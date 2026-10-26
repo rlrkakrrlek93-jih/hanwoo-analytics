@@ -74,38 +74,63 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
  }catch(e){document.getElementById('gradeStatusMale').textContent='자료 연동 대기';document.getElementById('gradeStatusFemale').textContent='자료 연동 대기';}
 })();
 </script><script>
-/* Average slaughter age from separate official monthly table. Does not infer cumulative means. */
+/* Average slaughter age: official monthly values; cumulative monthly-means are reference ONLY. */
 (function(){
- let ages=[];
- const $=id=>document.getElementById(id);
- function updateAge(){
-  const m=$('month')?.value, cumulative=$('mode')?.value!=='month';
-  const last=ages.length?ages.map(x=>x.month).sort().at(-1):null;
-  [['거세우',0],['암소',1]].forEach(([sex,idx])=>{
-    const panel=document.querySelectorAll('.grade-box')[idx];
-    if(!panel)return;
-    const note=[...panel.querySelectorAll('p.fine-note')].find(e=>e.textContent.includes('평균 출하월령')||e.dataset.ageNote);
-    if(!note)return;
-    note.dataset.ageNote='1';
-    const rec=ages.find(r=>r.month===m&&r.sex===sex);
-    note.textContent=cumulative ? '평균 도축개월령(누적): 도축두수 미확보로 산출 불가' :
-      rec ? `평균 도축개월령: ${Number(rec.age_months).toFixed(1)}개월 (${m}, 공식 통계)` :
-      `평균 도축개월령: ${last&&m>last?'선택 월 미발표 · 최신 '+last:'자료 미확보'}`;
-  });
-  document.querySelectorAll('#tableBody tr').forEach(tr=>{
-    const tds=tr.querySelectorAll('td');if(tds.length<9)return;
-    const rec=ages.find(r=>r.month===tds[0].textContent.trim()&&r.sex===tds[1].textContent.trim());
-    tds[8].textContent=rec?Number(rec.age_months).toFixed(1):'미발표';
-  });
- }
- const month=$('month'),mode=$('mode');
- for(const el of [month,mode])el?.addEventListener('change',()=>setTimeout(updateAge,0));
- (async()=>{try{
-  const response=await fetch('age_data.json',{cache:'no-store'});
-  if(!response.ok)throw new Error('age_data.json not found');
-  const value=await response.json();ages=Array.isArray(value.records)?value.records:[];
- }catch(err){console.info('Age data pending:',err.message)}
- updateAge();})();
+  const $=id=>document.getElementById(id);
+  let ages=[];
+  const newest=()=>ages.map(r=>r.month).sort().at(-1)||null;
+  const one=(sex,m)=>ages.find(r=>r.sex===sex && r.month===m);
+  function view(sex,m,mode){
+    const last=newest();
+    if(mode==='month'){
+      const r=one(sex,m);
+      return r?{value:Number(r.age_months),label:`${m} 공식 월별 평균`,status:'공식 월별 평균'}:
+        {value:null,label:last&&m>last?`해당 월 미발표 (최신 ${last})`:'자료 미확보'};
+    }
+    // Monthly published averages alone cannot give the true animal-weighted cumulative average.
+    const year=m.slice(0,4),stop=last&&last<m?last:m;
+    const wanted=Array.from({length:Number(stop.slice(5))},(_,i)=>`${year}-${String(i+1).padStart(2,'0')}`);
+    const selected=wanted.map(mm=>one(sex,mm));
+    if(!wanted.length || selected.some(x=>!x))return {value:null,label:'누적 비교 기간의 월별 자료 미확보'};
+    const value=selected.reduce((s,r)=>s+Number(r.age_months),0)/selected.length;
+    return {value,label:`${year}-01~${stop} 월평균 단순평균 (참고치${stop<m?', 최신 발표월까지':''})`,status:'공식 누적 평균 아님'};
+  }
+  function updateAge(){
+    const m=$('month')?.value,mode=$('mode')?.value;
+    if(!m||!mode)return;
+    [['거세우','male',0],['암소','female',1]].forEach(([sex,id,idx])=>{
+      const v=view(sex,m,mode);
+      const card=document.querySelector(`.panel.${id} .stats`);
+      const item=card&&[...card.querySelectorAll('.stat')].find(e=>e.querySelector('span')?.textContent.includes('출하월령'));
+      if(item){
+        const val=item.querySelector('b'),unit=item.querySelector('em'),label=item.querySelector('span');
+        if(val)val.textContent=v.value===null?'자료 미확보':v.value.toFixed(1);
+        if(unit)unit.textContent=v.value===null?'':`개월${mode==='month'?'':' · 참고'}`;
+        if(label)label.textContent=mode==='month'?'평균 도축개월령':'평균 도축개월령 (월평균 참고)';
+        item.title=v.label;
+      }
+      const panel=document.querySelectorAll('.grade-box')[idx];
+      const note=panel&&[...panel.querySelectorAll('p.fine-note')].find(e=>e.textContent.includes('평균 출하월령')||e.textContent.includes('평균 도축개월령')||e.dataset.ageNote==='1');
+      if(note){note.dataset.ageNote='1';note.textContent=v.value===null?`평균 도축개월령: ${v.label}`:`평균 도축개월령: ${v.value.toFixed(1)}개월 · ${v.label}`;}
+    });
+    document.querySelectorAll('#tableBody tr').forEach(tr=>{
+      const td=tr.querySelectorAll('td');if(td.length<9)return;
+      const r=one(td[1].textContent.trim(),td[0].textContent.trim());
+      td[8].textContent=r?Number(r.age_months).toFixed(1):'미발표';
+    });
+    const infobody=document.querySelector('.infobody');
+    const para=infobody&&[...infobody.querySelectorAll('p')].find(p=>p.querySelector('b')?.textContent.trim()==='출하월령');
+    if(para)para.innerHTML='<b>평균 도축개월령</b><br>별도 공식 통계표의 전국 한우 성별 월별 평균을 사용합니다. 누적 선택 시 표시하는 값은 월별 평균의 단순평균(참고치)이며, 도축두수 가중 공식 누적 평균이 아닙니다.';
+  }
+  for(const el of [$('month'),$('mode')])el?.addEventListener('change',()=>setTimeout(updateAge,0));
+  (async()=>{
+    try{
+      const r=await fetch('age_data.json',{cache:'no-store'});
+      if(!r.ok)throw Error('age_data.json HTTP '+r.status);
+      const result=await r.json();ages=Array.isArray(result.records)?result.records:[];
+    }catch(e){console.info('평균 도축개월령 데이터 로드 실패:',e.message)}
+    updateAge();
+  })();
 })();
 </script>
 </body></html>
