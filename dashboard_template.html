@@ -73,4 +73,39 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
    monthSelect.addEventListener('change',update);document.getElementById('mode').addEventListener('change',update);update();
  }catch(e){document.getElementById('gradeStatusMale').textContent='자료 연동 대기';document.getElementById('gradeStatusFemale').textContent='자료 연동 대기';}
 })();
-</script></body></html>
+</script><script>
+/* Average slaughter age from separate official monthly table. Does not infer cumulative means. */
+(function(){
+ let ages=[];
+ const $=id=>document.getElementById(id);
+ function updateAge(){
+  const m=$('month')?.value, cumulative=$('mode')?.value!=='month';
+  const last=ages.length?ages.map(x=>x.month).sort().at(-1):null;
+  [['거세우',0],['암소',1]].forEach(([sex,idx])=>{
+    const panel=document.querySelectorAll('.grade-box')[idx];
+    if(!panel)return;
+    const note=[...panel.querySelectorAll('p.fine-note')].find(e=>e.textContent.includes('평균 출하월령')||e.dataset.ageNote);
+    if(!note)return;
+    note.dataset.ageNote='1';
+    const rec=ages.find(r=>r.month===m&&r.sex===sex);
+    note.textContent=cumulative ? '평균 도축개월령(누적): 도축두수 미확보로 산출 불가' :
+      rec ? `평균 도축개월령: ${Number(rec.age_months).toFixed(1)}개월 (${m}, 공식 통계)` :
+      `평균 도축개월령: ${last&&m>last?'선택 월 미발표 · 최신 '+last:'자료 미확보'}`;
+  });
+  document.querySelectorAll('#tableBody tr').forEach(tr=>{
+    const tds=tr.querySelectorAll('td');if(tds.length<9)return;
+    const rec=ages.find(r=>r.month===tds[0].textContent.trim()&&r.sex===tds[1].textContent.trim());
+    tds[8].textContent=rec?Number(rec.age_months).toFixed(1):'미발표';
+  });
+ }
+ const month=$('month'),mode=$('mode');
+ for(const el of [month,mode])el?.addEventListener('change',()=>setTimeout(updateAge,0));
+ (async()=>{try{
+  const response=await fetch('age_data.json',{cache:'no-store'});
+  if(!response.ok)throw new Error('age_data.json not found');
+  const value=await response.json();ages=Array.isArray(value.records)?value.records:[];
+ }catch(err){console.info('Age data pending:',err.message)}
+ updateAge();})();
+})();
+</script>
+</body></html>
