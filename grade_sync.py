@@ -8,7 +8,7 @@ import argparse, json, re, os, tempfile
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from urllib.parse import parse_qsl, urlencode
+from urllib.parse import urlencode
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 
@@ -113,72 +113,89 @@ def parse_grade_response(raw):
     return rows
 
 
+def make_months():
+    now=datetime.now(ZoneInfo('Asia/Seoul'))
+    last_year,last_month=now.year,now.month
+    # Only completed months, unless a source has explicitly published an ongoing month.
+    last_month-=1
+    if last_month==0:last_month=12;last_year-=1
+    months=[];year,month=2026,1
+    while (year,month)<=(last_year,last_month):
+        months.append(f'{year:04d}{month:02d}')
+        month+=1
+        if month>12: year+=1;month=1
+    return months
+
+
+def build_official_form(months):
+    # Based on the user's actual 2026-10-26 DevTools POST payload, not invented selector names.
+    # PRD ends in a literal comma + '@' (the earlier @J variant was incorrect).
+    choices=[{'targetId':'PRD','targetValue':'','prdValue':'M,'+','.join(reversed(months))+',@'}]
+    for metric in ['T001','T002']:
+        choices.append({'targetId':'ITM_ID','targetValue':metric,'prdValue':''})
+    dims={'OV_L1_ID':['00'],'OV_L2_ID':['00','01','02','03'],
+          'OV_L3_ID':['00','01','02','03'],
+          'OV_L4_ID':['00','01','02','03']+[f'01{i:02d}' for i in range(1,17)]+[f'02{i:02d}' for i in range(1,7)]+[f'03{i:02d}' for i in range(1,4)]}
+    for key,vals in dims.items():
+        for v in vals: choices.append({'targetId':key,'targetValue':v,'prdValue':''})
+    # Form fields from the actual captured request; repeated multi-select fields use tuples.
+    fields=[('orgId','323'),('tblId','DT_323903_E1050005'),('language','ko'),
+            ('file',''),('analText',''),('scrId',''),
+            ('fieldList',json.dumps(choices,ensure_ascii=False,separators=(',',':'))),
+            ('colAxis','TIME,A,ITEM'),('rowAxis','B,C,D'),('isFirst','N'),
+            ('contextPath','/statHtml'),('connPath','I3'),('statId','2006903'),
+            ('pub',''),('pubLog','0'),('viewKind','1'),('doAnal','N'),('dataOpt','ko'),
+            ('view','table'),('classAllArr',json.dumps([{'objVarId':x,'ovlSn':str(i)} for i,x in enumerate('ABCD',1)])),
+            ('classSet',json.dumps([{'objVarId':x,'ovlSn':str(i),'visible':'true'} for i,x in enumerate('ABCD',1)])),
+            ('selectAllFlag','N'),('periodStr','M'),('tblNm','소도체 시도별 등급판정결과(작업장 기준)'),
+            ('itemMultiply','928'),('dbUser','NSI_IN_323.'),('usePivot','N'),('tableType','default'),
+            ('dataOpt2','ko'),('enableLevelExpr','Y'),('prdSort','desc'),('findData','on'),
+            ('reqCellCnt',str(len(months)*928)),('maxCellOver','Y'),('inheritYn','N'),('first_open','Y'),
+            ('downGridFileType','xlsx'),('downGridCellMerge','Y'),('downGridMeta','Y'),
+            ('headCheck','M'),('itemChkLi','T001'),('itemChkLi','T002'),('classChkLi1_1','00='),
+            ('classLvlAllChk2_1','on'),('classLvlAllChk3_1','on'),('classLvlAllChk4_2','on')]
+    for m in reversed(months):fields.append(('timeChkM',m))
+    for val in dims['OV_L2_ID']:fields.append(('classChkLi2_1',val+'='))
+    for val in dims['OV_L3_ID']:fields.append(('classChkLi3_1',val+'='))
+    for val in ['00','01','02','03']:fields.append(('classChkLi4_1',val+'='))
+    return urlencode(fields)
+
+
 def collect():
-    # Only public aggregate data, with bounded attempts and no session tokens in logs.
-    captured=[]
+    months=make_months()
+    if not months:raise RuntimeError('2026년 1월부터 조회할 완료 월 없음')
+    post=build_official_form(months)
+    url='https://mtrace.go.kr/statHtml/html.do'
     diagnostics=[]
+    # Keep the source's own browser session, but do not depend on an incidental initial AJAX call.
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
-        context=browser.new_context(locale='ko-KR',timezone_id='Asia/Seoul')
-        page=context.new_page()
-        def handle(resp):
-            if '/statHtml/html.do' in resp.url and resp.request.method=='POST':
-                diagnostics.append('통계 요청 HTTP '+str(resp.status))
-                if resp.status==200:
-                    try:
-                        raw=resp.json()
-                        if isinstance(raw,dict) and isinstance(raw.get('result'),list) and raw['result'] and 'mainTable' in raw['result'][0]:
-                            captured.append((resp.request.post_data,raw))
-                    except Exception as ex:
-                        diagnostics.append('응답 JSON 확인 실패: '+type(ex).__name__)
-        page.on('response',handle)
+        ctx=browser.new_context(locale='ko-KR',timezone_id='Asia/Seoul')
         try:
-            # The I3 entry point sometimes fails to issue the initial AJAX request.
-            # Try both public paths; do not spam the service.
-            urls=[URL,URL.replace('conn_path=I3','conn_path=I2')]
-            for url in urls:
-                if captured:break
-                try:
-                    response=page.goto(url,wait_until='domcontentloaded',timeout=45000)
-                    diagnostics.append('페이지 HTTP '+str(response.status if response else '없음'))
-                    page.wait_for_timeout(5500)
-                    if captured:break
-                    # Some tables require clicking their search/refresh control.
-                    for selector in ['[title="통계표조회"]','[aria-label="통계표조회"]','text=통계표조회']:
-                        if captured:break
-                        try:
-                            target=page.locator(selector).first
-                            if target.count() and target.is_visible(timeout=1500):
-                                target.click(timeout=4000)
-                                page.wait_for_timeout(4500)
-                                diagnostics.append('조회 버튼 클릭 시도')
-                        except Exception:pass
-                except Exception as ex:
-                    diagnostics.append('페이지 접근 실패: '+type(ex).__name__+' '+str(ex)[:100])
-            if not captured:
-                raise RuntimeError('육질등급 통계의 최초 데이터 요청을 확보하지 못했습니다. '+ ' / '.join(diagnostics[-8:])+' ; 조회 화면의 구조 확인 필요')
-            upto=datetime.now(ZoneInfo('Asia/Seoul')).strftime('%Y%m')
-            months=[];yy,mm=2026,1
-            while f'{yy:04d}{mm:02d}'<=upto:
-                months.append(f'{yy:04d}{mm:02d}')
-                mm+=1
-                if mm==13:yy+=1;mm=1
-            errors=[]
-            for post,original in reversed(captured):
-                try:
-                    fields=dict(parse_qsl(post or '',keep_blank_values=True))
-                    choices=json.loads(fields['fieldList'])
-                    prd=[item for item in choices if item.get('targetId')=='PRD']
-                    if not prd:raise ValueError('기간 PRD 설정 없음')
-                    for item in prd:item['prdValue']='M,'+','.join(reversed(months))+'@J'
-                    fields['fieldList']=json.dumps(choices,ensure_ascii=False,separators=(',',':'))
-                    reply=context.request.post('https://mtrace.go.kr/statHtml/html.do',data=urlencode(fields),headers={'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},timeout=60000)
-                    if reply.status!=200:raise ValueError('기간 확장 조회 HTTP '+str(reply.status))
-                    rows=parse_grade_response(reply.json())
-                    if any(r['month']=='2026-01' for r in rows):return rows
-                    raise ValueError('2026년 1월 자료가 반환되지 않음: 조회 기간 설정 재검증 필요')
-                except Exception as ex:errors.append(str(ex))
-            raise RuntimeError('기간 확장 조회 실패: '+' | '.join(errors[:2]))
+            page=ctx.new_page()
+            initial=page.goto(URL,wait_until='domcontentloaded',timeout=45000)
+            diagnostics.append('조회 페이지 HTTP '+str(initial.status if initial else '?'))
+            headers={'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
+                     'X-Requested-With':'XMLHttpRequest','Referer':URL}
+            # POST with Chromium session cookies. A response may be HTTP 200 yet contain no table.
+            reply=ctx.request.post(url,data=post,headers=headers,timeout=75000)
+            diagnostics.append('통계 요청 HTTP '+str(reply.status))
+            if reply.status != 200:raise RuntimeError(' / '.join(diagnostics))
+            raw=reply.json()
+            rows=parse_grade_response(raw)
+            first=months[0]
+            if not any(r['month']==f'{first[:4]}-{first[4:]}' for r in rows):
+                raise ValueError('시작월 누락 (응답 데이터 일부만 반환됨)')
+            expected={(f'{m[:4]}-{m[4:]}',s) for m in months for s in ('거세우','암소')}
+            actual={(r['month'],r['sex']) for r in rows}
+            missing=sorted(expected-actual)
+            if missing:
+                # Never silently claim full 2026 coverage when source does not supply it.
+                raise ValueError(f'요청한 기간 일부 누락: {missing[:5]} (총 {len(missing)}개 성별·월)')
+            print('[검증 완료] 공식 표 전국 한우 육질등급 2026-01부터 '+months[-1]+'까지',flush=True)
+            return rows
+        except Exception as exc:
+            raise RuntimeError('육질등급 조회/검증 실패: '+' / '.join(diagnostics)+' / '+str(exc)) from exc
         finally:browser.close()
 
 def save_rows(rows):
