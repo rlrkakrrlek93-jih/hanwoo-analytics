@@ -10,7 +10,7 @@
 <main class="shell"><div class="filterbox"><div class="field"><label for="month">조회 기준 월</label><select id="month"></select></div><div class="field"><label for="mode">평균 집계 기준</label><select id="mode"><option value="month">선택 월 평균</option><option value="ytd">1월부터 선택 월까지 누적 평균(추정)</option></select></div><button id="csv" class="smallbtn">↓ 현재 보기 CSV 다운로드</button><div class="status"><span class="dot"></span>공식 공개 통계 기반 · 일 1회 자동 점검</div></div>
 
 <section class="trust-panel" aria-labelledby="trustTitle"><h3 id="trustTitle">데이터 신뢰성 · 갱신 현황</h3><p class="fine-note">공식 통계표의 전국·한우·거세우/암소 자료를 사용합니다. 자동 수집 시각과 공식 자료의 발표 시각은 서로 다릅니다.</p><div class="trust-grid"><div class="trust-cell"><small>최신 수록 월</small><strong id="trustMonth">2026년 9월</strong></div><div class="trust-cell"><small>마지막 수집 성공 (KST)</small><strong id="trustFetched">확인되지 않음</strong></div><div class="trust-cell"><small>공식 통계 자료 갱신일</small><strong id="trustPublished">확인되지 않음</strong></div><div class="trust-cell"><small>자료 상태</small><strong id="trustStatus">저장 자료 · 자동 점검 예정</strong></div></div><p class="fine-note">마지막 수집 성공은 프로그램이 응답을 받아 형식을 검증한 시각이며, 새로운 월의 공식 발표를 의미하지 않습니다. 공식 갱신일은 정확한 원본 메타데이터를 확인한 경우에만 표기합니다. 이전 월 수치가 정정되면 기존 기록이 갱신될 수 있습니다. <a href="https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&amp;tblId=DT_323903_E1080008&amp;conn_path=I2" target="_blank" rel="noopener">공식 통계표에서 원자료 확인</a></p></section>
-<section class="grade-panel" aria-labelledby="gradeTitle"><h3 id="gradeTitle">육질등급 분포 · 출하월령</h3><p class="fine-note">추가 분석 항목을 위한 영역입니다. 공식 육질등급 판정결과를 별도 조회합니다. 월별 등급 출현율은 확보된 월에만 표시하며, 출하월령은 아직 자료 미확보입니다.</p><div class="grade-layout"><div class="grade-box"><b>거세우</b> <span class="muted-pill" id="gradeStatusMale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeMale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div><div class="grade-box"><b>암소</b> <span class="muted-pill" id="gradeStatusFemale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeFemale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div></div><p class="fine-note">육질등급 판정결과를 제공하는 <a href="https://www.mtrace.go.kr/statHtml/statHtml.do?conn_path=I2&amp;orgId=323&amp;tblId=DT_323903_E1050005" target="_blank" rel="noopener">공식 통계표(별도) 바로가기</a> · 출하월령 전국 월간 평균 통계는 미확인.<br>추가 통계는 <b>전국·한우·성별·월별</b> 집계 기준이 일치할 때만 통합할 예정입니다. 단순한 등급별 판정두수를 확보하면 같은 기준의 총 판정두수로 출현율을 계산할 수 있어.</p></section>
+<section class="grade-panel" aria-labelledby="gradeTitle"><h3 id="gradeTitle">육질등급 분포 · 출하월령</h3><p class="fine-note">추가 분석 항목을 위한 영역입니다. 공식 육질등급 판정결과를 별도 조회합니다. 월별 등급 출현율과 평균 도축개월령은 각각의 공식 통계표에서 확보된 월에만 표시합니다.</p><div class="grade-layout"><div class="grade-box"><b>거세우</b> <span class="muted-pill" id="gradeStatusMale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeMale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div><div class="grade-box"><b>암소</b> <span class="muted-pill" id="gradeStatusFemale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeFemale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div></div><p class="fine-note">육질등급 판정결과를 제공하는 <a href="https://www.mtrace.go.kr/statHtml/statHtml.do?conn_path=I2&amp;orgId=323&amp;tblId=DT_323903_E1050005" target="_blank" rel="noopener">공식 통계표(별도) 바로가기</a> · 평균 도축개월령은 별도의 공식 통계표를 사용합니다.<br>추가 통계는 <b>전국·한우·성별·월별</b> 집계 기준이 일치할 때만 통합할 예정입니다. 단순한 등급별 판정두수를 확보하면 같은 기준의 총 판정두수로 출현율을 계산할 수 있어.</p></section>
 <div class="sectionhead"><h2>성별 품질 성적</h2><div class="sub" id="periodLabel">2026년 9월 기준</div></div>
 <div class="panels"><section class="panel male"><div class="panel-head"><div class="sex-title"><span class="sexdot"></span>거세우</div><span class="count" id="maleCount">—</span></div><div class="bigval"><div class="label" id="maleMainLabel">평균 도체중</div><strong id="maleMain">—</strong><small id="maleUnit">kg</small></div><div class="stats" id="maleStats"></div><div class="chartbox"><div class="chart-title" id="maleChartTitle">거세우 월별 도체중 추이</div><div class="chart-sub">2026년 1월부터 선택한 월까지</div><svg id="maleChart" class="chart" viewBox="0 0 550 215" role="img" aria-label="거세우 월별 성적 그래프"></svg></div><div class="panel-foot"><span>연초 대비 변화 (1월 → 선택 월)</span><b id="maleChange">—</b></div></section>
 <section class="panel female"><div class="panel-head"><div class="sex-title"><span class="sexdot"></span>암소</div><span class="count" id="femaleCount">—</span></div><div class="bigval"><div class="label" id="femaleMainLabel">평균 도체중</div><strong id="femaleMain">—</strong><small id="femaleUnit">kg</small></div><div class="stats" id="femaleStats"></div><div class="chartbox"><div class="chart-title" id="femaleChartTitle">암소 월별 도체중 추이</div><div class="chart-sub">2026년 1월부터 선택한 월까지</div><svg id="femaleChart" class="chart" viewBox="0 0 550 215" role="img" aria-label="암소 월별 성적 그래프"></svg></div><div class="panel-foot"><span>연초 대비 변화 (1월 → 선택 월)</span><b id="femaleChange">—</b></div></section></div>
@@ -74,62 +74,63 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
  }catch(e){document.getElementById('gradeStatusMale').textContent='자료 연동 대기';document.getElementById('gradeStatusFemale').textContent='자료 연동 대기';}
 })();
 </script><script>
-/* Average slaughter age: official monthly values; cumulative monthly-means are reference ONLY. */
+/* Slaughter-age integration v16. Monthly: official. Cumulative: unweighted mean of published monthly averages (reference). */
 (function(){
-  const $=id=>document.getElementById(id);
+  const byId=id=>document.getElementById(id);
   let ages=[];
-  const newest=()=>ages.map(r=>r.month).sort().at(-1)||null;
-  const one=(sex,m)=>ages.find(r=>r.sex===sex && r.month===m);
-  function view(sex,m,mode){
-    const last=newest();
+  const key=(sex,month)=>ages.find(r=>r.sex===sex&&r.month===month);
+  function getValue(sex,month,mode){
+    const available=ages.map(r=>r.month).sort();const last=available.at(-1);
     if(mode==='month'){
-      const r=one(sex,m);
-      return r?{value:Number(r.age_months),label:`${m} 공식 월별 평균`,status:'공식 월별 평균'}:
-        {value:null,label:last&&m>last?`해당 월 미발표 (최신 ${last})`:'자료 미확보'};
+      const r=key(sex,month);
+      return r?{n:Number(r.age_months),description:`${month} 공식 월별 평균`,reference:false}:
+        {n:null,description:last&&month>last?`미발표 (최신 ${last})`:'해당 월 자료 미확보',reference:false};
     }
-    // Monthly published averages alone cannot give the true animal-weighted cumulative average.
-    const year=m.slice(0,4),stop=last&&last<m?last:m;
-    const wanted=Array.from({length:Number(stop.slice(5))},(_,i)=>`${year}-${String(i+1).padStart(2,'0')}`);
-    const selected=wanted.map(mm=>one(sex,mm));
-    if(!wanted.length || selected.some(x=>!x))return {value:null,label:'누적 비교 기간의 월별 자료 미확보'};
-    const value=selected.reduce((s,r)=>s+Number(r.age_months),0)/selected.length;
-    return {value,label:`${year}-01~${stop} 월평균 단순평균 (참고치${stop<m?', 최신 발표월까지':''})`,status:'공식 누적 평균 아님'};
+    const end=last&&month>last?last:month;
+    if(!end||end.slice(0,4)!==month.slice(0,4))return {n:null,description:'연초 이후 자료 미확보',reference:true};
+    const months=Array.from({length:Number(end.slice(5,7))},(_,i)=>month.slice(0,4)+'-'+String(i+1).padStart(2,'0'));
+    const records=months.map(m=>key(sex,m));
+    if(!records.length||records.some(r=>!r||!Number.isFinite(Number(r.age_months))))return {n:null,description:'기간 내 월별 데이터 누락',reference:true};
+    return {n:records.reduce((acc,r)=>acc+Number(r.age_months),0)/records.length,
+      description:`${months[0]}~${end} 월평균 단순평균 (참고치${end<month?', 미발표월 제외':''})`,reference:true};
   }
-  function updateAge(){
-    const m=$('month')?.value,mode=$('mode')?.value;
-    if(!m||!mode)return;
-    [['거세우','male',0],['암소','female',1]].forEach(([sex,id,idx])=>{
-      const v=view(sex,m,mode);
-      const card=document.querySelector(`.panel.${id} .stats`);
-      const item=card&&[...card.querySelectorAll('.stat')].find(e=>e.querySelector('span')?.textContent.includes('출하월령'));
-      if(item){
-        const val=item.querySelector('b'),unit=item.querySelector('em'),label=item.querySelector('span');
-        if(val)val.textContent=v.value===null?'자료 미확보':v.value.toFixed(1);
-        if(unit)unit.textContent=v.value===null?'':`개월${mode==='month'?'':' · 참고'}`;
-        if(label)label.textContent=mode==='month'?'평균 도축개월령':'평균 도축개월령 (월평균 참고)';
-        item.title=v.label;
+  function putText(){
+    const month=byId('month')?.value,mode=byId('mode')?.value;
+    if(!month||!mode)return;
+    [['거세우','male',0],['암소','female',1]].forEach(([sex,which,index])=>{
+      const r=getValue(sex,month,mode);
+      const stats=byId(which+'Stats');
+      if(stats){
+        const item=[...stats.querySelectorAll('.stat')].find(e=>e.querySelector('span')?.textContent.includes('출하월령'));
+        if(item){
+          const title=item.querySelector('span'),value=item.querySelector('b'),unit=item.querySelector('em');
+          if(title)title.textContent=mode==='month'?'평균 도축개월령':'평균 도축개월령 (월평균 참고)';
+          if(value)value.textContent=r.n===null?'자료 미확보':r.n.toFixed(1);
+          if(unit)unit.textContent=r.n===null?'':'개월';
+          item.title=r.description;
+        }
       }
-      const panel=document.querySelectorAll('.grade-box')[idx];
-      const note=panel&&[...panel.querySelectorAll('p.fine-note')].find(e=>e.textContent.includes('평균 출하월령')||e.textContent.includes('평균 도축개월령')||e.dataset.ageNote==='1');
-      if(note){note.dataset.ageNote='1';note.textContent=v.value===null?`평균 도축개월령: ${v.label}`:`평균 도축개월령: ${v.value.toFixed(1)}개월 · ${v.label}`;}
+      const section=document.querySelectorAll('.grade-box')[index];
+      if(section){
+        const note=[...section.querySelectorAll('p.fine-note')].find(p=>p.dataset.ageNote==='true'||p.textContent.includes('평균 출하월령')||p.textContent.includes('평균 도축개월령'));
+        if(note){note.dataset.ageNote='true';note.textContent=r.n===null?`평균 도축개월령: ${r.description}`:`평균 도축개월령: ${r.n.toFixed(1)}개월 · ${r.description}`;}
+      }
     });
     document.querySelectorAll('#tableBody tr').forEach(tr=>{
-      const td=tr.querySelectorAll('td');if(td.length<9)return;
-      const r=one(td[1].textContent.trim(),td[0].textContent.trim());
-      td[8].textContent=r?Number(r.age_months).toFixed(1):'미발표';
+      const cells=tr.querySelectorAll('td');if(cells.length<9)return;
+      const r=key(cells[1].textContent.trim(),cells[0].textContent.trim());
+      cells[8].textContent=r?Number(r.age_months).toFixed(1):'미발표';
     });
-    const infobody=document.querySelector('.infobody');
-    const para=infobody&&[...infobody.querySelectorAll('p')].find(p=>p.querySelector('b')?.textContent.trim()==='출하월령');
-    if(para)para.innerHTML='<b>평균 도축개월령</b><br>별도 공식 통계표의 전국 한우 성별 월별 평균을 사용합니다. 누적 선택 시 표시하는 값은 월별 평균의 단순평균(참고치)이며, 도축두수 가중 공식 누적 평균이 아닙니다.';
+    const info=[...document.querySelectorAll('.infobody p')].find(p=>p.querySelector('b')?.textContent.includes('출하월령'));
+    if(info)info.innerHTML='<b>평균 도축개월령</b><br>전국 한우 성별 공식 월별 통계(별도 통계표)입니다. 누적 선택 시 월평균의 단순평균을 참고치로 표시하며, 이는 도축두수 가중 공식 누적 평균이 아닙니다.';
   }
-  for(const el of [$('month'),$('mode')])el?.addEventListener('change',()=>setTimeout(updateAge,0));
+  for(const element of [byId('month'),byId('mode')])element?.addEventListener('change',()=>setTimeout(putText,0));
+  document.querySelectorAll('#metricControls').forEach(element=>element.addEventListener('click',()=>setTimeout(putText,0)));
   (async()=>{
-    try{
-      const r=await fetch('age_data.json',{cache:'no-store'});
-      if(!r.ok)throw Error('age_data.json HTTP '+r.status);
-      const result=await r.json();ages=Array.isArray(result.records)?result.records:[];
-    }catch(e){console.info('평균 도축개월령 데이터 로드 실패:',e.message)}
-    updateAge();
+    try{const response=await fetch('age_data.json',{cache:'no-store'});if(!response.ok)throw Error('HTTP '+response.status);
+      const data=await response.json();ages=Array.isArray(data.records)?data.records:[];}
+    catch(error){console.warn('월령 데이터 로드 실패:',error.message)}
+    putText();
   })();
 })();
 </script>
