@@ -1,0 +1,23 @@
+{
+  "fieldList": "[{\"targetId\":\"PRD\",\"targetValue\":\"\",\"prdValue\":\"M,202609,202608,202607,202606,202605,202604,202603,202602,202601,@\"},{\"targetId\":\"ITM_ID\",\"targetValue\":\"T001\",\"prdValue\":\"\"},{\"targetId\":\"ITM_ID\",\"targetValue\":\"T002\",\"prdValue\":\"\"},{\"targetId\":\"OV_L1_ID\",\"targetValue\":\"00\",\"prdValue\":\"\"},{\"targetId\":\"OV_L2_ID\",\"targetValue\":\"00\",\"prdValue\":\"\"},{\"targetId\":\"OV_L2_ID\",\"targetValue\":\"01\",\"prdValue\":\"\"},{\"targetId\":\"OV_L2_ID\",\"targetValue\":\"02\",\"prdValue\":\"\"},{\"targetId\":\"OV_L2_ID\",\"targetValue\":\"03\",\"prdValue\":\"\"},{\"targetId\":\"OV_L3_ID\",\"targetValue\":\"00\",\"prdValue\":\"\"},{\"targetId\":\"OV_L3_ID\",\"targetValue\":\"01\",\"prdValue\":\"\"},{\"targetId\":\"OV_L3_ID\",\"targetValue\":\"02\",\"prdValue\":\"\"},{\"targetId\":\"OV_L3_ID\",\"targetValue\":\"03\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"00\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"01\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"02\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"03\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0101\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0102\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0103\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0104\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0105\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0106\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0107\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0108\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0109\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0110\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0111\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0112\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0113\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0114\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0115\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0116\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0201\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0202\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0203\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0204\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0205\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0206\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0301\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0302\",\"prdValue\":\"\"},{\"targetId\":\"OV_L4_ID\",\"targetValue\":\"0303\",\"prdValue\":\"\"}]",
+  "classAllArr": "[{\"objVarId\":\"A\",\"ovlSn\":\"1\"},{\"objVarId\":\"B\",\"ovlSn\":\"2\"},{\"objVarId\":\"C\",\"ovlSn\":\"3\"},{\"objVarId\":\"D\",\"ovlSn\":\"4\"}]",
+  "classSet": "[{\"objVarId\":\"A\",\"ovlSn\":\"1\",\"visible\":\"true\"},{\"objVarId\":\"B\",\"ovlSn\":\"2\",\"visible\":\"true\"},{\"objVarId\":\"C\",\"ovlSn\":\"3\",\"visible\":\"true\"},{\"objVarId\":\"D\",\"ovlSn\":\"4\",\"visible\":\"true\"}]",
+  "statId": "2006903",
+  "itemMultiply": "928",
+  "dataOpt": "ko",
+  "isFirst": "N",
+  "contextPath": "/statHtml",
+  "connPath": "I3",
+  "colAxis": "TIME,A,ITEM",
+  "rowAxis": "B,C,D",
+  "viewKind": "1",
+  "periodStr": "M",
+  "maxCellOver": "Y",
+  "reqCellCnt": "8352",
+  "enableLevelExpr": "Y",
+  "dbUser": "NSI_IN_323.",
+  "pubLog": "0",
+  "usePivot": "N",
+  "view": "table",
+  "tblNm": "소도체 시도별 등급판정결과(작업장 기준)"
+}
