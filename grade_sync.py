@@ -114,26 +114,50 @@ def parse_grade_response(raw):
 
 
 def collect():
+    # Only public aggregate data, with bounded attempts and no session tokens in logs.
     captured=[]
+    diagnostics=[]
     with sync_playwright() as p:
         browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
         context=browser.new_context(locale='ko-KR',timezone_id='Asia/Seoul')
         page=context.new_page()
         def handle(resp):
-            if '/statHtml/html.do' in resp.url and resp.request.method=='POST' and resp.status==200:
-                try:
-                    raw=resp.json()
-                    if isinstance(raw.get('result'),list) and 'mainTable' in raw['result'][0]:
-                        captured.append((resp.request.post_data,raw))
-                except Exception:pass
+            if '/statHtml/html.do' in resp.url and resp.request.method=='POST':
+                diagnostics.append('통계 요청 HTTP '+str(resp.status))
+                if resp.status==200:
+                    try:
+                        raw=resp.json()
+                        if isinstance(raw,dict) and isinstance(raw.get('result'),list) and raw['result'] and 'mainTable' in raw['result'][0]:
+                            captured.append((resp.request.post_data,raw))
+                    except Exception as ex:
+                        diagnostics.append('응답 JSON 확인 실패: '+type(ex).__name__)
         page.on('response',handle)
         try:
-            page.goto(URL,wait_until='domcontentloaded',timeout=60000)
-            page.wait_for_timeout(9000)
-            if not captured:raise RuntimeError('통계표 초기 조회 응답 없음')
-            # Site default is recent three months. Request all months from Jan 2026
-            # using the same browser session and POST fieldList parameters.
-            from_date='202601'; upto=datetime.now(ZoneInfo('Asia/Seoul')).strftime('%Y%m')
+            # The I3 entry point sometimes fails to issue the initial AJAX request.
+            # Try both public paths; do not spam the service.
+            urls=[URL,URL.replace('conn_path=I3','conn_path=I2')]
+            for url in urls:
+                if captured:break
+                try:
+                    response=page.goto(url,wait_until='domcontentloaded',timeout=45000)
+                    diagnostics.append('페이지 HTTP '+str(response.status if response else '없음'))
+                    page.wait_for_timeout(5500)
+                    if captured:break
+                    # Some tables require clicking their search/refresh control.
+                    for selector in ['[title="통계표조회"]','[aria-label="통계표조회"]','text=통계표조회']:
+                        if captured:break
+                        try:
+                            target=page.locator(selector).first
+                            if target.count() and target.is_visible(timeout=1500):
+                                target.click(timeout=4000)
+                                page.wait_for_timeout(4500)
+                                diagnostics.append('조회 버튼 클릭 시도')
+                        except Exception:pass
+                except Exception as ex:
+                    diagnostics.append('페이지 접근 실패: '+type(ex).__name__+' '+str(ex)[:100])
+            if not captured:
+                raise RuntimeError('육질등급 통계의 최초 데이터 요청을 확보하지 못했습니다. '+ ' / '.join(diagnostics[-8:])+' ; 조회 화면의 구조 확인 필요')
+            upto=datetime.now(ZoneInfo('Asia/Seoul')).strftime('%Y%m')
             months=[];yy,mm=2026,1
             while f'{yy:04d}{mm:02d}'<=upto:
                 months.append(f'{yy:04d}{mm:02d}')
@@ -150,15 +174,12 @@ def collect():
                     fields['fieldList']=json.dumps(choices,ensure_ascii=False,separators=(',',':'))
                     reply=context.request.post('https://mtrace.go.kr/statHtml/html.do',data=urlencode(fields),headers={'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8','X-Requested-With':'XMLHttpRequest'},timeout=60000)
                     if reply.status!=200:raise ValueError('기간 확장 조회 HTTP '+str(reply.status))
-                    obj=reply.json()
-                    rows=parse_grade_response(obj)
+                    rows=parse_grade_response(reply.json())
                     if any(r['month']=='2026-01' for r in rows):return rows
-                    # Refuse to pretend missing January was collected.
-                    raise ValueError('2026년 1월 자료가 반환되지 않음: 기간 설정 검증 필요')
+                    raise ValueError('2026년 1월 자료가 반환되지 않음: 조회 기간 설정 재검증 필요')
                 except Exception as ex:errors.append(str(ex))
-            raise RuntimeError('2026년 1월부터 자동 수집 실패: '+' | '.join(errors[:2]))
+            raise RuntimeError('기간 확장 조회 실패: '+' | '.join(errors[:2]))
         finally:browser.close()
-
 
 def save_rows(rows):
     path=ROOT/'grade_data.json'
