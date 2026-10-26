@@ -37,21 +37,40 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
  const palette=['#226ea9','#4d9acc','#71b8a9','#d8a35a','#cc7a76'];
  let data=[];
  function update(){
-   const m=monthSelect.value;
-   for(const [sex,id,status] of [['거세우','gradeMale','gradeStatusMale'],['암소','gradeFemale','gradeStatusFemale']]){
-     const record=data.find(r=>r.month===m&&r.sex===sex);
-     const el=document.getElementById(id),tag=document.getElementById(status);
-     if(!record){el.textContent=m+' 육질등급 자료 미확보';tag.textContent='해당 월 미수록';continue;}
-     tag.textContent='공식 집계 자료';
-     const bars=gradeKeys.map((g,i)=>{const x=record.grades[g];return '<div style="display:grid;grid-template-columns:42px 1fr 64px;gap:9px;align-items:center;margin:9px 0;font-size:12px"><b>'+g+'</b><div style="height:13px;background:#e4ebf2;border-radius:9px;overflow:hidden"><div style="width:'+Math.max(0,Math.min(x.rate,100))+'%;height:100%;background:'+palette[i]+'"></div></div><b style="text-align:right">'+x.rate.toFixed(1)+'%</b></div>'}).join('');
-     el.style.textAlign='left';el.style.padding='12px 14px';el.innerHTML='<div style="font-size:12px;color:#64748b">'+m+' · 전국 한우 '+sex+' · '+record.count.toLocaleString()+'두</div>'+bars;
-   }
- }
+  const m=monthSelect.value;
+  const modeControl=document.getElementById('mode');
+  const cumulative=modeControl && modeControl.value==='ytd';
+  const start=m.slice(0,4)+'-01';
+  const expected=Array.from({length:Number(m.slice(5,7))},(_,i)=>m.slice(0,4)+'-'+String(i+1).padStart(2,'0'));
+  for(const [sex,id,status] of [['거세우','gradeMale','gradeStatusMale'],['암소','gradeFemale','gradeStatusFemale']]){
+    const el=document.getElementById(id),tag=document.getElementById(status);
+    if(!el || !tag)continue;
+    const selected=data.filter(r=>r.sex===sex && (cumulative ? r.month>=start && r.month<=m : r.month===m));
+    const months=new Set(selected.map(r=>r.month));
+    if(!selected.length || (cumulative && expected.some(mon=>!months.has(mon)))){
+      el.textContent=cumulative?'선택한 기간에 누락된 월이 있어 누적값을 표시할 수 없습니다.':m+' 육질등급 자료 미확보';
+      tag.textContent='자료 미확보';
+      continue;
+    }
+    const total=selected.reduce((sum,r)=>sum+Number(r.count||0),0);
+    if(total<=0){el.textContent='판정두수 자료 확인 필요';tag.textContent='확인 필요';continue;}
+    const output=gradeKeys.map((g,i)=>{
+      const count=selected.reduce((sum,r)=>sum+Number(r.grades?.[g]?.count||0),0);
+      // Single month: keep official published rate. Cumulative: compute from counts.
+      const rate=cumulative ? count/total*100 : Number(selected[0].grades?.[g]?.rate);
+      if(!Number.isFinite(rate))throw Error('육질등급 '+g+'의 출현율 누락');
+      return '<div style="display:grid;grid-template-columns:42px 1fr 64px;gap:9px;align-items:center;margin:9px 0;font-size:12px"><b>'+g+'</b><div style="height:13px;background:#e4ebf2;border-radius:9px;overflow:hidden"><div style="width:'+Math.max(0,Math.min(rate,100))+'%;height:100%;background:'+palette[i]+'"></div></div><b style="text-align:right">'+rate.toFixed(1)+'%</b></div>';
+    }).join('');
+    tag.textContent=cumulative?'판정두수 가중 누적':'공식 집계 자료';
+    el.style.textAlign='left';el.style.padding='12px 14px';
+    el.innerHTML='<div style="font-size:12px;color:#64748b">'+(cumulative?start+' ~ '+m:m)+' · 전국 한우 '+sex+' · '+total.toLocaleString()+'두'+(cumulative?' (누적)':'')+'</div>'+output;
+  }
+}
  try{
    const r=await fetch('grade_data.json',{cache:'no-store'});
    if(!r.ok)throw new Error('데이터 파일 없음');
    const response=await r.json();data=response.records||[];
-   monthSelect.addEventListener('change',update);update();
+   monthSelect.addEventListener('change',update);document.getElementById('mode').addEventListener('change',update);update();
  }catch(e){document.getElementById('gradeStatusMale').textContent='자료 연동 대기';document.getElementById('gradeStatusFemale').textContent='자료 연동 대기';}
 })();
 </script></body></html>
