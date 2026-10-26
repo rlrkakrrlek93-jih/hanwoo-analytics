@@ -1,0 +1,170 @@
+{
+  "source": "https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1050005&conn_path=I3",
+  "table_id": "DT_323903_E1050005",
+  "last_success_kst": null,
+  "seed_source": "2026-10-26 downloaded official workbook",
+  "records": [
+    {
+      "month": "2026-07",
+      "sex": "거세우",
+      "count": 32255,
+      "grades": {
+        "1++": {
+          "count": 15238,
+          "rate": 47.2
+        },
+        "1+": {
+          "count": 8947,
+          "rate": 27.7
+        },
+        "1": {
+          "count": 5874,
+          "rate": 18.2
+        },
+        "2": {
+          "count": 1886,
+          "rate": 5.8
+        },
+        "3": {
+          "count": 274,
+          "rate": 0.8
+        }
+      }
+    },
+    {
+      "month": "2026-07",
+      "sex": "암소",
+      "count": 36229,
+      "grades": {
+        "1++": {
+          "count": 6209,
+          "rate": 17.1
+        },
+        "1+": {
+          "count": 7987,
+          "rate": 22.0
+        },
+        "1": {
+          "count": 10252,
+          "rate": 28.3
+        },
+        "2": {
+          "count": 7882,
+          "rate": 21.8
+        },
+        "3": {
+          "count": 3824,
+          "rate": 10.6
+        }
+      }
+    },
+    {
+      "month": "2026-08",
+      "sex": "거세우",
+      "count": 37584,
+      "grades": {
+        "1++": {
+          "count": 17625,
+          "rate": 46.9
+        },
+        "1+": {
+          "count": 10704,
+          "rate": 28.5
+        },
+        "1": {
+          "count": 6753,
+          "rate": 18.0
+        },
+        "2": {
+          "count": 2176,
+          "rate": 5.8
+        },
+        "3": {
+          "count": 295,
+          "rate": 0.8
+        }
+      }
+    },
+    {
+      "month": "2026-08",
+      "sex": "암소",
+      "count": 37008,
+      "grades": {
+        "1++": {
+          "count": 6170,
+          "rate": 16.7
+        },
+        "1+": {
+          "count": 7959,
+          "rate": 21.5
+        },
+        "1": {
+          "count": 10433,
+          "rate": 28.2
+        },
+        "2": {
+          "count": 8279,
+          "rate": 22.4
+        },
+        "3": {
+          "count": 4073,
+          "rate": 11.0
+        }
+      }
+    },
+    {
+      "month": "2026-09",
+      "sex": "거세우",
+      "count": 51288,
+      "grades": {
+        "1++": {
+          "count": 24628,
+          "rate": 48.0
+        },
+        "1+": {
+          "count": 14406,
+          "rate": 28.1
+        },
+        "1": {
+          "count": 8961,
+          "rate": 17.5
+        },
+        "2": {
+          "count": 2959,
+          "rate": 5.8
+        },
+        "3": {
+          "count": 312,
+          "rate": 0.6
+        }
+      }
+    },
+    {
+      "month": "2026-09",
+      "sex": "암소",
+      "count": 46921,
+      "grades": {
+        "1++": {
+          "count": 8522,
+          "rate": 18.2
+        },
+        "1+": {
+          "count": 10444,
+          "rate": 22.3
+        },
+        "1": {
+          "count": 13507,
+          "rate": 28.8
+        },
+        "2": {
+          "count": 9878,
+          "rate": 21.1
+        },
+        "3": {
+          "count": 4518,
+          "rate": 9.6
+        }
+      }
+    }
+  ]
+}
