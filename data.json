@@ -1,8 +1,9 @@
 {
   "source": "https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2",
   "latest_month": "2026-09",
-  "last_success_kst": "2026-10-26 20:02 KST",
+  "last_success_kst": "2026-10-26 20:13 KST",
   "official_published_at": null,
+  "validation": "success",
   "records": [
     {
       "month": "2026-01",
