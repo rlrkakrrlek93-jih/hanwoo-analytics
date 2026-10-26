@@ -6,133 +6,133 @@
       "month": "2026-01",
       "sex": "거세우",
       "count": 60946,
-      "live": 814.0,
       "weight": 488.0,
-      "fat": 13.0,
-      "rea": 103.0,
       "marbling": 7.0,
-      "price": 21958.0
+      "rea": 103.0,
+      "fat": 13.0,
+      "live": 814.0,
+      "price": 21958
     },
     {
       "month": "2026-01",
       "sex": "암소",
       "count": 48105,
-      "live": 665.0,
       "weight": 389.0,
-      "fat": 14.0,
-      "rea": 92.0,
       "marbling": 5.0,
-      "price": 19095.0
+      "rea": 92.0,
+      "fat": 14.0,
+      "live": 665.0,
+      "price": 19095
     },
     {
       "month": "2026-02",
       "sex": "거세우",
       "count": 30230,
-      "live": 802.0,
       "weight": 486.0,
-      "fat": 13.0,
-      "rea": 103.0,
       "marbling": 7.0,
-      "price": 21866.0
+      "rea": 103.0,
+      "fat": 13.0,
+      "live": 802.0,
+      "price": 21866
     },
     {
       "month": "2026-02",
       "sex": "암소",
       "count": 27058,
-      "live": 665.0,
       "weight": 385.0,
-      "fat": 13.0,
-      "rea": 91.0,
       "marbling": 5.0,
-      "price": 18848.0
+      "rea": 91.0,
+      "fat": 13.0,
+      "live": 665.0,
+      "price": 18848
     },
     {
       "month": "2026-03",
       "sex": "거세우",
       "count": 34141,
-      "live": 829.0,
       "weight": 486.0,
-      "fat": 13.0,
-      "rea": 103.0,
       "marbling": 6.0,
-      "price": 21567.0
+      "rea": 103.0,
+      "fat": 13.0,
+      "live": 829.0,
+      "price": 21567
     },
     {
       "month": "2026-03",
       "sex": "암소",
       "count": 31110,
-      "live": 675.0,
       "weight": 388.0,
-      "fat": 13.0,
-      "rea": 92.0,
       "marbling": 5.0,
-      "price": 18827.0
+      "rea": 92.0,
+      "fat": 13.0,
+      "live": 675.0,
+      "price": 18827
     },
     {
       "month": "2026-04",
       "sex": "거세우",
       "count": 37688,
-      "live": 809.0,
       "weight": 487.0,
-      "fat": 13.0,
-      "rea": 103.0,
       "marbling": 6.0,
-      "price": 21230.0
+      "rea": 103.0,
+      "fat": 13.0,
+      "live": 809.0,
+      "price": 21230
     },
     {
       "month": "2026-04",
       "sex": "암소",
       "count": 38136,
-      "live": 669.0,
       "weight": 389.0,
-      "fat": 13.0,
-      "rea": 92.0,
       "marbling": 5.0,
-      "price": 18073.0
+      "rea": 92.0,
+      "fat": 13.0,
+      "live": 669.0,
+      "price": 18073
     },
     {
       "month": "2026-05",
       "sex": "거세우",
       "count": 29828,
-      "live": 796.0,
       "weight": 487.0,
-      "fat": 12.0,
-      "rea": 104.0,
       "marbling": 7.0,
-      "price": 21852.0
+      "rea": 104.0,
+      "fat": 12.0,
+      "live": 796.0,
+      "price": 21852
     },
     {
       "month": "2026-05",
       "sex": "암소",
       "count": 32241,
-      "live": 675.0,
       "weight": 388.0,
-      "fat": 13.0,
-      "rea": 92.0,
       "marbling": 5.0,
-      "price": 18384.0
+      "rea": 92.0,
+      "fat": 13.0,
+      "live": 675.0,
+      "price": 18384
     },
     {
       "month": "2026-06",
       "sex": "거세우",
       "count": 31011,
-      "live": 815.0,
       "weight": 487.0,
-      "fat": 12.0,
-      "rea": 104.0,
       "marbling": 7.0,
-      "price": 22919.0
+      "rea": 104.0,
+      "fat": 12.0,
+      "live": 815.0,
+      "price": 22919
     },
     {
       "month": "2026-06",
       "sex": "암소",
       "count": 34781,
-      "live": 663.0,
       "weight": 386.0,
-      "fat": 13.0,
-      "rea": 92.0,
       "marbling": 5.0,
-      "price": 19183.0
+      "rea": 92.0,
+      "fat": 13.0,
+      "live": 663.0,
+      "price": 19183
     },
     {
       "month": "2026-07",

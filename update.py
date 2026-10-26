@@ -3,6 +3,8 @@
 No automated requests are made to the website.
 """
 import argparse, csv, json, re
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from bs4 import BeautifulSoup
 
@@ -82,6 +84,12 @@ def build(response,template,destination):
     payload=json.dumps(records,ensure_ascii=False,separators=(',',':'))
     html,n=re.subn(r'const DATA=\[.*?\];\s*const METRICS=',lambda m:'const DATA='+payload+';\nconst METRICS=',html,count=1,flags=re.S)
     if n!=1:raise ValueError('홈페이지 DATA 코드 위치를 찾지 못했습니다.')
+    # Timestamp only when a response has been parsed and validated; not an official release time.
+    checked=datetime.now(ZoneInfo('Asia/Seoul')).strftime('%Y-%m-%d %H:%M KST')
+    meta={'last_success_kst':checked,'official_published_at':None,'validation':'success'}
+    html,n_meta=re.subn(r'const UPDATE_META=\{.*?\};',lambda m:'const UPDATE_META='+json.dumps(meta,ensure_ascii=False)+';',html,count=1,flags=re.S)
+    if n_meta!=1:raise ValueError('홈페이지 갱신 메타데이터 코드 위치를 찾지 못했습니다.')
+
     last=records[-1]['month'];first=records[0]['month']
     html=re.sub(r'2026\.01 — 2026\.09',f'{first.replace("-",".")} — {last.replace("-",".")}',html)
     html=html.replace('2026년 1~9월 (현재 확보한 자료)',f'{first} ~ {last} (저장된 응답 기준)')
@@ -89,7 +97,7 @@ def build(response,template,destination):
     html=html.replace('공식 API의 연계 방법이 확인되면', '정기 수집 연계 방식이 확정되면')
     html=html.replace('공식 API 미연결 · 제공 통계 스냅샷','자동 연동 미설정 · 저장된 공식 통계 응답')
     dest=Path(destination);dest.write_text(html,encoding='utf-8')
-    (ROOT/'data.json').write_text(json.dumps({'source':SOURCE,'latest_month':last,'records':records},ensure_ascii=False,indent=2),encoding='utf-8')
+    (ROOT/'data.json').write_text(json.dumps({'source':SOURCE,'latest_month':last,'last_success_kst':checked,'official_published_at':None,'records':records},ensure_ascii=False,indent=2),encoding='utf-8')
     with (ROOT/'data.csv').open('w',encoding='utf-8-sig',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=list(records[0]));writer.writeheader();writer.writerows(records)
     return records
