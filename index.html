@@ -131,7 +131,7 @@ body[data-sex="beef"] #nationalBeef{display:grid!important;gap:14px;margin-top:2
 <div class="sectionhead"><h2>지표별 월간 변화</h2><span class="sub">지표를 선택해 그래프 비교</span></div><div class="metric-controls" id="metricControls"></div>
 <div class="below" id="details"><section class="tablecard"><h3><span id="tableSexTitle">거세우</span> 월별 상세 통계</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>월</th><th>구분</th><th>판정두수</th><th id="tableMetric">평균 도체중</th><th>근내지방도</th><th>등심단면적</th><th>등지방두께</th><th>경락단가(원)</th><th>도축개월령(개월)</th></tr></thead><tbody id="tableBody"></tbody></table></div></section></div>
 <div class="footer">자료: 축산물품질평가원 공개 통계 · 자체 재가공 | 누적값은 집계 방식에 따라 추정치 또는 참고치입니다. | HANWOO INSIGHT</div></main>
-<script>const UPDATE_META={"last_success_kst": "2026-10-30 15:18 KST", "official_published_at": null, "validation": "success", "source_table_id": "DT_323903_E1080008"};
+<script>const UPDATE_META={"last_success_kst": "2026-10-26 22:58 KST", "official_published_at": null, "validation": "success", "source_table_id": "DT_323903_E1080008"};
 const DATA=[{"month":"2026-01","sex":"거세우","count":60946,"weight":488.0,"marbling":7.0,"rea":103.0,"fat":13.0,"live":814.0,"price":21958},{"month":"2026-01","sex":"암소","count":48105,"weight":389.0,"marbling":5.0,"rea":92.0,"fat":14.0,"live":665.0,"price":19095},{"month":"2026-02","sex":"거세우","count":30230,"weight":486.0,"marbling":7.0,"rea":103.0,"fat":13.0,"live":802.0,"price":21866},{"month":"2026-02","sex":"암소","count":27058,"weight":385.0,"marbling":5.0,"rea":91.0,"fat":13.0,"live":665.0,"price":18848},{"month":"2026-03","sex":"거세우","count":34141,"weight":486.0,"marbling":6.0,"rea":103.0,"fat":13.0,"live":829.0,"price":21567},{"month":"2026-03","sex":"암소","count":31110,"weight":388.0,"marbling":5.0,"rea":92.0,"fat":13.0,"live":675.0,"price":18827},{"month":"2026-04","sex":"거세우","count":37688,"weight":487.0,"marbling":6.0,"rea":103.0,"fat":13.0,"live":809.0,"price":21230},{"month":"2026-04","sex":"암소","count":38136,"weight":389.0,"marbling":5.0,"rea":92.0,"fat":13.0,"live":669.0,"price":18073},{"month":"2026-05","sex":"거세우","count":29828,"weight":487.0,"marbling":7.0,"rea":104.0,"fat":12.0,"live":796.0,"price":21852},{"month":"2026-05","sex":"암소","count":32241,"weight":388.0,"marbling":5.0,"rea":92.0,"fat":13.0,"live":675.0,"price":18384},{"month":"2026-06","sex":"거세우","count":31011,"weight":487.0,"marbling":7.0,"rea":104.0,"fat":12.0,"live":815.0,"price":22919},{"month":"2026-06","sex":"암소","count":34781,"weight":386.0,"marbling":5.0,"rea":92.0,"fat":13.0,"live":663.0,"price":19183},{"month":"2026-07","sex":"거세우","count":32219,"live":833.0,"weight":484.0,"fat":12.0,"rea":104.0,"marbling":7.0,"price":23487.0},{"month":"2026-07","sex":"암소","count":36154,"live":679.0,"weight":382.0,"fat":13.0,"rea":91.0,"marbling":5.0,"price":19720.0},{"month":"2026-08","sex":"거세우","count":37553,"live":811.0,"weight":485.0,"fat":12.0,"rea":104.0,"marbling":7.0,"price":24137.0},{"month":"2026-08","sex":"암소","count":36914,"live":656.0,"weight":379.0,"fat":13.0,"rea":90.0,"marbling":5.0,"price":20392.0},{"month":"2026-09","sex":"거세우","count":51266,"live":809.0,"weight":486.0,"fat":12.0,"rea":104.0,"marbling":7.0,"price":25375.0},{"month":"2026-09","sex":"암소","count":46869,"live":655.0,"weight":381.0,"fat":13.0,"rea":91.0,"marbling":5.0,"price":21892.0}];
 const METRICS={weight:['평균 도체중','kg',0],marbling:['평균 근내지방도','No.',1],rea:['평균 등심단면적','㎠',1],fat:['평균 등지방두께','mm',1],live:['평균 생체중','kg',0],price:['경락단가','원',0]};
 const allMonths=[...new Set(DATA.map(r=>r.month))].sort();let metric='weight';const $=id=>document.getElementById(id);const nf=new Intl.NumberFormat('ko-KR');const fmt=(v,d=0)=>Number(v).toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -337,7 +337,38 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
   const show=(id,value)=>$(id).textContent=value;
   show('beefPeriod',month.replace('-','년 ')+'월 · '+(mode==='month'?'선택 월':'1월부터 누적'));
   show('beefNCount',r?num(r.count)+'두':'미발표');show('beefNWeight',r?num(r.weight,mode==='month'?0:1)+' kg':'—');show('beefNPrice',r?num(r.price)+'원/kg':'—');
-  show('beefNAge',mode==='month'&&r&&r.age_months!=null?num(r.age_months,1)+'개월':mode!=='month'?'누적 미제공':'미발표');
+  // Beef-steer slaughter ages come from a separate official monthly series.
+  // For cumulative mode, show an explicitly labelled estimate, weighted by
+  // grade-assessment counts (proxy weights, not matching slaughter population).
+  const ageCard=$('beefNAge');
+  const validAge=x=>x.age_months!==null&&x.age_months!==undefined&&x.age_months!==''&&Number.isFinite(Number(x.age_months))&&Number(x.age_months)>0;
+  if(mode==='month'){
+   ageCard.textContent=r&&validAge(r)?num(r.age_months,1)+'개월':'미발표';
+   ageCard.title='해당 월 공식 평균 도축개월령';
+  }else{
+   const dated=available.filter(validAge).sort((a,b)=>a.month.localeCompare(b.month));
+   const last=dated.at(-1)?.month;
+   const eligible=dated.filter(x=>x.month<=last && Number(x.count)>0);
+   const expected=last?Array.from({length:Number(last.slice(5))},(_,i)=>last.slice(0,4)+'-'+String(i+1).padStart(2,'0')):[];
+   const complete=expected.length>0&&expected.every(m=>eligible.some(x=>x.month===m));
+   const total=eligible.reduce((s,x)=>s+Number(x.count),0);
+   if(complete && total>0){
+    const estimate=eligible.reduce((s,x)=>s+Number(x.age_months)*Number(x.count),0)/total;
+    ageCard.textContent=num(estimate,1)+'개월';
+    ageCard.title='1월~'+last+' 판정두수 가중 추정치. 월령 통계의 모집단과 판정두수의 모집단이 다를 수 있어 공식 누적 평균이 아닙니다.';
+   }else{
+    ageCard.textContent='누적 산출 불가';
+    ageCard.title='발표된 월별 도축개월령 중 누락된 월이 있어 계산하지 않았습니다.';
+   }
+  }
+  let ageNote=$('beefAgeAccumulationNote');
+  if(!ageNote){
+   ageNote=document.createElement('div');ageNote.id='beefAgeAccumulationNote';
+   ageNote.style.cssText='font-size:12px;line-height:1.5;color:#7c817d;margin-top:8px;';
+   ageCard.parentElement.appendChild(ageNote);
+  }
+  ageNote.textContent=mode==='month'?'공식 월별 평균':ageCard.textContent==='누적 산출 불가'?'월령 자료 누락 · 누적 산출 불가':`1월~${last} 판정두수 가중 추정 · 공식 누적 아님`;
+
   show('beefNMarbling',r?num(r.marbling,1):'—');show('beefNArea',r?num(r.area,1)+' ㎠':'—');show('beefNFat',r?num(r.fat,1)+' mm':'—');show('beefNLive',r?num(r.live)+' kg':'—');
   $('beefNationalRows').innerHTML=available.length?available.slice().reverse().map(x=>`<tr><td>${x.month}</td><td>${num(x.count)}</td><td>${num(x.weight)}</td><td>${num(x.marbling,1)}</td><td>${num(x.area,1)}</td><td>${num(x.fat,1)}</td><td>${num(x.price)}</td><td>${x.age_months!=null?num(x.age_months,1):'미발표'}</td></tr>`).join(''):'<tr><td colspan="8">해당 월 공식 자료 없음</td></tr>';
  }

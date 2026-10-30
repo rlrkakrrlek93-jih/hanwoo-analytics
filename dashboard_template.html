@@ -337,7 +337,38 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
   const show=(id,value)=>$(id).textContent=value;
   show('beefPeriod',month.replace('-','년 ')+'월 · '+(mode==='month'?'선택 월':'1월부터 누적'));
   show('beefNCount',r?num(r.count)+'두':'미발표');show('beefNWeight',r?num(r.weight,mode==='month'?0:1)+' kg':'—');show('beefNPrice',r?num(r.price)+'원/kg':'—');
-  show('beefNAge',mode==='month'&&r&&r.age_months!=null?num(r.age_months,1)+'개월':mode!=='month'?'누적 미제공':'미발표');
+  // Beef-steer slaughter ages come from a separate official monthly series.
+  // For cumulative mode, show an explicitly labelled estimate, weighted by
+  // grade-assessment counts (proxy weights, not matching slaughter population).
+  const ageCard=$('beefNAge');
+  const validAge=x=>x.age_months!==null&&x.age_months!==undefined&&x.age_months!==''&&Number.isFinite(Number(x.age_months))&&Number(x.age_months)>0;
+  if(mode==='month'){
+   ageCard.textContent=r&&validAge(r)?num(r.age_months,1)+'개월':'미발표';
+   ageCard.title='해당 월 공식 평균 도축개월령';
+  }else{
+   const dated=available.filter(validAge).sort((a,b)=>a.month.localeCompare(b.month));
+   const last=dated.at(-1)?.month;
+   const eligible=dated.filter(x=>x.month<=last && Number(x.count)>0);
+   const expected=last?Array.from({length:Number(last.slice(5))},(_,i)=>last.slice(0,4)+'-'+String(i+1).padStart(2,'0')):[];
+   const complete=expected.length>0&&expected.every(m=>eligible.some(x=>x.month===m));
+   const total=eligible.reduce((s,x)=>s+Number(x.count),0);
+   if(complete && total>0){
+    const estimate=eligible.reduce((s,x)=>s+Number(x.age_months)*Number(x.count),0)/total;
+    ageCard.textContent=num(estimate,1)+'개월';
+    ageCard.title='1월~'+last+' 판정두수 가중 추정치. 월령 통계의 모집단과 판정두수의 모집단이 다를 수 있어 공식 누적 평균이 아닙니다.';
+   }else{
+    ageCard.textContent='누적 산출 불가';
+    ageCard.title='발표된 월별 도축개월령 중 누락된 월이 있어 계산하지 않았습니다.';
+   }
+  }
+  let ageNote=$('beefAgeAccumulationNote');
+  if(!ageNote){
+   ageNote=document.createElement('div');ageNote.id='beefAgeAccumulationNote';
+   ageNote.style.cssText='font-size:12px;line-height:1.5;color:#7c817d;margin-top:8px;';
+   ageCard.parentElement.appendChild(ageNote);
+  }
+  ageNote.textContent=mode==='month'?'공식 월별 평균':ageCard.textContent==='누적 산출 불가'?'월령 자료 누락 · 누적 산출 불가':`1월~${last} 판정두수 가중 추정 · 공식 누적 아님`;
+
   show('beefNMarbling',r?num(r.marbling,1):'—');show('beefNArea',r?num(r.area,1)+' ㎠':'—');show('beefNFat',r?num(r.fat,1)+' mm':'—');show('beefNLive',r?num(r.live)+' kg':'—');
   $('beefNationalRows').innerHTML=available.length?available.slice().reverse().map(x=>`<tr><td>${x.month}</td><td>${num(x.count)}</td><td>${num(x.weight)}</td><td>${num(x.marbling,1)}</td><td>${num(x.area,1)}</td><td>${num(x.fat,1)}</td><td>${num(x.price)}</td><td>${x.age_months!=null?num(x.age_months,1):'미발표'}</td></tr>`).join(''):'<tr><td colspan="8">해당 월 공식 자료 없음</td></tr>';
  }
