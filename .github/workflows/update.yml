@@ -69,3 +69,14 @@ jobs:
             git commit -m "Update monthly slaughter age"
             git push
           fi
+
+      - name: Probe new cattle statistics
+        run: python probe_new_stats.py
+
+      - name: Save cattle statistics diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-stats-probe
+          path: new_stats_probe/
+          if-no-files-found: warn
