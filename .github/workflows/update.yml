@@ -80,7 +80,8 @@ jobs:
           name: new-stats-probe
           path: new_stats_probe/
           if-no-files-found: warn
-- name: Collect national beef steer statistics
+          
+      - name: Collect national beef steer statistics
         run: python beef_national_sync.py
 
       - name: Commit national beef steer data
@@ -89,3 +90,6 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "Update national beef steer"
             git push
+          fi
+
+
