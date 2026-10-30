@@ -1,0 +1,47 @@
+{
+  "source_table": "DT_323903_E1080008",
+  "definition": "전국 육우 거세우, 체중간격 전체, 등급판정 항목별 평균",
+  "records": [
+    {
+      "month": "2026-07",
+      "breed": "육우",
+      "sex": "거세우",
+      "count": 3855,
+      "live": 702.0,
+      "weight": 429.0,
+      "fat": 7.0,
+      "area": 74.0,
+      "yield_index": 61.0,
+      "marbling": 2.0,
+      "price": 12363.0,
+      "age_months": 23.4
+    },
+    {
+      "month": "2026-08",
+      "breed": "육우",
+      "sex": "거세우",
+      "count": 3983,
+      "live": 758.0,
+      "weight": 430.0,
+      "fat": 7.0,
+      "area": 74.0,
+      "yield_index": 61.0,
+      "marbling": 2.0,
+      "price": 12401.0,
+      "age_months": 23.6
+    },
+    {
+      "month": "2026-09",
+      "breed": "육우",
+      "sex": "거세우",
+      "count": 5007,
+      "live": 773.0,
+      "weight": 440.0,
+      "fat": 7.0,
+      "area": 75.0,
+      "yield_index": 61.0,
+      "marbling": 3.0,
+      "price": 12682.0
+    }
+  ]
+}

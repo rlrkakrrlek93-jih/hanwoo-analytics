@@ -81,6 +81,11 @@ body[data-sex="male"] .grade-box:nth-child(2),body[data-sex="female"] .grade-box
 .grade-panel{margin-top:18px}.grade-panel h3{font-size:19px}
 @media(max-width:850px){.farmer-primary{grid-template-columns:repeat(2,minmax(0,1fr))}.farmer-secondary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:500px){.farmer-tile{padding:15px 12px}.farmer-value{font-size:27px}.farmer-mini{padding:11px}.farmer-head h2{font-size:19px}.sex-choice{min-height:80px}}
+</style><style>
+.sex-picker{grid-template-columns:repeat(3,minmax(0,1fr))}
+body[data-sex="beef"] .farmer-overview,body[data-sex="beef"] .sectionhead,body[data-sex="beef"] .panels,body[data-sex="beef"] #grades,body[data-sex="beef"] #metricControls,body[data-sex="beef"] #details{display:none!important}
+body[data-sex="beef"] #nationalBeef{display:grid!important;gap:14px;margin-top:20px}
+@media(max-width:650px){.sex-choice strong{font-size:16px}.sex-choice small{font-size:10px}.sex-choice{padding:11px 8px}.sex-picker{gap:7px}}
 </style></head><body>
 <header><div class="top"><div class="brand"><div class="logo">牛</div>HANWOO <span style="font-weight:400;color:#afbdd0">INSIGHT</span></div><nav aria-label="바로가기" class="mini-nav"><a href="#quality">품질 비교</a><a href="#grades">육질등급</a><a href="#details">월별 상세표</a><a href="https://www.youtube.com/@thankscow" rel="noopener" target="_blank">땡스카우 ↗</a></nav><div class="topsmall">공식 공개자료 기반</div></div></header>
 <div class="hero"><div class="shell hero-row"><div><div class="eyebrow">전국 한우 성적 한눈에</div><h1>우리 한우, 전국 평균은 어떨까요?</h1><p>거세우·암소 품질과 육질등급을 쉽고 빠르게 확인하세요.</p></div><div class="hero-foot"><span class="tag">✓ 전국 통계</span><span class="tag">✓ 축산물품질평가원 자료</span><span class="tag">월별·누적 비교</span></div></div></div>
@@ -90,7 +95,23 @@ body[data-sex="male"] .grade-box:nth-child(2),body[data-sex="female"] .grade-box
 <div class="sex-picker" role="tablist" aria-label="조회할 한우 구분">
 <button type="button" role="tab" class="sex-choice is-on" id="chooseMale" aria-selected="true"><span class="sex-icon">●</span><span><strong>거세우</strong><small>거세한 수소 성적</small></span></button>
 <button type="button" role="tab" class="sex-choice" id="chooseFemale" aria-selected="false"><span class="sex-icon">●</span><span><strong>암소</strong><small>암소 성적</small></span></button>
-</div><section class="farmer-overview" aria-label="선택한 성별 핵심 성적">
+<button type="button" role="tab" class="sex-choice" id="chooseBeef" aria-selected="false"><span class="sex-icon">●</span><span><strong>육우 거세우</strong><small>전국 육우 성적</small></span></button></div><section class="national-beef" id="nationalBeef" aria-label="육우 거세우 전국 성적" hidden>
+ <div class="farmer-head"><div><h2>육우 거세우 · 전국 평균</h2><p id="beefPeriod">선택한 기간 공식 집계</p></div><span class="sub">전체 체중 구간 · 전국 기준</span></div>
+ <div class="farmer-primary">
+ <div class="farmer-tile"><div class="farmer-label">등급판정두수</div><div class="farmer-value" id="beefNCount">—</div></div>
+ <div class="farmer-tile"><div class="farmer-label">평균 도체중</div><div class="farmer-value" id="beefNWeight">—</div></div>
+ <div class="farmer-tile highlight"><div class="farmer-label">경락단가</div><div class="farmer-value" id="beefNPrice">—</div></div>
+ <div class="farmer-tile"><div class="farmer-label">평균 도축개월령</div><div class="farmer-value" id="beefNAge">—</div></div>
+ </div>
+ <div class="farmer-secondary">
+ <div class="farmer-mini"><small>근내지방도</small><strong id="beefNMarbling">—</strong></div>
+ <div class="farmer-mini"><small>등심단면적</small><strong id="beefNArea">—</strong></div>
+ <div class="farmer-mini"><small>등지방두께</small><strong id="beefNFat">—</strong></div>
+ <div class="farmer-mini"><small>평균 생체중</small><strong id="beefNLive">—</strong></div>
+ </div>
+ <div class="tablecard" style="margin-top:18px"><h3>육우 거세우 월별 성적</h3><div class="tablewrap"><table class="tbl"><thead><tr><th>월</th><th>판정두수</th><th>도체중(kg)</th><th>근내지방도</th><th>등심단면적(㎠)</th><th>등지방두께(mm)</th><th>경락단가(원)</th><th>도축개월령</th></tr></thead><tbody id="beefNationalRows"><tr><td colspan="8">자료 불러오는 중</td></tr></tbody></table></div></div>
+ <p class="sex-note">공식 통계표 기준 전국 평균입니다. 미발표 월은 임의 수치로 채우지 않습니다. 누적 평균은 판정두수 가중 추정치입니다.</p>
+ </section><section class="farmer-overview" aria-label="선택한 성별 핵심 성적">
   <div class="farmer-head"><div><h2 id="farmerTitle">거세우 전국 평균 한눈에</h2><p id="farmerSubtitle">2026년 선택한 기간의 주요 통계</p></div><span class="sub" id="farmerPeriodHint">전월 대비 변화는 선택 월 기준</span></div>
   <div class="farmer-primary">
     <div class="farmer-tile"><div class="farmer-label">평균 도체중</div><div class="farmer-value"><span id="quickWeight">—</span><span class="farmer-unit">kg</span></div><div class="farmer-delta" id="deltaWeight">—</div></div>
@@ -304,5 +325,25 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
   update();
  })();
  update();
+})();
+</script><script>
+(function(){
+ let data=[];const $=id=>document.getElementById(id);const num=(x,d=0)=>Number(x).toLocaleString('ko-KR',{maximumFractionDigits:d,minimumFractionDigits:d});
+ const beef=$('chooseBeef'),male=$('chooseMale'),female=$('chooseFemale');
+ function paint(){if(document.body.dataset.sex!=='beef')return;
+  let month=$('month').value,mode=$('mode').value;
+  let available=data.filter(x=>x.month<=month),selected=available.find(x=>x.month===month),r=mode==='month'?selected:null;
+  if(mode!=='month'&&available.length){let total=available.reduce((s,x)=>s+x.count,0);r={count:total};for(let k of ['weight','marbling','area','fat','live','price'])r[k]=available.reduce((s,x)=>s+x.count*x[k],0)/total}
+  const show=(id,value)=>$(id).textContent=value;
+  show('beefPeriod',month.replace('-','년 ')+'월 · '+(mode==='month'?'선택 월':'1월부터 누적'));
+  show('beefNCount',r?num(r.count)+'두':'미발표');show('beefNWeight',r?num(r.weight,mode==='month'?0:1)+' kg':'—');show('beefNPrice',r?num(r.price)+'원/kg':'—');
+  show('beefNAge',mode==='month'&&r&&r.age_months!=null?num(r.age_months,1)+'개월':mode!=='month'?'누적 미제공':'미발표');
+  show('beefNMarbling',r?num(r.marbling,1):'—');show('beefNArea',r?num(r.area,1)+' ㎠':'—');show('beefNFat',r?num(r.fat,1)+' mm':'—');show('beefNLive',r?num(r.live)+' kg':'—');
+  $('beefNationalRows').innerHTML=available.length?available.slice().reverse().map(x=>`<tr><td>${x.month}</td><td>${num(x.count)}</td><td>${num(x.weight)}</td><td>${num(x.marbling,1)}</td><td>${num(x.area,1)}</td><td>${num(x.fat,1)}</td><td>${num(x.price)}</td><td>${x.age_months!=null?num(x.age_months,1):'미발표'}</td></tr>`).join(''):'<tr><td colspan="8">해당 월 공식 자료 없음</td></tr>';
+ }
+ beef.addEventListener('click',()=>{window.hanwooSelectedSex='육우 거세우';document.body.dataset.sex='beef';beef.classList.add('is-on');beef.setAttribute('aria-selected','true');for(let b of [male,female]){b.classList.remove('is-on');b.setAttribute('aria-selected','false')}paint()});
+ for(let b of [male,female])b.addEventListener('click',()=>{beef.classList.remove('is-on');beef.setAttribute('aria-selected','false')});
+ for(let id of ['month','mode'])$(id).addEventListener('change',paint);
+ fetch('beef_national_data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}).then(v=>{data=v.records||[];paint()}).catch(e=>console.warn('육우 전국 자료 미수신',e));
 })();
 </script></body></html>
