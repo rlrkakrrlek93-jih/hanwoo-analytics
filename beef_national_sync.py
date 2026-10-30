@@ -127,36 +127,91 @@ def collect_months():
      print('주의:',month,'조회 실패. 기존 저장값 유지:',str(ex)[:150])
    return found
   finally:browser.close()
+AGE_TABLE='DT_323901_A300000005'
+AGE_URL=f'https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId={AGE_TABLE}&conn_path=I2'
+AGE_POST='https://mtrace.go.kr/statHtml/html.do'
+
 def parse_age(html):
- s=BeautifulSoup(html,'html.parser');out={}
- for tr in s.select('#mainTable tbody tr'):
-  values=[td.get('title','').strip() for td in tr.find_all('td',recursive=False)]
-  m=re.match(r'^(20\d{2})\.\s*(\d{2})$',values[0] if values else '')
-  if m and len(values)>=11:
-   try:out[m.group(1)+'-'+m.group(2)]=float(values[10])
-   except ValueError:pass
+ """The official monthly table has TIME + 10 numeric cells; beef-steer is last."""
+ soup=BeautifulSoup(html,'html.parser'); table=soup.select_one('table#mainTable')
+ if not table:raise ValueError('평균도축개월령 mainTable 없음')
+ headings=table.select('thead tr')
+ if not headings or not any('육우' in h.get('title','') for h in headings[0].find_all('th')):
+  raise ValueError('육우 항목 머리글 확인 실패')
+ out={}
+ for tr in table.select('tbody tr'):
+  td=tr.find_all('td',recursive=False)
+  if len(td)<11:continue
+  date=td[0].get('title','').strip()
+  m=re.fullmatch(r'(20\d{2})\.\s*(\d{1,2})',date)
+  if not m:continue
+  month=f'{m.group(1)}-{int(m.group(2)):02d}'
+  raw=td[10].get('title','').replace(',','').strip()
+  try:value=float(raw)
+  except ValueError:continue
+  if 10<=value<=150:out[month]=value
  return out
+
+def age_form(months):
+ """Official public table selection: breed Hanwoo+beef, all four sex groups."""
+ fields=[{'targetId':'PRD','targetValue':'','prdValue':'M,'+','.join(reversed(months))+',@'},
+         {'targetId':'ITM_ID','targetValue':'T001','prdValue':''}]
+ for key,values in [('OV_L1_ID',['01','03']),('OV_L2_ID',['00','01','02','03'])]:
+  fields += [{'targetId':key,'targetValue':v,'prdValue':''} for v in values]
+ pairs=[('orgId','323'),('tblId',AGE_TABLE),('language','ko'),('file',''),('analText',''),('scrId',''),
+ ('fieldList',json.dumps(fields,ensure_ascii=False,separators=(',',':'))),('colAxis','A,B'),('rowAxis','TIME'),
+ ('isFirst','N'),('contextPath','/statHtml'),('connPath','I2'),('statId','2006901'),('viewKind','1'),
+ ('mode','tab'),('dataOpt','ko'),('view','table'),('periodStr','M'),('findData','on'),
+ ('classAllArr','[{"objVarId":"A","ovlSn":"1"},{"objVarId":"B","ovlSn":"2"}]'),
+ ('classSet','[{"objVarId":"A","ovlSn":"1","visible":"true"},{"objVarId":"B","ovlSn":"2","visible":"true"}]'),
+ ('itemMultiply','8'),('reqCellCnt',str(len(months)*8)),('enableLevelExpr','Y'),('prdSort','desc'),
+ ('itemChkLi','T001'),('classChkLi1_1','01='),('classChkLi1_1','03=')]
+ pairs += [('classChkLi2_1',v+'=') for v in ('00','01','02','03')]
+ pairs += [('timeChkM',m) for m in reversed(months)]
+ return pairs
+
+def collect_ages():
+ """Recheck Jan 2026 through previous calendar month, 3 months per call.
+ Any missing/unpublished month stays absent. Old verified values survive failures.
+ """
+ kst=datetime.timezone(datetime.timedelta(hours=9));now=datetime.datetime.now(kst)
+ last=now.year*12+now.month-2
+ months=[f'{k//12:04d}-{k%12+1:02d}' for k in range(2026*12,last+1)]
+ found={}
+ if not months:return found
+ with sync_playwright() as p:
+  browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
+  try:
+   ctx=browser.new_context(locale='ko-KR',timezone_id='Asia/Seoul')
+   ctx.new_page().goto(AGE_URL,wait_until='domcontentloaded',timeout=45000)
+   for i in range(0,len(months),3):
+    chunk=months[i:i+3]; yms=[x.replace('-','') for x in chunk]
+    try:
+     resp=ctx.request.post(AGE_POST,data=urllib.parse.urlencode(age_form(yms)),
+       headers={'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
+                'Referer':AGE_URL,'X-Requested-With':'XMLHttpRequest'},timeout=35000)
+     if not resp.ok:raise RuntimeError(f'HTTP {resp.status}')
+     raw=resp.json();results=raw.get('result',[])
+     if not results:raise ValueError('result HTML 미제공')
+     got=parse_age(results[0])
+     for mo in chunk:
+      if mo in got:found[mo]=got[mo]
+     print('육우 거세우 도축개월령',','.join(chunk),'->',','.join(f'{m}:{found[m]}' for m in chunk if m in found) or '미수집')
+    except Exception as ex:
+     print('주의: 월령',','.join(chunk),'조회 실패, 저장된 과거 데이터 유지:',str(ex)[:160])
+  finally:browser.close()
+ return found
+
 def main():
  arg=argparse.ArgumentParser();arg.add_argument('--html',help='공식 HTML 응답으로 오프라인 검증');args=arg.parse_args()
  newer=parse_table(Path(args.html).read_text('utf-8')) if args.html else collect_months()
- # Optional second official table for slaughter ages; do not fail national quality update if unavailable.
+ # Fetch each batch of historical age months, independent of national quality table.
+ ages={}
  if not args.html:
-  try:
-   with sync_playwright() as p:
-    browser=p.chromium.launch(headless=True,args=['--no-sandbox']);page=browser.new_page(locale='ko-KR',timezone_id='Asia/Seoul');answers=[]
-    def cap(resp):
-     if '/statHtml/html.do' in resp.url and resp.request.method=='POST' and resp.status==200:
-      try:
-       data=resp.json()
-       if data.get('result') and 'mainTable' in str(data['result'][0]):answers.append(data['result'][0])
-      except Exception:pass
-    page.on('response',cap)
-    try:page.goto('https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323901_A300000005&conn_path=I2',wait_until='domcontentloaded',timeout=45000);page.wait_for_timeout(7000)
-    finally:browser.close()
-    if answers:
-     for m,age in parse_age(answers[-1]).items():
-      if m in newer:newer[m]['age_months']=age
-  except Exception as exc:print('Age data unavailable this run:',str(exc)[:160])
+  try:ages=collect_ages()
+  except Exception as exc:print('주의: 월령 통합 조회 실패, 기존 월령 보존:',str(exc)[:180])
+ for month,age in ages.items():
+  if month in newer:newer[month]['age_months']=age
  file=ROOT/'beef_national_data.json';old={}
  if file.exists():
   try:old={r['month']:r for r in json.loads(file.read_text('utf-8')).get('records',[])}
@@ -164,6 +219,10 @@ def main():
  for month,rec in newer.items():
   if 'age_months' not in rec and month in old and 'age_months' in old[month]:rec['age_months']=old[month]['age_months']
  old.update(newer)
+ # Backfill age even when corresponding national quality month is already saved,
+ # but skip creating partial quality records for months not yet collected.
+ for month,age in ages.items():
+  if month in old:old[month]['age_months']=age
  payload={'source_table':'DT_323903_E1080008','definition':'전국 육우 거세우, 체중간격 전체, 등급판정 항목별 평균','records':[old[k] for k in sorted(old)]}
  fd,tmp=tempfile.mkstemp(dir=ROOT,prefix='.beef_national_',suffix='.json')
  try:
