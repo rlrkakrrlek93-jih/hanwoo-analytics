@@ -60,6 +60,27 @@ body[data-sex="male"] .grade-box:nth-child(2),body[data-sex="female"] .grade-box
 .grade-box{padding:22px}.grade-panel{padding:26px}.grade-box .grade-placeholder{max-width:780px}
 .sex-note{font-size:12px;color:#8b7b70;padding:10px 0 0}
 @media(max-width:650px){.sex-picker{gap:9px}.sex-choice{padding:15px 12px;gap:8px}.sex-choice.is-on{padding:14px 11px}.sex-choice strong{font-size:19px}.sex-choice small{font-size:10px}.panel .stats{grid-template-columns:repeat(2,1fr)}.grade-panel{padding:14px}}
+
+/* V4 farmer-first dashboard */
+.hero{padding:32px 0 50px}.hero h1{font-size:clamp(24px,3vw,34px)}.hero p{max-width:580px}.sex-picker{margin:22px 0 10px;max-width:none}
+.sex-choice{min-height:94px}.sectionhead{margin-top:22px}.panels,.grade-layout{max-width:none}
+.farmer-overview{margin:13px 0 12px;display:grid;gap:14px}
+.farmer-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.farmer-head h2{font-size:21px;margin:0;letter-spacing:-.6px}.farmer-head p{color:#738078;font-size:12px;margin:5px 0 0}
+.farmer-primary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.farmer-tile{min-width:0;background:#fff;border:1px solid #e7e7e2;border-radius:16px;padding:19px 17px;box-shadow:0 4px 18px #253f2c07}
+.farmer-tile.highlight{border-color:#dfc1ba;background:#fff8f5}
+.farmer-label{font-size:12px;color:#6f8073;font-weight:700}.farmer-value{margin:10px 0 6px;font-size:clamp(25px,2.4vw,36px);font-weight:850;letter-spacing:-1px;white-space:nowrap;color:#293e34}
+.farmer-unit{font-size:13px;color:#6a7a70;font-weight:600;margin-left:3px}
+.farmer-delta{font-size:12px;color:#7a837c;min-height:19px}.farmer-delta.up{color:#b54e44}.farmer-delta.down{color:#3e7e68}
+.farmer-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.farmer-mini{background:#f1f4ef;border:1px solid #e6eae4;border-radius:12px;padding:13px 15px}.farmer-mini strong{display:block;font-size:18px;color:#304338;margin-top:6px}.farmer-mini small{font-size:11px;color:#79877c}
+/* The standalone KPI area replaces duplicated KPI text inside trend cards; chart remains intact. */
+.panels .panel-head,.panels .bigval,.panels .stats{display:none}
+.panels .panel .chartbox{border-top:none;padding-top:20px}.panels .panel{border-radius:15px}.panels .panel-foot{padding:12px 18px}
+.grade-panel{margin-top:18px}.grade-panel h3{font-size:19px}
+@media(max-width:850px){.farmer-primary{grid-template-columns:repeat(2,minmax(0,1fr))}.farmer-secondary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.farmer-tile{padding:15px 12px}.farmer-value{font-size:27px}.farmer-mini{padding:11px}.farmer-head h2{font-size:19px}.sex-choice{min-height:80px}}
 </style></head><body>
 <header><div class="top"><div class="brand"><div class="logo">牛</div>HANWOO <span style="font-weight:400;color:#afbdd0">INSIGHT</span></div><nav aria-label="바로가기" class="mini-nav"><a href="#quality">품질 비교</a><a href="#grades">육질등급</a><a href="#details">월별 상세표</a><a href="https://www.youtube.com/@thankscow" rel="noopener" target="_blank">땡스카우 ↗</a></nav><div class="topsmall">공식 공개자료 기반</div></div></header>
 <div class="hero"><div class="shell hero-row"><div><div class="eyebrow">전국 한우 성적 한눈에</div><h1>우리 한우, 전국 평균은 어떨까요?</h1><p>거세우·암소 품질과 육질등급을 쉽고 빠르게 확인하세요.</p></div><div class="hero-foot"><span class="tag">✓ 전국 통계</span><span class="tag">✓ 축산물품질평가원 자료</span><span class="tag">월별·누적 비교</span></div></div></div>
@@ -69,7 +90,21 @@ body[data-sex="male"] .grade-box:nth-child(2),body[data-sex="female"] .grade-box
 <div class="sex-picker" role="tablist" aria-label="조회할 한우 구분">
 <button type="button" role="tab" class="sex-choice is-on" id="chooseMale" aria-selected="true"><span class="sex-icon">●</span><span><strong>거세우</strong><small>거세한 수소 성적</small></span></button>
 <button type="button" role="tab" class="sex-choice" id="chooseFemale" aria-selected="false"><span class="sex-icon">●</span><span><strong>암소</strong><small>암소 성적</small></span></button>
-</div><div class="sectionhead" id="quality"><h2 id="activeSexTitle">거세우 주요 성적</h2><div class="sub" id="periodLabel">2026년 9월 기준</div></div>
+</div><section class="farmer-overview" aria-label="선택한 성별 핵심 성적">
+  <div class="farmer-head"><div><h2 id="farmerTitle">거세우 전국 평균 한눈에</h2><p id="farmerSubtitle">2026년 선택한 기간의 주요 통계</p></div><span class="sub" id="farmerPeriodHint">전월 대비 변화는 선택 월 기준</span></div>
+  <div class="farmer-primary">
+    <div class="farmer-tile"><div class="farmer-label">평균 도체중</div><div class="farmer-value"><span id="quickWeight">—</span><span class="farmer-unit">kg</span></div><div class="farmer-delta" id="deltaWeight">—</div></div>
+    <div class="farmer-tile"><div class="farmer-label">경락단가</div><div class="farmer-value"><span id="quickPrice">—</span><span class="farmer-unit">원/kg</span></div><div class="farmer-delta" id="deltaPrice">—</div></div>
+    <div class="farmer-tile highlight"><div class="farmer-label">1++ 육질등급 출현율</div><div class="farmer-value"><span id="quickGrade">—</span><span class="farmer-unit">%</span></div><div class="farmer-delta" id="deltaGrade">등급 자료 불러오는 중</div></div>
+    <div class="farmer-tile"><div class="farmer-label">평균 도축개월령</div><div class="farmer-value"><span id="quickAge">—</span><span class="farmer-unit">개월</span></div><div class="farmer-delta" id="deltaAge">월령 자료 불러오는 중</div></div>
+  </div>
+  <div class="farmer-secondary">
+    <div class="farmer-mini"><small>평균 근내지방도</small><strong id="quickMarbling">—</strong></div>
+    <div class="farmer-mini"><small>평균 등심단면적</small><strong id="quickArea">—</strong></div>
+    <div class="farmer-mini"><small>평균 등지방두께</small><strong id="quickFat">—</strong></div>
+    <div class="farmer-mini"><small>판정두수</small><strong id="quickCount">—</strong></div>
+  </div>
+</section><div class="sectionhead" id="quality"><h2 id="activeSexTitle">거세우 월별 추이</h2><div class="sub" id="periodLabel">2026년 9월 기준</div></div>
 <div class="panels"><section class="panel male"><div class="panel-head"><div class="sex-title"><span class="sexdot"></span>거세우</div><span class="count" id="maleCount">—</span></div><div class="bigval"><div class="label" id="maleMainLabel">평균 도체중</div><strong id="maleMain">—</strong><small id="maleUnit">kg</small></div><div class="stats" id="maleStats"></div><div class="chartbox"><div class="chart-title" id="maleChartTitle">거세우 월별 도체중 추이</div><div class="chart-sub">월별 변화 추이</div><svg aria-label="거세우 월별 성적 그래프" class="chart" id="maleChart" role="img" viewbox="0 0 550 215"></svg></div><div class="panel-foot"><span>연초 대비 변화 (1월 → 선택 월)</span><b id="maleChange">—</b></div></section>
 <section class="panel female"><div class="panel-head"><div class="sex-title"><span class="sexdot"></span>암소</div><span class="count" id="femaleCount">—</span></div><div class="bigval"><div class="label" id="femaleMainLabel">평균 도체중</div><strong id="femaleMain">—</strong><small id="femaleUnit">kg</small></div><div class="stats" id="femaleStats"></div><div class="chartbox"><div class="chart-title" id="femaleChartTitle">암소 월별 도체중 추이</div><div class="chart-sub">월별 변화 추이</div><svg aria-label="암소 월별 성적 그래프" class="chart" id="femaleChart" role="img" viewbox="0 0 550 215"></svg></div><div class="panel-foot"><span>연초 대비 변화 (1월 → 선택 월)</span><b id="femaleChange">—</b></div></section></div><section aria-labelledby="gradeTitle" class="grade-panel" id="grades"><h3 id="gradeTitle"><span id="gradeSexTitle">거세우</span> 육질등급 · 도축개월령</h3><div class="grade-layout"><div class="grade-box"><b>거세우</b> <span class="muted-pill" id="gradeStatusMale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeMale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div><div class="grade-box"><b>암소</b> <span class="muted-pill" id="gradeStatusFemale">공식 자료 확인 중</span><div class="grade-legend"><span>1++</span><span>1+</span><span>1</span><span>2</span><span>3</span></div><div class="grade-placeholder" id="gradeFemale">육질등급별 출현율 · 자료 확인 중</div><p class="fine-note">평균 출하월령: 자료 미확보</p></div></div></section>
 <div class="sectionhead"><h2>지표별 월간 변화</h2><span class="sub">지표를 선택해 그래프 비교</span></div><div class="metric-controls" id="metricControls"></div>
@@ -201,7 +236,7 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
   document.body.dataset.sex=isMale?'male':'female';
   male.classList.toggle('is-on',isMale);female.classList.toggle('is-on',!isMale);
   male.setAttribute('aria-selected',String(isMale));female.setAttribute('aria-selected',String(!isMale));
-  document.getElementById('activeSexTitle').textContent=sex+' 주요 성적';
+  document.getElementById('activeSexTitle').textContent=sex+' 월별 추이';
   document.getElementById('gradeSexTitle').textContent=sex;
   document.getElementById('tableSexTitle').textContent=sex;
   if(typeof render==='function')render();
@@ -209,5 +244,64 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
  male.addEventListener('click',()=>selectSex('거세우'));
  female.addEventListener('click',()=>selectSex('암소'));
  selectSex('거세우');
+})();
+</script><script>
+/* Farmer-first cards, based on existing data. No source or collection changes. */
+(function(){
+ let gradeRecords=[],ageRecords=[];
+ const el=id=>document.getElementById(id),n=(v,d=0)=>Number(v).toLocaleString('ko-KR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const set=(id,value)=>{if(el(id))el(id).textContent=value};
+ function rateFor(sex,month,mode){
+  const rows=gradeRecords.filter(r=>r.sex===sex&&r.month<=month&&(mode!=='month'||r.month===month));
+  if(!rows.length)return null;
+  if(mode==='month'){let g=rows.at(-1)?.grades?.['1++'];return Number.isFinite(Number(g?.rate))?Number(g.rate):null}
+  const sum=rows.reduce((s,r)=>s+Number(r.count||0),0);
+  const plus=rows.reduce((s,r)=>s+Number(r.grades?.['1++']?.count||0),0);
+  return sum>0?100*plus/sum:null;
+ }
+ function ageFor(sex,month,mode){
+  let rows=ageRecords.filter(r=>r.sex===sex&&r.month<=month).sort((a,b)=>a.month.localeCompare(b.month));
+  if(mode==='month'){let row=rows.find(r=>r.month===month);return row?{value:Number(row.age_months),note:'공식 월별 평균'}:{value:null,note:'해당 월 미발표'}}
+  if(!rows.length)return {value:null,note:'자료 미확보'};
+  let available=rows.at(-1).month;
+  let months=Array.from({length:Number(available.slice(5))},(_,i)=>available.slice(0,4)+'-'+String(i+1).padStart(2,'0'));
+  if(months.some(m=>!rows.some(r=>r.month===m)))return {value:null,note:'월별 자료 누락'};
+  return {value:rows.reduce((s,r)=>s+Number(r.age_months),0)/rows.length,note:'월평균 단순평균 · 참고'};
+ }
+ function change(id,current,prev,unit,decimal=0){
+  const node=el(id);if(!node)return;
+  node.classList.remove('up','down');
+  if(!Number.isFinite(prev)){node.textContent='전월 비교 자료 없음';return}
+  const diff=current-prev;
+  if(Math.abs(diff)<Math.pow(10,-decimal)/2){node.textContent='전월 대비 변동 없음';return}
+  node.classList.add(diff>0?'up':'down');
+  node.textContent=`전월 대비 ${diff>0?'▲':'▼'} ${n(Math.abs(diff),decimal)}${unit} ${diff>0?'증가':'감소'}`;
+ }
+ function update(){
+  if(typeof DATA==='undefined'||typeof aggregate!=='function')return;
+  const sex=window.hanwooSelectedSex||'거세우',month=el('month')?.value,mode=el('mode')?.value;
+  if(!month)return;
+  const rows=series(sex,month),r=aggregate(rows,mode),latest=rows.at(-1),prev=rows.at(-2);
+  if(!r)return;
+  const age=ageFor(sex,month,mode),g=rateFor(sex,month,mode);
+  set('farmerTitle',sex+' 전국 평균 한눈에');set('farmerSubtitle',month.replace('-','년 ')+'월 · '+(mode==='month'?'선택 월 성적':'1월부터 누적 성적'));
+  set('farmerPeriodHint',mode==='month'?'전월 대비 변화':'변화량은 마지막 월과 전월 비교');
+  set('quickWeight',n(r.weight,mode==='month'?0:1));set('quickPrice',n(r.price,mode==='month'?0:1));
+  set('quickGrade',g==null?'—':n(g,1));set('quickAge',age.value==null?'—':n(age.value,1));
+  set('quickMarbling',n(r.marbling,1)+' No.');set('quickArea',n(r.rea,1)+' ㎠');set('quickFat',n(r.fat,1)+' mm');set('quickCount',n(r.count)+'두');
+  change('deltaWeight',latest.weight,prev?.weight,'kg',0);change('deltaPrice',latest.price,prev?.price,'원',0);
+  set('deltaGrade',g==null?'등급 자료 미확보':mode==='month'?'선택 월 판정두수 기준':'1월부터 판정두수 가중');
+  set('deltaAge',age.note);
+ }
+ window.refreshFarmerOverview=update;
+ for(const id of ['month','mode'])el(id)?.addEventListener('change',()=>setTimeout(update,0));
+ for(const id of ['chooseMale','chooseFemale'])el(id)?.addEventListener('click',()=>setTimeout(update,0));
+ (async()=>{
+  const requests=await Promise.allSettled([fetch('grade_data.json',{cache:'no-store'}).then(r=>r.json()),fetch('age_data.json',{cache:'no-store'}).then(r=>r.json())]);
+  if(requests[0].status==='fulfilled')gradeRecords=requests[0].value.records||[];
+  if(requests[1].status==='fulfilled')ageRecords=requests[1].value.records||[];
+  update();
+ })();
+ update();
 })();
 </script></body></html>
