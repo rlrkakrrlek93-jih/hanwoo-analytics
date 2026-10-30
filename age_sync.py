@@ -69,6 +69,61 @@ def parse(raw):
         raise ValueError('2026년 1월 이후 전국 한우 거세우·암소 자료를 모두 찾지 못함')
     return rows
 
+def parse_beef_steer_age(raw):
+    """Extract beef-steer slaughter age from the SAME verified age-table response."""
+    if not isinstance(raw,dict) or not raw.get('result'):
+        return {}
+    table=BeautifulSoup(raw['result'][0],'html.parser').select_one('table#mainTable')
+    if table is None:
+        return {}
+    heads=table.select('thead tr')
+    if len(heads)<2:
+        return {}
+    # Verify the breed+sex header order before reading numeric columns.
+    first=[(x.get('title',''),int(x.get('colspan') or 1)) for x in heads[0].find_all('th')]
+    second=heads[1].find_all('th')
+    if not any(name=='육우' and width>=4 for name,width in first):
+        return {}
+    beef_start=1
+    for name,width in first:
+        if name=='시점':
+            continue
+        if name=='육우':
+            break
+        beef_start+=width
+    # 육우 columns: 전체 / 암 / 수 / 거세
+    beef_neutered=beef_start+3
+    ages={}
+    for tr in table.select('tbody tr'):
+        cells=tr.find_all('td',recursive=False)
+        if len(cells)<=beef_neutered:continue
+        date=cells[0].get('title','').strip()
+        m=re.fullmatch(r'(20\d{2})\.\s*(\d{1,2})',date)
+        if not m:continue
+        month=f'{m.group(1)}-{int(m.group(2)):02d}'
+        if month<'2026-01':continue
+        value=cells[beef_neutered].get('title','').replace(',','').strip()
+        try:num=float(value)
+        except ValueError:continue
+        if 10<=num<=150:ages[month]=num
+    return ages
+
+def save_beef_ages(ages):
+    path=ROOT/'beef_national_data.json'
+    if not path.exists() or not ages:
+        print('육우 월령 추가: 자료 파일 또는 공식 월령 자료가 없어 기존 자료 유지')
+        return
+    data=json.loads(path.read_text(encoding='utf8'))
+    updated=[]
+    for rec in data.get('records',[]):
+        mo=rec.get('month')
+        if rec.get('breed')=='육우' and rec.get('sex')=='거세우' and mo in ages:
+            rec['age_months']=ages[mo]
+            updated.append(mo)
+    if updated:
+        path.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+    print('한우 월령 통계표로 육우 거세우 월령 병합:',', '.join(updated) if updated else '해당 월 없음')
+
 def collect():
     months=months_until_last_complete()
     with sync_playwright() as p:
@@ -81,7 +136,11 @@ def collect():
             if r.status!=200:raise RuntimeError('통계표 요청 실패')
             try: raw=r.json()
             except Exception as e:raise RuntimeError('통계표 JSON 응답 아님') from e
-            try:return parse(raw)
+            try:
+                hanwoo_rows=parse(raw)
+                beef_ages=parse_beef_steer_age(raw)
+                print('동일 공식 응답의 육우 거세우 월령:', ', '.join(f'{mo}:{v:.1f}' for mo,v in sorted(beef_ages.items())) or '없음')
+                return hanwoo_rows,beef_ages
             except Exception:
                 summary={'keys':list(raw) if isinstance(raw,dict) else str(type(raw)),
                          'result_length':len(str(raw.get('result',''))) if isinstance(raw,dict) else 0,
@@ -101,4 +160,10 @@ def save(rows):
     print(f'도축개월령 수집 성공: {len(merged)}행, {merged[0]["month"]} ~ {merged[-1]["month"]}')
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('--response');a=ap.parse_args()
-    save(parse(json.loads(Path(a.response).read_text(encoding='utf8'))) if a.response else collect())
+    if a.response:
+        raw=json.loads(Path(a.response).read_text(encoding='utf8'))
+        hanwoo_rows,beef_ages=parse(raw),parse_beef_steer_age(raw)
+    else:
+        hanwoo_rows,beef_ages=collect()
+    save(hanwoo_rows)
+    save_beef_ages(beef_ages)
