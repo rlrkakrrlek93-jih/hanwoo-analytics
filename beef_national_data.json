@@ -13,7 +13,8 @@
       "area": 74.0,
       "yield_index": 61.0,
       "marbling": 2.0,
-      "price": 12033.0
+      "price": 12033.0,
+      "age_months": 23.6
     },
     {
       "month": "2026-02",
@@ -26,7 +27,8 @@
       "area": 73.0,
       "yield_index": 61.0,
       "marbling": 2.0,
-      "price": 12527.0
+      "price": 12527.0,
+      "age_months": 23.0
     },
     {
       "month": "2026-03",
@@ -39,7 +41,8 @@
       "area": 73.0,
       "yield_index": 61.0,
       "marbling": 2.0,
-      "price": 13212.0
+      "price": 13212.0,
+      "age_months": 22.8
     },
     {
       "month": "2026-04",
@@ -52,7 +55,8 @@
       "area": 73.0,
       "yield_index": 61.0,
       "marbling": 2.0,
-      "price": 12718.0
+      "price": 12718.0,
+      "age_months": 23.2
     },
     {
       "month": "2026-05",
@@ -65,7 +69,8 @@
       "area": 74.0,
       "yield_index": 61.0,
       "marbling": 2.0,
-      "price": 12498.0
+      "price": 12498.0,
+      "age_months": 23.4
     },
     {
       "month": "2026-06",
