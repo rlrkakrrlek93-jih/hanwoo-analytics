@@ -125,7 +125,8 @@
       "area": 75.0,
       "yield_index": 61.0,
       "marbling": 3.0,
-      "price": 12682.0
+      "price": 12682.0,
+      "age_months": 23.8
     }
   ]
 }
