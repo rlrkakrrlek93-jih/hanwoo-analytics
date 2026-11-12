@@ -127,6 +127,19 @@
       "marbling": 3.0,
       "price": 12682.0,
       "age_months": 23.8
+    },
+    {
+      "month": "2026-10",
+      "breed": "육우",
+      "sex": "거세우",
+      "count": 4112,
+      "live": 778.0,
+      "weight": 441.0,
+      "fat": 8.0,
+      "area": 75.0,
+      "yield_index": 61.0,
+      "marbling": 3.0,
+      "price": 12790.0
     }
   ]
 }
