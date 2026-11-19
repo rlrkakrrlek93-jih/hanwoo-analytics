@@ -382,3 +382,4 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
  fetch('beef_national_data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(r.status);return r.json()}).then(v=>{data=v.records||[];paint()}).catch(e=>console.warn('육우 전국 자료 미수신',e));
 })();
 </script></body></html>
+<script src="quality-check.js" defer></script>
