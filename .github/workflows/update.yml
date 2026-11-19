@@ -1,4 +1,3 @@
-
 name: Hanwoo Daily Update
 
 on:
@@ -35,22 +34,21 @@ jobs:
           pip install playwright
           python -m playwright install --with-deps chromium
 
-      - name: Collect official statistics
-        run: python collect.py
+      - name: Safe collect, verify, and automatically recover
+        run: python auto_quality.py
 
-      - name: Commit quality statistics
+      - name: Commit verified quality data and agent report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html data.csv data.json
+          git add index.html data.csv data.json quality_report.json
           if ! git diff --cached --quiet; then
-            git commit -m "Update Hanwoo quality statistics"
+            git commit -m "Safe update Hanwoo statistics and quality report"
             git push
           fi
 
       - name: Collect grade incidence
         run: python grade_sync.py
-
       - name: Commit grade statistics
         run: |
           git add grade_data.json
@@ -61,7 +59,6 @@ jobs:
 
       - name: Collect monthly slaughter age
         run: python age_sync.py
-
       - name: Commit slaughter age statistics
         run: |
           git add age_data.json
@@ -72,7 +69,6 @@ jobs:
 
       - name: Probe new cattle statistics
         run: python probe_new_stats.py
-
       - name: Save cattle statistics diagnostic
         if: always()
         uses: actions/upload-artifact@v4
@@ -80,10 +76,9 @@ jobs:
           name: new-stats-probe
           path: new_stats_probe/
           if-no-files-found: warn
-          
+
       - name: Collect national beef steer statistics
         run: python beef_national_sync.py
-
       - name: Commit national beef steer data
         run: |
           git add beef_national_data.json
@@ -91,5 +86,3 @@ jobs:
             git commit -m "Update national beef steer"
             git push
           fi
-
-
