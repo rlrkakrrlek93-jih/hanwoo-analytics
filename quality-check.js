@@ -1,68 +1,91 @@
-/* HANWOO INSIGHT independent data-quality panel, v1.3.1.
-   Read-only: never overwrites collection, dashboard records, or source files. */
+/* HANWOO INSIGHT v1.4 — read-only data quality panel.
+ * Displays results from auto_quality.py; never changes any statistic.
+ */
 (()=>{'use strict';
-const FILES=['data.json','grade_data.json','age_data.json'];
-const FIELDS={count:'판정두수',weight:'도체중',marbling:'근내지방도',rea:'등심단면적',fat:'등지방두께',live:'생체중',price:'경락단가'};
-const LIMITS={count:0.30,weight:0.05,marbling:0.20,rea:0.10,fat:0.25,live:0.10,price:0.15};
-const SRC='https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2';
-const $=id=>document.getElementById(id);
-const h=(tag,attrs={},value)=>{const e=document.createElement(tag);for(const [k,v] of Object.entries(attrs)){if(k==='className')e.className=v;else e.setAttribute(k,v)}if(value!==undefined)e.textContent=value;return e};
-const n=v=>Number(v).toLocaleString('ko-KR',{maximumFractionDigits:2});
-function safeRows(v){return (v&&Array.isArray(v.records))?v.records:[]}
-function isMonth(x){return /^\d{4}-(0[1-9]|1[0-2])$/.test(String(x||''))}
-function textAt(id,text){$(id).textContent=text}
-const style=h('style');style.textContent=`#hq{max-width:1440px;margin:26px auto 44px;padding:0 32px;color:#243950;font:inherit}#hq *{box-sizing:border-box}#hq .hq-card{background:#fff;border:1px solid #dfe8f2;border-radius:16px;padding:22px;box-shadow:0 8px 24px #132f4a08}#hq h2{font-size:21px;margin:0 0 9px}#hq p,#hq small{color:#60748d;line-height:1.6}#hq button{border:1px solid #b7cddd;padding:9px 13px;background:#f4f8fc;border-radius:9px;color:#24415d;cursor:pointer;font-weight:700}#hq button:hover{background:#e7f3fc}#hq .hq-badges{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}#hq .hq-pill{padding:8px 11px;border-radius:8px;background:#edf3f8;font-size:13px}#hq .hq-good{background:#e9f7ee;color:#17613e}#hq .hq-warn{background:#fff1df;color:#8c561b}#hq .hq-bad{background:#fdebea;color:#9a2727}#hq table{width:100%;border-collapse:collapse;font-size:13px}#hq td,#hq th{text-align:left;border-bottom:1px solid #e8eef4;padding:10px 8px}#hq th{color:#637991;background:#f6f9fc}#hq .hq-table{max-height:340px;overflow:auto;margin-top:10px}#hq .hq-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:15px 0}#hq input[type=file]{max-width:100%;font-size:12px}#hq .hq-quiet{font-size:12px;color:#667b90}#hq a{color:#176b9c}#hq .hq-message{margin:12px 0;white-space:pre-wrap;font-size:13px}#hq details{margin-top:12px}#hq summary{cursor:pointer;font-weight:700}@media(max-width:600px){#hq{padding:0 16px}#hq .hq-card{padding:14px}}`;
-(document.head||document.documentElement).append(style);
-const panel=h('section',{id:'hq'}),card=h('div',{className:'hq-card'});panel.append(card);
-card.append(h('h2',{},'데이터 신뢰성 검사'),h('p',{},'현재 공개된 데이터를 읽기 전용으로 검사합니다. 내부 검사는 공식 원본 일치 검증과 다릅니다.'));
-const badges=h('div',{className:'hq-badges',id:'hq-badges'}),actions=h('div',{className:'hq-actions'}),run=h('button',{type:'button'},'현재 데이터 다시 검사'),file=h('input',{type:'file',accept:'.json,application/json','aria-label':'공식 원본 비교용 JSON 파일 선택'});
-actions.append(run,h('label',{},'공식 원본 JSON 파일 비교: '),file);card.append(badges,actions);
-card.append(h('div',{className:'hq-message',id:'hq-message'},'검사 준비 중…'));
-const link=h('a',{href:SRC,target:'_blank',rel:'noopener noreferrer'},'축산유통 통계누리 원본 통계표 열기');card.append(link);
-const detail=h('details');detail.append(h('summary',{},'검사 결과 상세보기'),h('div',{className:'hq-table',id:'hq-detail'}));card.append(detail);
-card.append(h('p',{className:'hq-quiet'},'비교용 JSON은 축산물품질평가원 자료에서 생성한 검증 가능한 원본이어야 합니다. 브라우저에 업로드한 임의 파일은 공식 출처가 자동으로 인증되지 않습니다.'));
-const locate=document.querySelector('main .footer')||document.querySelector('footer');if(locate&&locate.parentNode){locate.parentNode.insertBefore(panel,locate)}else(document.querySelector('main')||document.body).append(panel);
-let current=null, lastIssues=[];
-function badge(title,value,kind=''){badges.append(h('span',{className:'hq-pill '+(kind?'hq-'+kind:'')},title+': '+value))}
-function showIssues(items){const holder=$('hq-detail');holder.replaceChildren();if(!items.length){holder.append(h('p',{},'검사 대상에서 구조상 문제나 설정된 이상치 경고가 발견되지 않았습니다.'));return}
- const t=h('table'),head=h('tr');for(const x of ['분류','대상','내용'])head.append(h('th',{},x));t.append(head);
- for(const it of items.slice(0,120)){let tr=h('tr');for(const s of [it.type,it.id,it.message])tr.append(h('td',{},String(s)));t.append(tr)}holder.append(t);
- if(items.length>120)holder.append(h('small',{},`나머지 ${items.length-120}건은 화면 표시에서 생략`));}
-const issue=(issues,type,id,message)=>issues.push({type,id,message});
-function inspect(data,related){const rows=safeRows(data);const issues=[],keys=new Set(),months=new Set();
- if(!rows.length)issue(issues,'구조 오류','data.json','records 배열이 비어 있거나 없습니다.');
- for(const r of rows){const key=`${r.month||'?'} / ${r.sex||'?'}`;
- if(!isMonth(r.month))issue(issues,'월 형식',key,'YYYY-MM 형식이 아닙니다.');
- if(!['거세우','암소'].includes(r.sex))issue(issues,'성별 형식',key,'거세우 또는 암소가 아닙니다.');
- if(keys.has(key))issue(issues,'중복',key,'같은 월·성별이 중복되었습니다.');keys.add(key);months.add(r.month);
- for(const [field,name] of Object.entries(FIELDS)){const v=r[field];if(v===undefined||v===null||v===''||!Number.isFinite(Number(v))||Number(v)<0)issue(issues,'누락/숫자 오류',key,name+' 값이 잘못되었습니다.');}
- if(Number.isFinite(+r.marbling)&&(+r.marbling<1||+r.marbling>9))issue(issues,'범위 확인',key,'근내지방도 1~9 범위를 벗어났습니다.');
+ const OFFICIAL='https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2';
+ const METRIC={count:'판정두수',weight:'평균 도체중',marbling:'근내지방도',rea:'등심단면적',fat:'등지방두께',live:'평균 생체중',price:'경락단가'};
+ const LIMITS={count:0.30,weight:0.05,marbling:0.20,rea:0.10,fat:0.25,live:0.10,price:0.15};
+ const $=id=>document.getElementById(id);
+ const el=(tag,cl,content)=>{const n=document.createElement(tag);if(cl)n.className=cl;if(content!==undefined)n.textContent=content;return n};
+ const monthOK=v=>/^\d{4}-(0[1-9]|1[0-2])$/.test(String(v||''));
+ const num=v=>typeof v==='number'&&Number.isFinite(v);
+ const safe=v=>v&&Array.isArray(v.records)?v.records:[];
+ const request=async path=>{const r=await fetch(path+'?check='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error(path+' HTTP '+r.status);return r.json()};
+ const css=`#hq{max-width:1440px;margin:28px auto 48px;padding:0 32px;color:#243950;font:inherit}#hq *{box-sizing:border-box}#hq .hq-card{border:1px solid #dfe8f2;border-radius:16px;padding:24px;background:#fff;box-shadow:0 6px 22px #18324b0a}#hq h2{font-size:21px;margin:0 0 8px}#hq .hq-sub{color:#60748d;line-height:1.6;font-size:14px}#hq .hq-badges{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}#hq .hq-pill{display:inline-block;padding:8px 11px;border-radius:8px;background:#edf3f8;font-size:13px}#hq .hq-good{background:#e9f7ee;color:#17613e}#hq .hq-warn{background:#fff1df;color:#8c561b}#hq .hq-bad{background:#fdebea;color:#9a2727}#hq button{border:1px solid #b7cddd;padding:10px 15px;background:#f4f8fc;color:#24415d;border-radius:9px;cursor:pointer;font-weight:700}#hq .hq-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:15px 0}#hq .hq-details{margin:12px 0}#hq .hq-table{overflow:auto;max-height:380px;margin-top:10px}#hq table{border-collapse:collapse;width:100%;font-size:13px}#hq th,#hq td{border-bottom:1px solid #e7edf5;text-align:left;padding:11px}#hq th{background:#f5f8fc;color:#5e738b}#hq .hq-message{font-size:13px;line-height:1.8;white-space:pre-wrap;color:#36526d;margin:12px 0}#hq details summary{cursor:pointer;font-weight:700}#hq a{color:#176b9c}#hq .hq-quiet{color:#60748d;font-size:12px;line-height:1.6}#hq input[type=file]{font-size:12px;max-width:100%}@media(max-width:600px){#hq{padding:0 14px}#hq .hq-card{padding:15px}}`;
+ const style=el('style');style.textContent=css;document.head.append(style);
+ const panel=el('section');panel.id='hq';const card=el('div','hq-card');panel.append(card);
+ card.append(el('h2','', '데이터 신뢰성 검사'),el('p','hq-sub','내부 검사와 공식 원본 재수집 검사를 구분합니다. 전월 대비 변동은 오류가 아닌 참고 정보입니다.'));
+ const badges=el('div','hq-badges'),actions=el('div','hq-actions'),btn=el('button','','현재 데이터 다시 검사'),file=el('input');
+ btn.type='button';file.type='file';file.accept='.json,application/json';file.setAttribute('aria-label','공식 자료 비교 파일 선택');
+ actions.append(btn,el('span','','원본 JSON 직접 비교:'),file);
+ const status=el('div','hq-message','검사를 준비하고 있습니다…');const link=el('a','', '축산유통 통계누리 공식 통계표 열기');link.href=OFFICIAL;link.target='_blank';link.rel='noopener noreferrer';
+ const details=el('details','hq-details'),sum=el('summary','', '검사 결과 상세보기'),tableHolder=el('div','hq-table');details.append(sum,tableHolder);
+ card.append(badges,actions,status,link,details,el('p','hq-quiet','공식 자동 검증의 범위는 수집한 응답에 포함된 월에 한정됩니다. 파일 수동 업로드만으로 출처가 인증되지는 않습니다.'));
+ const anchor=document.querySelector('main .footer')||document.querySelector('footer');if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(panel,anchor);else (document.querySelector('main')||document.body).append(panel);
+ let current=null;
+ const badge=(title,value,type='')=>badges.append(el('span','hq-pill '+(type?'hq-'+type:''),title+': '+value));
+ const entry=(severity,type,id,message)=>({severity,type,id,message});
+ function inspect(doc){
+  const rows=safe(doc),errors=[],notices=[],keys=new Set(),months=new Set();
+  if(!rows.length)errors.push(entry('오류','구조','data.json','records 배열이 없습니다.'));
+  for(const r of rows){
+   const id=(r.month||'?')+' / '+(r.sex||'?');
+   if(!monthOK(r.month))errors.push(entry('오류','월 형식',id,'YYYY-MM 형식이 아닙니다.'));
+   if(!['거세우','암소'].includes(r.sex))errors.push(entry('오류','성별',id,'거세우 또는 암소만 허용합니다.'));
+   if(keys.has(id))errors.push(entry('오류','중복',id,'중복된 월/성별입니다.'));keys.add(id);months.add(r.month);
+   for(const [k,n] of Object.entries(METRIC))if(!num(r[k])||r[k]<0)errors.push(entry('오류','수치',id,n+' 누락 또는 수치 형식 오류'));
+   if(num(r.marbling)&&(r.marbling<1||r.marbling>9))errors.push(entry('오류','범위',id,'근내지방도 범위를 벗어남'));
+  }
+  const all=[...months].filter(monthOK).sort();
+  if(all.length){let y=+all[0].slice(0,4),m=+all[0].slice(5);while(y*12+m<=+all.at(-1).slice(0,4)*12+(+all.at(-1).slice(5))){
+   const mon=y+'-'+String(m).padStart(2,'0');for(const sex of ['거세우','암소'])if(!keys.has(mon+' / '+sex))errors.push(entry('오류','자료 누락',mon+' / '+sex,'월별 데이터가 없습니다.'));
+   if(++m>12){y++;m=1;}
+  }}
+  for(const sex of ['거세우','암소']){
+   const seq=rows.filter(r=>r.sex===sex&&monthOK(r.month)).sort((a,b)=>a.month.localeCompare(b.month));
+   for(let i=1;i<seq.length;i++)for(const [k,name] of Object.entries(METRIC)){
+    const p=seq[i-1][k],v=seq[i][k];if(!num(p)||!num(v)||p<=0)continue;
+    const pct=Math.abs((v/p-1)*100);if(pct>LIMITS[k]*100)notices.push(entry('참고','월간 변동',seq[i].month+' / '+sex,`${name} 전월 대비 ${pct.toFixed(1)}% 변동. 통계 오류로 판정하지 않습니다.`));
+   }
+  }
+  const latest=all.at(-1)||'미확인';
+  if(doc.latest_month&&doc.latest_month!==latest)errors.push(entry('오류','최신 월 메타데이터','latest_month',`선언 월 ${doc.latest_month}, 실제 월 ${latest}`));
+  return {errors,notices,latest,total:rows.length};
  }
- const ordered=[...months].filter(isMonth).sort();if(ordered.length){let cursor=ordered[0];while(cursor<=ordered.at(-1)){for(const sex of ['거세우','암소'])if(!keys.has(`${cursor} / ${sex}`))issue(issues,'월·성별 누락',`${cursor} / ${sex}`,'해당 월/성별 행이 없습니다.');const [y,m]=cursor.split('-').map(Number);cursor=`${y+(m===12)}-${String(m===12?1:m+1).padStart(2,'0')}`;}}
- for(const sex of ['거세우','암소']){const seq=rows.filter(r=>r.sex===sex&&isMonth(r.month)).sort((a,b)=>a.month.localeCompare(b.month));for(let i=1;i<seq.length;i++){const a=seq[i-1],b=seq[i];for(const [f,label] of Object.entries(FIELDS)){let p=+a[f],v=+b[f];if(!Number.isFinite(p)||!Number.isFinite(v)||p<=0)continue;const pct=Math.abs(v/p-1);if(pct>LIMITS[f])issue(issues,'변동 검토',`${b.month} / ${sex}`,`${label} 전월 대비 ${Math.round(pct*1000)/10}% 변동 (초기 기준 ${LIMITS[f]*100}%). 통계 오류 확정은 아닙니다.`)}}}
- for(const [name,data2] of Object.entries(related)){if(!data2)issue(issues,'자료 확인',name,'파일을 읽지 못했습니다.');else if(!Array.isArray(data2.records))issue(issues,'구조 확인',name,'records 배열이 없습니다.');}
- return {issues,latest:ordered.at(-1)||'미확인',rows:rows.length};}
-async function load(path){const sep=path.includes('?')?'&':'?';let res=await fetch(path+sep+'hq='+Date.now(),{cache:'no-store'});if(!res.ok)throw Error(path+': HTTP '+res.status);return res.json()}
-async function runCheck(){badges.replaceChildren();textAt('hq-message','저장된 공개 파일을 다시 조회하고 있습니다…');try{
- const results=await Promise.allSettled(FILES.map(load));if(results[0].status==='rejected')throw results[0].reason;
- const main=results[0].value,related={};FILES.slice(1).forEach((f,i)=>related[f]=results[i+1].status==='fulfilled'?results[i+1].value:null);
- current=main;const result=inspect(main,related);lastIssues=result.issues;
- badge('최신 저장 월',result.latest);badge('저장 행 수',result.rows+'행');badge('내부 경고',result.issues.length+'건',result.issues.length?'warn':'good');
- badge('공식 원본 대조','미검증','warn');
- const claim=main.latest_month||'미기재',sync=main.last_success_kst||'미기재';
- if(claim!==result.latest){issue(lastIssues,'메타데이터 불일치','latest_month',`선언값 ${claim}, 실제 데이터 최종월 ${result.latest}`)}
- textAt('hq-message',`데이터 파일에서 확인된 마지막 월: ${result.latest}\n수집 성공시각 메타데이터: ${sync}\n공식 발표일: ${main.official_published_at||'미확인'}\n공식 원본과의 독립 대조는 아직 수행되지 않았습니다.`);
- showIssues(lastIssues);if(lastIssues.length)detail.open=true;
- }catch(err){badge('검사 상태','데이터 불러오기 실패','bad');textAt('hq-message',`검사 실패: ${err.message}. 원래 대시보드 데이터는 변경되지 않았습니다.`);showIssues([{type:'읽기 실패',id:'data.json',message:err.message}]);}}
-function normalizeDoc(obj){if(Array.isArray(obj))return obj;if(obj&&Array.isArray(obj.records))return obj.records;throw Error('JSON 배열 또는 records 배열이 필요합니다.')}
-file.addEventListener('change',async()=>{const f=file.files?.[0];if(!f||!current)return;try{const raw=JSON.parse(await f.text()),official=normalizeDoc(raw),local=safeRows(current),lookup=new Map();const differences=[];
- for(const r of official){if(!isMonth(r.month)||!['거세우','암소'].includes(r.sex))continue;const k=r.month+' / '+r.sex;if(lookup.has(k))issue(differences,'원본 중복',k,'원본 파일에 중복 항목');lookup.set(k,r)}
- let matched=0;for(const r of local){const k=r.month+' / '+r.sex,o=lookup.get(k);if(!o){issue(differences,'원본 미포함',k,'업로드된 JSON에 해당 월/성별이 없습니다.');continue}matched++;
- for(const [key,label] of Object.entries(FIELDS)){if(!Number.isFinite(Number(o[key]))){issue(differences,'원본 결측',k,label+' 원본 값 없음');continue}if(Math.abs(+r[key]-(+o[key]))>1e-7)issue(differences,'수치 불일치',k,`${label}: 홈페이지 ${r[key]} / 비교 파일 ${o[key]}`)}}
- for(const k of lookup.keys())if(!local.some(r=>r.month+' / '+r.sex===k))issue(differences,'홈페이지 미반영',k,'비교 파일에 있으나 홈페이지에 없는 월/성별');
- badges.replaceChildren();badge('업로드 파일',f.name);badge('비교된 월·성별',matched+'건');badge('수치/범위 불일치',differences.length+'건',differences.length?'bad':'good');badge('출처 진위','미확인','warn');
- textAt('hq-message',`${matched}개 월·성별 행을 비교했습니다. ${differences.length}개 차이 또는 확인 필요 사항이 있습니다.\n주의: 이 파일의 공식 출처 진위 및 집계 조건은 자동으로 인증하지 않았습니다.`);
- showIssues(differences);detail.open=true;
- }catch(err){textAt('hq-message','비교 실패: '+err.message)}});
-run.addEventListener('click',runCheck);runCheck();
+ function draw(items){tableHolder.replaceChildren();if(!items.length){tableHolder.append(el('p','hq-quiet','검사에서 오류·검토 항목을 찾지 못했습니다.'));return;}
+  const t=el('table'),head=el('tr');for(const name of ['구분','유형','대상','내용'])head.append(el('th','',name));t.append(head);
+  for(const it of items.slice(0,150)){const tr=el('tr');for(const x of [it.severity,it.type,it.id,it.message])tr.append(el('td','',String(x)));t.append(tr);}tableHolder.append(t);
+ }
+ async function run(){badges.replaceChildren();status.textContent='저장된 통계를 다시 확인하고 있습니다…';try{
+  const results=await Promise.allSettled(['data.json','grade_data.json','age_data.json','quality_report.json'].map(request));
+  if(results[0].status!=='fulfilled')throw results[0].reason;
+  const data=results[0].value,report=results[3].status==='fulfilled'?results[3].value:null;
+  current=data;const result=inspect(data),errors=result.errors,notices=result.notices;
+  for(let i=1;i<=2;i++)if(results[i].status!=='fulfilled')notices.push(entry('참고','보조 데이터',i===1?'grade_data.json':'age_data.json','별도 통계 파일을 확인하지 못했습니다.'));
+  badge('최신 저장 월',result.latest);badge('저장 행 수',result.total+'행');
+  badge('데이터 구조 오류',errors.length+'건',errors.length?'bad':'good');
+  badge('변동 참고',notices.length+'건',notices.length?'warn':'good');
+  let agent='미설정',detailMessage='';
+  if(report&&report.status==='verified_current_source'){
+   agent='최근 공식 수집 검증';
+   const months=Array.isArray(report.verified_months)?report.verified_months:[];
+   detailMessage=`공식 응답을 재수집해 확인한 월: ${months.length?months.join(', '):'없음'}\n`;badge('자동 검증',agent,'good');
+   badge('자동 수정·추가',Array.isArray(report.corrections)?report.corrections.length+'행':'미확인');
+  }else if(report&&report.status==='blocked_kept_previous'){
+   agent='오류 차단·기존 자료 보존';badge('자동 검증',agent,'warn');
+  }else badge('자동 검증',agent,'warn');
+  status.textContent=`마지막 저장 월: ${result.latest}\n자동 검증 실행 시각: ${report?.checked_at_kst||'아직 없음'}\n${detailMessage}${report?.message||'자동 검증 보고서가 아직 없습니다.'}\n공식 통계 발표시각: ${data.official_published_at||'미확인'}\n※ 전체 과거 데이터의 독립 출처 대조를 의미하지 않습니다.`;
+  const all=[...errors,...notices];draw(all);details.open=errors.length>0;
+ }catch(err){badge('검사','불러오기 실패','bad');status.textContent='검사 실패: '+err.message+'\n홈페이지 데이터는 변경하지 않았습니다.';draw([entry('오류','연결','data.json',err.message)]);details.open=true;}}
+ file.addEventListener('change',async()=>{const f=file.files&&file.files[0];if(!f||!current)return;try{
+  const value=JSON.parse(await f.text()),rows=Array.isArray(value)?value:safe(value);
+  if(!rows.length)throw Error('JSON의 records 배열이 비어 있습니다.');const lookup=new Map(),diff=[];
+  for(const r of rows){const k=r.month+' / '+r.sex;if(lookup.has(k))diff.push(entry('오류','원본 중복',k,'동일 월·성별 중복'));lookup.set(k,r)}
+  let matched=0;for(const r of safe(current)){const k=r.month+' / '+r.sex,o=lookup.get(k);if(!o){diff.push(entry('미포함','원본 범위',k,'비교 파일에 없는 자료'));continue;}matched++;
+   for(const [key,label] of Object.entries(METRIC)){if(!num(o[key]))diff.push(entry('오류','원본 결측',k,label+' 값 없음'));else if(+r[key]!==+o[key])diff.push(entry('차이','수치 불일치',k,`${label}: 홈페이지 ${r[key]} / 업로드 ${o[key]}`));}}
+  badges.replaceChildren();badge('대조 행',matched+'개');badge('확인 사항',diff.length+'건',diff.length?'warn':'good');badge('파일 출처','진위 미확인','warn');
+  status.textContent=`${f.name}: ${matched}개 행 비교, 차이 또는 범위 확인 ${diff.length}건. 업로드 파일이 공식 자료인지는 인증되지 않았습니다.`;
+  draw(diff);details.open=true;
+ }catch(err){status.textContent='비교 실패: '+err.message;}});
+ btn.addEventListener('click',run);run();
 })();
