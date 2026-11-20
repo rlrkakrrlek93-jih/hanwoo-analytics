@@ -3,6 +3,9 @@ on:
   pull_request:
     paths:
       - 'market_source_probe.py'
+      - 'market_supply_sync.py'
+      - 'market-indicators.js'
+      - 'test_market_supply.py'
       - '.github/workflows/market-probe.yml'
   workflow_dispatch:
 permissions:
@@ -20,6 +23,12 @@ jobs:
         run: |
           pip install -r requirements.txt
           python -m playwright install --with-deps chromium
+      - name: JavaScript syntax validation
+        run: node --check market-indicators.js
+      - name: Validate market supply parser
+        run: python -m unittest test_market_supply -v
+      - name: Live supply collector dry-run (no published file changed)
+        run: python market_supply_sync.py --dry-run
       - name: Inspect public sources
         run: python market_source_probe.py
       - name: Archive diagnostic responses
