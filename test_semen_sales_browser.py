@@ -24,19 +24,27 @@ def main():
                 scope.locator('circle[data-year="2024"]').first.wait_for(timeout=20000)
                 svg=scope.locator("svg")
                 assert scope.count()==1
+                assert svg.locator('circle[data-year="2022"]').count()==12
+                assert svg.locator('circle[data-year="2023"]').count()==12
                 assert svg.locator('circle[data-year="2024"]').count()==12
                 assert svg.locator('circle[data-year="2025"]').count()==5
                 assert svg.locator('circle[data-year="2026"]').count()==0
+                assert svg.locator('path[data-year="2022"]').count()==1
+                assert svg.locator('path[data-year="2023"]').count()==1
                 assert svg.locator('path[data-year="2024"]').count()==1
                 assert svg.locator('path[data-year="2025"]').count()==1
                 assert svg.locator('path[data-year="2026"]').count()==0
                 assert svg.locator('path[data-year="2024"]').get_attribute("d").startswith("M")
                 assert svg.locator('path[data-year="2025"]').get_attribute("d").startswith("M")
+                jan22=svg.locator('circle[data-year="2022"][data-month="1"]').get_attribute("cx")
+                jan23=svg.locator('circle[data-year="2023"][data-month="1"]').get_attribute("cx")
                 jan24=svg.locator('circle[data-year="2024"][data-month="1"]').get_attribute("cx")
                 jan25=svg.locator('circle[data-year="2025"][data-month="1"]').get_attribute("cx")
-                assert jan24==jan25
+                assert jan22==jan23==jan24==jan25
                 labels=svg.locator("text").all_text_contents()
                 assert all(f"{i}월" in labels for i in range(1,13))
+                assert "171천 str" in svg.locator('circle[data-year="2022"][data-month="1"] title').text_content()
+                assert "132천 str" in svg.locator('circle[data-year="2023"][data-month="1"] title').text_content()
                 assert "128천 str" in svg.locator('circle[data-year="2024"][data-month="1"] title').text_content()
                 assert "139천 str" in svg.locator('circle[data-year="2025"][data-month="1"] title').text_content()
                 assert "2025년 6월 이후" in scope.inner_text()
@@ -44,10 +52,11 @@ def main():
                 folder.mkdir(exist_ok=True)
                 scope.screenshot(path=str(folder/"semen_sales_annual_compare.png"))
                 scope.locator("input").nth(0).uncheck()
-                assert svg.locator('path[data-year="2024"]').count()==0
+                assert svg.locator('path[data-year="2022"]').count()==0
+                assert svg.locator('path[data-year="2024"]').count()==1
                 assert svg.locator('path[data-year="2025"]').count()==1
                 assert not errors, errors[:3]
-                print("PASS: semen Jan-Dec year overlay, 17 confirmed months, unpublished months hidden")
+                print("PASS: semen Jan-Dec year overlay, 41 confirmed months, unpublished months hidden")
             finally:browser.close()
     finally:server.shutdown();server.server_close()
 if __name__=="__main__":
