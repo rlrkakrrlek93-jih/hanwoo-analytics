@@ -27,7 +27,7 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: JavaScript syntax validation
         run: node --check market-indicators.js
-      - name: Browser regression: overlay year comparison
+      - name: Browser regression - overlay year comparison
         run: python test_market_chart_browser.py
       - name: Save year comparison screenshot
         if: always()
