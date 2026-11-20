@@ -278,11 +278,20 @@ def main():
             browser=pl.chromium.launch(headless=True,args=['--no-sandbox'])
             try:
                 ctx=browser.new_context(locale='ko-KR',timezone_id='Asia/Seoul')
-                months=desired_months()
+                all_months=desired_months()
+                old=json.loads(OUT.read_text(encoding='utf8')) if OUT.exists() else {}
+                stored={r['month']:r for r in old.get('records',[]) if isinstance(r,dict) and 'month' in r}
+                recent=set(all_months[-4:])
+                missing={x for x in all_months if x[:4]+'-'+x[4:] not in stored}
+                missing_price={x for x in all_months if
+                    (r:=stored.get(x[:4]+'-'+x[4:])) is not None and
+                    ('auction_price_by_sex' not in r or
+                     any(r.get('auction_price_by_sex',{}).get(k) is None for k in ('steer','female')))}
+                months=sorted(recent|missing|missing_price)
+                print('Monthly source check:',len(months),'months;',len(missing),'new,',len(missing_price),'missing price,',len(recent),'recent')
                 inv,inv_parts=collect_table(ctx,INVENTORY_TABLE,parse_inventory,months)
                 grade,grade_parts=collect_table(ctx,GRADING_TABLE,parse_grading,months)
             finally:browser.close()
-        old=json.loads(OUT.read_text(encoding='utf8')) if OUT.exists() else {}
         result=build(inv,inv_parts,grade,grade_parts,old)
         print('Verified official supply',result['latest_month'],len(result['records']),
               'inventory',result['records'][-1]['inventory_head'],
