@@ -56,7 +56,6 @@ def test_page():
                 assert svg.locator("path[data-year='2025']").count() == 0
                 assert svg.locator("circle[data-year='2026'][data-month='11']").count() == 0
                 assert svg.locator("circle[data-year='2026'][data-month='12']").count() == 0
-                assert len(page.locator('#marketScope table tbody tr').all()) == 0 or True
                 print("PASS: 9 curves, aligned Jan-Dec, 34 monthly samples x 3 metrics, toggles and price selector")
             finally:
                 browser.close()
