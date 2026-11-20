@@ -9,6 +9,8 @@ on:
       - 'test_precision_compatibility.py'
       - '.github/workflows/precision-probe.yml'
   workflow_dispatch:
+  schedule:
+    - cron: '25 0 * * 1' # Every Monday 09:25 KST (UTC)
 
 permissions:
   contents: read
