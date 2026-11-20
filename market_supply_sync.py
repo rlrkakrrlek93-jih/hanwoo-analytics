@@ -293,6 +293,16 @@ def main():
                 grade,grade_parts=collect_table(ctx,GRADING_TABLE,parse_grading,months)
             finally:browser.close()
         result=build(inv,inv_parts,grade,grade_parts,old)
+        covered={r['month'] for r in result['records']}
+        latest=result['latest_month']
+        history=[mo[:4]+'-'+mo[4:] for mo in desired_months() if mo[:4]+'-'+mo[4:]<=latest]
+        incomplete=[mo for mo in history if mo not in covered]
+        without_price=[r['month'] for r in result['records'] if
+            not isinstance(r.get('auction_price_by_sex',{}).get('steer'),int) or
+            not isinstance(r.get('auction_price_by_sex',{}).get('female'),int)]
+        if incomplete or without_price:
+            raise ValueError('2024+ official monthly coverage incomplete. Missing months: '+
+                str(incomplete[:8])+'; missing published sex prices: '+str(without_price[:8]))
         print('Verified official supply',result['latest_month'],len(result['records']),
               'inventory',result['records'][-1]['inventory_head'],
               'graded',result['records'][-1]['graded_head'])
