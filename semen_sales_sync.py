@@ -43,7 +43,7 @@ def find_values(raw,year):
         if not row:continue
         tokens=re.findall(r'\d{1,3}(?:,\d{3})*',row.group(1))
         numbers=[int(x.replace(',','')) for x in tokens]
-        if len(numbers)>1 and numbers[-1]>=1000 and abs(numbers[-1]-sum(numbers[:-1]))<=max(6,len(numbers)//2):
+        if len(numbers)>1 and abs(numbers[-1]-sum(numbers[:-1]))<=max(6,(len(numbers)-1)//2):
             numbers=numbers[:-1]
         if not 1<=len(numbers)<=12 or any(v<25 or v>400 for v in numbers):
             return None
