@@ -37,7 +37,7 @@ def last_complete():
 
 def desired_months():
     end=last_complete()
-    y,m=2026,1;out=[]
+    y,m=2024,1;out=[]
     while f'{y:04d}-{m:02d}'<=end:
         out.append(f'{y:04d}{m:02d}')
         m+=1
@@ -105,12 +105,14 @@ def parse_grading(response):
     metrics=repeat_names(cells(head[2]))
     if len(month_codes)!=len(regions) or len(month_codes)!=len(metrics):
         raise ValueError('Grading multiheader width mismatch')
-    nationwide={(mo,i) for i,(mo,region,metric) in enumerate(zip(month_codes,regions,metrics))
-                if region=='00' and metric=='T001'}
     expected=set(month_codes)
-    if {mo for mo,i in nationwide} != expected:raise ValueError('National graded-count fields missing')
-    positions={mo:i for mo,i in nationwide}
-    grouped={};breed=sex=''
+    indexes={}
+    for i,(mo,region,metric) in enumerate(zip(month_codes,regions,metrics)):
+        if region=='00' and metric in ('T001','T008'):
+            indexes.setdefault(mo,{})[metric]=i
+    if set(indexes)!=expected or any(set(v)!={'T001','T008'} for v in indexes.values()):
+        raise ValueError('National graded count and auction price fields missing')
+    grouped={};prices={};breed=sex=''
     for tr in table.select('tbody tr'):
         c=cells(tr)
         if len(c)<4:continue
@@ -118,13 +120,22 @@ def parse_grading(response):
         breed=labels[0] or breed
         sex=labels[1] or sex
         if breed!='한우' or sex not in SEXES or labels[2]!='전체':continue
-        for month_code,idx in positions.items():
-            if 3+idx>=len(c):raise ValueError('Grade count column out of bounds')
-            value=strict_int(c[3+idx])
+        for month_code,fieldpos in indexes.items():
+            countidx=fieldpos['T001']
+            priceidx=fieldpos['T008']
+            if 3+max(countidx,priceidx)>=len(c):
+                raise ValueError('Grade/price column out of bounds')
+            value=strict_int(c[3+countidx])
             if not 0<=value<=250000:raise ValueError('Grade count outside range')
             key=(month_code[1:5]+'-'+month_code[5:],sex)
             if key in grouped:raise ValueError('Duplicate grade sex '+str(key))
             grouped[key]=value
+            try:
+                price=strict_int(c[3+priceidx])
+                if not 1000<=price<=100000:raise ValueError('Auction price outside plausible range')
+            except ValueError:
+                price=None
+            prices[key]=price
     result={};details={}
     for month in sorted({k[0] for k in grouped}):
         if any((month,sex) not in grouped for sex in SEXES):
@@ -133,7 +144,11 @@ def parse_grading(response):
         total=sum(v.values())
         if not 10000<=total<=250000:raise ValueError('Invalid grading total '+month)
         result[month]=total
-        details[month]={'female':v['암'],'male':v['수'],'steer':v['거세']}
+        details[month]={'female':v['암'],'male':v['수'],'steer':v['거세'],
+                        'auction_price_by_sex':{
+                          'female':prices.get((month,'암')),
+                          'male':prices.get((month,'수')),
+                          'steer':prices.get((month,'거세'))}}
     return result,details
 
 def capture(ctx,table_id):
@@ -221,6 +236,12 @@ def verify_records(records):
         grade=r.get('graded_by_sex',{})
         if sum(inv.values())!=r['inventory_head'] or sum(grade.values())!=r['graded_head']:
             raise ValueError('Breakdown mismatch '+mo)
+        price=r.get('auction_price_by_sex')
+        if price is not None:
+            if not isinstance(price,dict):raise ValueError('Invalid auction price object')
+            for sex,val in price.items():
+                if sex not in ('female','male','steer') or (val is not None and (type(val) is not int or not 1000<=val<=100000)):
+                    raise ValueError('Invalid auction price '+mo+' '+sex)
     return True
 
 def atomic_write(path,obj):
@@ -236,13 +257,16 @@ def build(inv,inv_parts,graded,grade_parts,old=None):
     prior={r['month']:r for r in old.get('records',[])}
     for mo in set(inv)&set(graded):
         prior[mo]=dict(month=mo,inventory_head=inv[mo],graded_head=graded[mo],
-                       inventory_by_farm=inv_parts[mo],graded_by_sex=grade_parts[mo])
-    records=[prior[x] for x in sorted(prior)]
+                       inventory_by_farm=inv_parts[mo],
+                       graded_by_sex={k:v for k,v in grade_parts[mo].items() if k!='auction_price_by_sex'},
+                       auction_price_by_sex=grade_parts[mo].get('auction_price_by_sex',{}))
+    records=[prior[x] for x in sorted(prior) if x>='2024-01']
     verify_records(records)
     if not records:raise ValueError('No matching official inventory and graded months')
     return dict(schema_version=1,source_inventory=BASE+INVENTORY_TABLE,
         source_grading=BASE+GRADING_TABLE,inventory_definition='월말 전국 한우 사육두수 (농장 사육형태 전체)',
         grading_definition='월중 전국 한우 도체 판정두수 (암·수·거세 포함)',
+        price_definition='월중 전국 한우 성별 경락단가(원/kg), 공표 원본; 한우 전체 평균으로 혼합 계산하지 않음',
         last_success_kst=kst_now(),latest_month=records[-1]['month'],records=records)
 
 def main():
