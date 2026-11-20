@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "source_inventory": "https://mtrace.go.kr/statHtml/statHtml.do?conn_path=I2&orgId=323&tblId=DT_323901_A100000011",
+  "source_grading": "https://mtrace.go.kr/statHtml/statHtml.do?conn_path=I2&orgId=323&tblId=DT_323903_E1080008",
+  "inventory_definition": "월말 전국 한우 사육두수 (농장 사육형태 전체)",
+  "grading_definition": "월중 전국 한우 도체 판정두수 (암·수·거세 포함)",
+  "last_success_kst": "2026-11-20 15:50 KST",
+  "latest_month": "2026-10",
+  "records": [
+    {
+      "month": "2026-01",
+      "inventory_head": 3099884,
+      "graded_head": 109384,
+      "inventory_by_farm": {
+        "breeding": 434061,
+        "fattening": 320876,
+        "integrated": 2344947
+      },
+      "graded_by_sex": {
+        "female": 48105,
+        "male": 333,
+        "steer": 60946
+      }
+    },
+    {
+      "month": "2026-02",
+      "inventory_head": 3081259,
+      "graded_head": 57659,
+      "inventory_by_farm": {
+        "breeding": 424513,
+        "fattening": 322956,
+        "integrated": 2333790
+      },
+      "graded_by_sex": {
+        "female": 27058,
+        "male": 371,
+        "steer": 30230
+      }
+    },
+    {
+      "month": "2026-03",
+      "inventory_head": 3098470,
+      "graded_head": 65767,
+      "inventory_by_farm": {
+        "breeding": 441617,
+        "fattening": 323355,
+        "integrated": 2333498
+      },
+      "graded_by_sex": {
+        "female": 31110,
+        "male": 516,
+        "steer": 34141
+      }
+    },
+    {
+      "month": "2026-04",
+      "inventory_head": 3127280,
+      "graded_head": 76103,
+      "inventory_by_farm": {
+        "breeding": 446581,
+        "fattening": 322696,
+        "integrated": 2358003
+      },
+      "graded_by_sex": {
+        "female": 38136,
+        "male": 279,
+        "steer": 37688
+      }
+    },
+    {
+      "month": "2026-05",
+      "inventory_head": 3153897,
+      "graded_head": 62333,
+      "inventory_by_farm": {
+        "breeding": 418569,
+        "fattening": 319623,
+        "integrated": 2415705
+      },
+      "graded_by_sex": {
+        "female": 32241,
+        "male": 264,
+        "steer": 29828
+      }
+    },
+    {
+      "month": "2026-06",
+      "inventory_head": 3180686,
+      "graded_head": 66063,
+      "inventory_by_farm": {
+        "breeding": 405379,
+        "fattening": 320529,
+        "integrated": 2454778
+      },
+      "graded_by_sex": {
+        "female": 34781,
+        "male": 271,
+        "steer": 31011
+      }
+    },
+    {
+      "month": "2026-07",
+      "inventory_head": 3194025,
+      "graded_head": 68636,
+      "inventory_by_farm": {
+        "breeding": 410899,
+        "fattening": 323341,
+        "integrated": 2459785
+      },
+      "graded_by_sex": {
+        "female": 36154,
+        "male": 263,
+        "steer": 32219
+      }
+    },
+    {
+      "month": "2026-08",
+      "inventory_head": 3179579,
+      "graded_head": 74694,
+      "inventory_by_farm": {
+        "breeding": 410388,
+        "fattening": 319740,
+        "integrated": 2449451
+      },
+      "graded_by_sex": {
+        "female": 36914,
+        "male": 227,
+        "steer": 37553
+      }
+    },
+    {
+      "month": "2026-09",
+      "inventory_head": 3145736,
+      "graded_head": 98600,
+      "inventory_by_farm": {
+        "breeding": 418896,
+        "fattening": 314576,
+        "integrated": 2412264
+      },
+      "graded_by_sex": {
+        "female": 46869,
+        "male": 465,
+        "steer": 51266
+      }
+    },
+    {
+      "month": "2026-10",
+      "inventory_head": 3139307,
+      "graded_head": 62425,
+      "inventory_by_farm": {
+        "breeding": 426068,
+        "fattening": 316985,
+        "integrated": 2396254
+      },
+      "graded_by_sex": {
+        "female": 27570,
+        "male": 527,
+        "steer": 34328
+      }
+    }
+  ]
+}

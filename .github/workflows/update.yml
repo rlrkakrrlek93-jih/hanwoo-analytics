@@ -67,6 +67,17 @@ jobs:
             git push
           fi
 
+
+      - name: Refresh monthly Hanwoo supply indicators (safe)
+        run: python market_supply_sync.py
+      - name: Commit independently verified supply data
+        run: |
+          git add market_supply_data.json market_supply_status.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update monthly Hanwoo inventory and all-sex grading"
+            git push
+          fi
+
       - name: Probe new cattle statistics
         run: python probe_new_stats.py
       - name: Save cattle statistics diagnostic
