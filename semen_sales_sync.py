@@ -29,17 +29,22 @@ BASELINE_2024=[128,207,140,162,193,195,188,168,180,165,133,161]
 BASELINE_2025=[139,143,118,140,179]
 
 def find_values(raw,year):
-    """Require the correct 2021 semen header, never the similarly shaped feed table."""
+    """Find only semen table rows after known 2021 control values; drop report subtotal."""
     text=raw.replace('\u00a0',' ')
-    a=re.search(r'2021\s+172\s+162\s+179\s+209',text)
-    if not a: return None
-    section=text[a.start():a.start()+3000]
-    match=re.search(r'(?m)^\s*'+str(year)+r'\s+((?:\d{2,3}\s+){0,12}\d{2,3})',section)
+    match=re.search(r'2021\s+172\s+162\s+179\s+209',text)
     if not match:return None
-    block=match.group(1)
-    values=[int(x) for x in re.findall(r'\b\d{2,3}\b',block)]
-    if not values or len(values)>12 or any(not 25<=v<=400 for v in values):return None
-    return values
+    section=text[match.start():match.start()+4200]
+    for line in section.splitlines():
+        row=re.match(r'^\s*'+str(year)+r'\s+(.+?)\s*$',line)
+        if not row:continue
+        tokens=re.findall(r'\d{1,3}(?:,\d{3})*',row.group(1))
+        numbers=[int(x.replace(',','')) for x in tokens]
+        if len(numbers)>1 and numbers[-1]==sum(numbers[:-1]):
+            numbers=numbers[:-1]
+        if not 1<=len(numbers)<=12 or any(v<25 or v>400 for v in numbers):
+            return None
+        return numbers
+    return None
 
 def report_rows(url):
     response=requests.get(url,headers=UA,timeout=23)
