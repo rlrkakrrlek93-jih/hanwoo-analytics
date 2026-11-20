@@ -6,6 +6,7 @@ on:
       - 'market_supply_sync.py'
       - 'market-indicators.js'
       - 'test_market_supply.py'
+      - 'test_market_history_price.py'
       - '.github/workflows/market-probe.yml'
   workflow_dispatch:
 permissions:
@@ -13,7 +14,7 @@ permissions:
 jobs:
   source-probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 13
+    timeout-minutes: 22
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,7 +27,7 @@ jobs:
       - name: JavaScript syntax validation
         run: node --check market-indicators.js
       - name: Validate market supply parser
-        run: python -m unittest test_market_supply -v
+        run: python -m unittest test_market_supply test_market_history_price -v
       - name: Live supply collector dry-run (no published file changed)
         run: python market_supply_sync.py --dry-run
       - name: Inspect public sources
