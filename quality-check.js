@@ -20,7 +20,7 @@
  actions.append(btn,el('span','','원본 JSON 직접 비교:'),file);
  const status=el('div','hq-message','검사를 준비하고 있습니다…');const link=el('a','', '축산유통 통계누리 공식 통계표 열기');link.href=OFFICIAL;link.target='_blank';link.rel='noopener noreferrer';
  const details=el('details','hq-details'),sum=el('summary','', '검사 결과 상세보기'),tableHolder=el('div','hq-table');details.append(sum,tableHolder);
- card.append(badges,actions,status,link,details,el('p','hq-quiet','공식 자동 검증의 범위는 수집한 응답에 포함된 월에 한정됩니다. 파일 수동 업로드만으로 출처가 인증되지는 않습니다.'));
+ card.append(badges,actions,status,link,details,el('p','hq-quiet','정밀도 안내: 현재 공식 소도체 항목별 평균표에서 근내지방도 등 평균 지표는 정수로 제공됩니다. 예를 들어 7.0 표시는 원본 정수 7의 화면 표기이지, 실제 평균이 소수 첫째 자리까지 7.0이라는 증거가 아닙니다. 동일 집계 기준의 소수점 공식 원본은 아직 확보되지 않았습니다.'),el('p','hq-quiet','공식 자동 검증의 범위는 수집한 응답에 포함된 월에 한정됩니다. 파일 수동 업로드만으로 출처가 인증되지는 않습니다.'));
  const anchor=document.querySelector('main .footer')||document.querySelector('footer');if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(panel,anchor);else (document.querySelector('main')||document.body).append(panel);
  let current=null;
  const badge=(title,value,type='')=>badges.append(el('span','hq-pill '+(type?'hq-'+type:''),title+': '+value));
