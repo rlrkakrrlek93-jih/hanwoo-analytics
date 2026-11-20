@@ -4,9 +4,490 @@
   "source_grading": "https://mtrace.go.kr/statHtml/statHtml.do?conn_path=I2&orgId=323&tblId=DT_323903_E1080008",
   "inventory_definition": "월말 전국 한우 사육두수 (농장 사육형태 전체)",
   "grading_definition": "월중 전국 한우 도체 판정두수 (암·수·거세 포함)",
-  "last_success_kst": "2026-11-20 15:50 KST",
+  "price_definition": "월중 전국 한우 성별 경락단가(원/kg), 공표 원본; 한우 전체 평균으로 혼합 계산하지 않음",
+  "last_success_kst": "2026-11-20 16:07 KST",
   "latest_month": "2026-10",
   "records": [
+    {
+      "month": "2024-01",
+      "inventory_head": 3357680,
+      "graded_head": 123626,
+      "inventory_by_farm": {
+        "breeding": 538544,
+        "fattening": 328069,
+        "integrated": 2491067
+      },
+      "graded_by_sex": {
+        "female": 58127,
+        "male": 660,
+        "steer": 64839
+      },
+      "auction_price_by_sex": {
+        "female": 14360,
+        "male": 9742,
+        "steer": 17609
+      }
+    },
+    {
+      "month": "2024-02",
+      "inventory_head": 3353758,
+      "graded_head": 59280,
+      "inventory_by_farm": {
+        "breeding": 524568,
+        "fattening": 334441,
+        "integrated": 2494749
+      },
+      "graded_by_sex": {
+        "female": 28077,
+        "male": 423,
+        "steer": 30780
+      },
+      "auction_price_by_sex": {
+        "female": 14371,
+        "male": 9210,
+        "steer": 17809
+      }
+    },
+    {
+      "month": "2024-03",
+      "inventory_head": 3362986,
+      "graded_head": 69096,
+      "inventory_by_farm": {
+        "breeding": 517485,
+        "fattening": 337387,
+        "integrated": 2508114
+      },
+      "graded_by_sex": {
+        "female": 35849,
+        "male": 322,
+        "steer": 32925
+      },
+      "auction_price_by_sex": {
+        "female": 13754,
+        "male": 8824,
+        "steer": 17227
+      }
+    },
+    {
+      "month": "2024-04",
+      "inventory_head": 3396068,
+      "graded_head": 76516,
+      "inventory_by_farm": {
+        "breeding": 506301,
+        "fattening": 334923,
+        "integrated": 2554844
+      },
+      "graded_by_sex": {
+        "female": 39151,
+        "male": 361,
+        "steer": 37004
+      },
+      "auction_price_by_sex": {
+        "female": 14084,
+        "male": 9425,
+        "steer": 17353
+      }
+    },
+    {
+      "month": "2024-05",
+      "inventory_head": 3431712,
+      "graded_head": 78619,
+      "inventory_by_farm": {
+        "breeding": 467069,
+        "fattening": 332223,
+        "integrated": 2632420
+      },
+      "graded_by_sex": {
+        "female": 41654,
+        "male": 419,
+        "steer": 36546
+      },
+      "auction_price_by_sex": {
+        "female": 13383,
+        "male": 9418,
+        "steer": 16737
+      }
+    },
+    {
+      "month": "2024-06",
+      "inventory_head": 3449127,
+      "graded_head": 68777,
+      "inventory_by_farm": {
+        "breeding": 433176,
+        "fattening": 329957,
+        "integrated": 2685994
+      },
+      "graded_by_sex": {
+        "female": 37008,
+        "male": 355,
+        "steer": 31414
+      },
+      "auction_price_by_sex": {
+        "female": 13133,
+        "male": 8995,
+        "steer": 16609
+      }
+    },
+    {
+      "month": "2024-07",
+      "inventory_head": 3455849,
+      "graded_head": 78485,
+      "inventory_by_farm": {
+        "breeding": 435605,
+        "fattening": 327988,
+        "integrated": 2692256
+      },
+      "graded_by_sex": {
+        "female": 41512,
+        "male": 333,
+        "steer": 36640
+      },
+      "auction_price_by_sex": {
+        "female": 13592,
+        "male": 9016,
+        "steer": 17067
+      }
+    },
+    {
+      "month": "2024-08",
+      "inventory_head": 3412100,
+      "graded_head": 109620,
+      "inventory_by_farm": {
+        "breeding": 440655,
+        "fattening": 321498,
+        "integrated": 2649947
+      },
+      "graded_by_sex": {
+        "female": 53718,
+        "male": 489,
+        "steer": 55413
+      },
+      "auction_price_by_sex": {
+        "female": 14650,
+        "male": 9450,
+        "steer": 18024
+      }
+    },
+    {
+      "month": "2024-09",
+      "inventory_head": 3388412,
+      "graded_head": 76259,
+      "inventory_by_farm": {
+        "breeding": 439484,
+        "fattening": 316528,
+        "integrated": 2632400
+      },
+      "graded_by_sex": {
+        "female": 35863,
+        "male": 536,
+        "steer": 39860
+      },
+      "auction_price_by_sex": {
+        "female": 15970,
+        "male": 9723,
+        "steer": 19363
+      }
+    },
+    {
+      "month": "2024-10",
+      "inventory_head": 3366299,
+      "graded_head": 82919,
+      "inventory_by_farm": {
+        "breeding": 441643,
+        "fattening": 317626,
+        "integrated": 2607030
+      },
+      "graded_by_sex": {
+        "female": 37966,
+        "male": 309,
+        "steer": 44644
+      },
+      "auction_price_by_sex": {
+        "female": 15746,
+        "male": 9864,
+        "steer": 18405
+      }
+    },
+    {
+      "month": "2024-11",
+      "inventory_head": 3340089,
+      "graded_head": 70546,
+      "inventory_by_farm": {
+        "breeding": 435659,
+        "fattening": 321310,
+        "integrated": 2583120
+      },
+      "graded_by_sex": {
+        "female": 33252,
+        "male": 273,
+        "steer": 37021
+      },
+      "auction_price_by_sex": {
+        "female": 16062,
+        "male": 10967,
+        "steer": 18333
+      }
+    },
+    {
+      "month": "2024-12",
+      "inventory_head": 3287549,
+      "graded_head": 94496,
+      "inventory_by_farm": {
+        "breeding": 446821,
+        "fattening": 329168,
+        "integrated": 2511560
+      },
+      "graded_by_sex": {
+        "female": 43376,
+        "male": 372,
+        "steer": 50748
+      },
+      "auction_price_by_sex": {
+        "female": 16333,
+        "male": 11324,
+        "steer": 18745
+      }
+    },
+    {
+      "month": "2025-01",
+      "inventory_head": 3226066,
+      "graded_head": 107795,
+      "inventory_by_farm": {
+        "breeding": 451526,
+        "fattening": 326807,
+        "integrated": 2447733
+      },
+      "graded_by_sex": {
+        "female": 48621,
+        "male": 616,
+        "steer": 58558
+      },
+      "auction_price_by_sex": {
+        "female": 15974,
+        "male": 10808,
+        "steer": 18536
+      }
+    },
+    {
+      "month": "2025-02",
+      "inventory_head": 3215159,
+      "graded_head": 62414,
+      "inventory_by_farm": {
+        "breeding": 450408,
+        "fattening": 328867,
+        "integrated": 2435884
+      },
+      "graded_by_sex": {
+        "female": 28646,
+        "male": 263,
+        "steer": 33505
+      },
+      "auction_price_by_sex": {
+        "female": 15804,
+        "male": 9998,
+        "steer": 18201
+      }
+    },
+    {
+      "month": "2025-03",
+      "inventory_head": 3223681,
+      "graded_head": 64794,
+      "inventory_by_farm": {
+        "breeding": 449313,
+        "fattening": 328459,
+        "integrated": 2445909
+      },
+      "graded_by_sex": {
+        "female": 31244,
+        "male": 318,
+        "steer": 33232
+      },
+      "auction_price_by_sex": {
+        "female": 15752,
+        "male": 10985,
+        "steer": 17876
+      }
+    },
+    {
+      "month": "2025-04",
+      "inventory_head": 3244811,
+      "graded_head": 84948,
+      "inventory_by_farm": {
+        "breeding": 455759,
+        "fattening": 323476,
+        "integrated": 2465576
+      },
+      "graded_by_sex": {
+        "female": 40886,
+        "male": 253,
+        "steer": 43809
+      },
+      "auction_price_by_sex": {
+        "female": 15779,
+        "male": 11913,
+        "steer": 18168
+      }
+    },
+    {
+      "month": "2025-05",
+      "inventory_head": 3275915,
+      "graded_head": 71208,
+      "inventory_by_farm": {
+        "breeding": 423152,
+        "fattening": 321716,
+        "integrated": 2531047
+      },
+      "graded_by_sex": {
+        "female": 36425,
+        "male": 361,
+        "steer": 34422
+      },
+      "auction_price_by_sex": {
+        "female": 15557,
+        "male": 11369,
+        "steer": 18145
+      }
+    },
+    {
+      "month": "2025-06",
+      "inventory_head": 3290334,
+      "graded_head": 66167,
+      "inventory_by_farm": {
+        "breeding": 397355,
+        "fattening": 319783,
+        "integrated": 2573196
+      },
+      "graded_by_sex": {
+        "female": 33652,
+        "male": 301,
+        "steer": 32214
+      },
+      "auction_price_by_sex": {
+        "female": 15757,
+        "male": 11451,
+        "steer": 18494
+      }
+    },
+    {
+      "month": "2025-07",
+      "inventory_head": 3299372,
+      "graded_head": 79148,
+      "inventory_by_farm": {
+        "breeding": 390320,
+        "fattening": 320496,
+        "integrated": 2588556
+      },
+      "graded_by_sex": {
+        "female": 41088,
+        "male": 329,
+        "steer": 37731
+      },
+      "auction_price_by_sex": {
+        "female": 16368,
+        "male": 11251,
+        "steer": 19348
+      }
+    },
+    {
+      "month": "2025-08",
+      "inventory_head": 3289061,
+      "graded_head": 76423,
+      "inventory_by_farm": {
+        "breeding": 392977,
+        "fattening": 318775,
+        "integrated": 2577309
+      },
+      "graded_by_sex": {
+        "female": 38033,
+        "male": 240,
+        "steer": 38150
+      },
+      "auction_price_by_sex": {
+        "female": 17315,
+        "male": 12070,
+        "steer": 20402
+      }
+    },
+    {
+      "month": "2025-09",
+      "inventory_head": 3225052,
+      "graded_head": 126433,
+      "inventory_by_farm": {
+        "breeding": 410780,
+        "fattening": 310694,
+        "integrated": 2503578
+      },
+      "graded_by_sex": {
+        "female": 58729,
+        "male": 568,
+        "steer": 67136
+      },
+      "auction_price_by_sex": {
+        "female": 18005,
+        "male": 12778,
+        "steer": 20947
+      }
+    },
+    {
+      "month": "2025-10",
+      "inventory_head": 2888897,
+      "graded_head": 59615,
+      "inventory_by_farm": {
+        "breeding": 556330,
+        "fattening": 241618,
+        "integrated": 2090949
+      },
+      "graded_by_sex": {
+        "female": 26266,
+        "male": 274,
+        "steer": 33075
+      },
+      "auction_price_by_sex": {
+        "female": 18639,
+        "male": 12112,
+        "steer": 21296
+      }
+    },
+    {
+      "month": "2025-11",
+      "inventory_head": 3196726,
+      "graded_head": 64592,
+      "inventory_by_farm": {
+        "breeding": 409460,
+        "fattening": 320685,
+        "integrated": 2466581
+      },
+      "graded_by_sex": {
+        "female": 29822,
+        "male": 227,
+        "steer": 34543
+      },
+      "auction_price_by_sex": {
+        "female": 18418,
+        "male": 12207,
+        "steer": 20834
+      }
+    },
+    {
+      "month": "2025-12",
+      "inventory_head": 3164892,
+      "graded_head": 82690,
+      "inventory_by_farm": {
+        "breeding": 420791,
+        "fattening": 323485,
+        "integrated": 2420616
+      },
+      "graded_by_sex": {
+        "female": 37042,
+        "male": 291,
+        "steer": 45357
+      },
+      "auction_price_by_sex": {
+        "female": 18642,
+        "male": 13243,
+        "steer": 21296
+      }
+    },
     {
       "month": "2026-01",
       "inventory_head": 3099884,
@@ -20,6 +501,11 @@
         "female": 48105,
         "male": 333,
         "steer": 60946
+      },
+      "auction_price_by_sex": {
+        "female": 19095,
+        "male": 13755,
+        "steer": 21958
       }
     },
     {
@@ -35,6 +521,11 @@
         "female": 27058,
         "male": 371,
         "steer": 30230
+      },
+      "auction_price_by_sex": {
+        "female": 18848,
+        "male": 12973,
+        "steer": 21866
       }
     },
     {
@@ -50,6 +541,11 @@
         "female": 31110,
         "male": 516,
         "steer": 34141
+      },
+      "auction_price_by_sex": {
+        "female": 18827,
+        "male": 12832,
+        "steer": 21567
       }
     },
     {
@@ -65,6 +561,11 @@
         "female": 38136,
         "male": 279,
         "steer": 37688
+      },
+      "auction_price_by_sex": {
+        "female": 18073,
+        "male": 13403,
+        "steer": 21230
       }
     },
     {
@@ -80,6 +581,11 @@
         "female": 32241,
         "male": 264,
         "steer": 29828
+      },
+      "auction_price_by_sex": {
+        "female": 18384,
+        "male": 13402,
+        "steer": 21852
       }
     },
     {
@@ -95,6 +601,11 @@
         "female": 34781,
         "male": 271,
         "steer": 31011
+      },
+      "auction_price_by_sex": {
+        "female": 19183,
+        "male": 13885,
+        "steer": 22919
       }
     },
     {
@@ -110,6 +621,11 @@
         "female": 36154,
         "male": 263,
         "steer": 32219
+      },
+      "auction_price_by_sex": {
+        "female": 19720,
+        "male": 14004,
+        "steer": 23487
       }
     },
     {
@@ -125,6 +641,11 @@
         "female": 36914,
         "male": 227,
         "steer": 37553
+      },
+      "auction_price_by_sex": {
+        "female": 20392,
+        "male": 15223,
+        "steer": 24137
       }
     },
     {
@@ -140,6 +661,11 @@
         "female": 46869,
         "male": 465,
         "steer": 51266
+      },
+      "auction_price_by_sex": {
+        "female": 21892,
+        "male": 14540,
+        "steer": 25375
       }
     },
     {
@@ -155,6 +681,11 @@
         "female": 27570,
         "male": 527,
         "steer": 34328
+      },
+      "auction_price_by_sex": {
+        "female": 21722,
+        "male": 13298,
+        "steer": 24616
       }
     }
   ]
