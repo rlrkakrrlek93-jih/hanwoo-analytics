@@ -6,9 +6,129 @@
   "source": "전국한우협회 한우동향분석 <표 6> (원자료: 농협경제지주 한우개량사업소)",
   "source_report_2024": "https://www.ihanwoo.org/file_c/file_download?fname=ax_6049658841.pdf&furl=%2Fupload&orifname=2025%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
   "source_report_2025": "https://www.ihanwoo.org/file_c/file_download?furl=/upload&fname=ax_9838022113.pdf&orifname=2025%EB%85%84+6%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
-  "coverage": "2024-01 ~ 2025-05 (검증된 월만 수록)",
+  "coverage": "2022-01 ~ 2025-05 (검증된 월만 수록; 2026년 미확보)",
   "last_verified_kst": "2026-11-20",
   "records": [
+    {
+      "month": "2022-01",
+      "sold_thousand_str": 171,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-02",
+      "sold_thousand_str": 171,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-03",
+      "sold_thousand_str": 171,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-04",
+      "sold_thousand_str": 183,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-05",
+      "sold_thousand_str": 206,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-06",
+      "sold_thousand_str": 233,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-07",
+      "sold_thousand_str": 199,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-08",
+      "sold_thousand_str": 192,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-09",
+      "sold_thousand_str": 202,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-10",
+      "sold_thousand_str": 220,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-11",
+      "sold_thousand_str": 176,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2022-12",
+      "sold_thousand_str": 162,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-01",
+      "sold_thousand_str": 132,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-02",
+      "sold_thousand_str": 167,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-03",
+      "sold_thousand_str": 152,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-04",
+      "sold_thousand_str": 181,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-05",
+      "sold_thousand_str": 161,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-06",
+      "sold_thousand_str": 194,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-07",
+      "sold_thousand_str": 172,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-08",
+      "sold_thousand_str": 188,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-09",
+      "sold_thousand_str": 200,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-10",
+      "sold_thousand_str": 178,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-11",
+      "sold_thousand_str": 135,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2023-12",
+      "sold_thousand_str": 170,
+      "source_url": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
     {
       "month": "2024-01",
       "sold_thousand_str": 128,
@@ -94,5 +214,12 @@
       "sold_thousand_str": 179,
       "source_url": "https://www.ihanwoo.org/file_c/file_download?furl=/upload&fname=ax_9838022113.pdf&orifname=2025%EB%85%84+6%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
     }
-  ]
+  ],
+  "source_report_2022_2023": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
+  "published_annual_totals_thousand_str": {
+    "2022": 2281,
+    "2023": 2030,
+    "2024": 2020
+  },
+  "annual_total_note": "2022년은 월별 반올림 공표값의 합계 2,286천 str와 공식 연간 집계 합계 2,281천 str가 다릅니다. 보고서 안내처럼 반올림 또는 집계 차이로 연간 공식값을 별도 유지합니다."
 }

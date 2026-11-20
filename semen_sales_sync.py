@@ -23,8 +23,12 @@ PAGES=[
  'https://www.ihanwoo.org/20803',
 ]
 UA={'User-Agent':'Mozilla/5.0 (compatible; HanwooInsight public data check)'}
-SOURCE={'2024':"https://www.ihanwoo.org/file_c/file_download?fname=ax_6049658841.pdf&furl=%2Fupload&orifname=2025%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
+SOURCE={'2022-2023':"https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
+ '2024':"https://www.ihanwoo.org/file_c/file_download?fname=ax_6049658841.pdf&furl=%2Fupload&orifname=2025%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
  '2025':"https://www.ihanwoo.org/file_c/file_download?furl=/upload&fname=ax_9838022113.pdf&orifname=2025%EB%85%84+6%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"}
+BASELINE_2022=[171,171,171,183,206,233,199,192,202,220,176,162]
+BASELINE_2023=[132,167,152,181,161,194,172,188,200,178,135,170]
+PUBLISHED_YEAR_2022=2281  # sum of 12 rounded monthly reports = 2286
 BASELINE_2024=[128,207,140,162,193,195,188,168,180,165,133,161]
 BASELINE_2025=[139,143,118,140,179]
 
@@ -39,7 +43,7 @@ def find_values(raw,year):
         if not row:continue
         tokens=re.findall(r'\d{1,3}(?:,\d{3})*',row.group(1))
         numbers=[int(x.replace(',','')) for x in tokens]
-        if len(numbers)>1 and numbers[-1]==sum(numbers[:-1]):
+        if len(numbers)>1 and abs(numbers[-1]-sum(numbers[:-1]))<=max(6,(len(numbers)-1)//2):
             numbers=numbers[:-1]
         if not 1<=len(numbers)<=12 or any(v<25 or v>400 for v in numbers):
             return None
@@ -57,7 +61,7 @@ def report_rows(url):
         text=page.get_text(sort=True)
         if '정액' not in text or '천str' not in text.replace(' ','').lower():
             continue
-        for year in range(2024,datetime.now(ZoneInfo('Asia/Seoul')).year+1):
+        for year in range(2022,datetime.now(ZoneInfo('Asia/Seoul')).year+1):
             vals=find_values(text,year)
             if vals and (year not in results or len(vals)>len(results[year])):
                 results[year]=vals
@@ -118,13 +122,17 @@ def main():
         return
     results,added=merge(previous,reports)
     bymonth={r['month']:r['sold_thousand_str'] for r in results}
+    if any(bymonth.get(f'2022-{i+1:02d}')!=v for i,v in enumerate(BASELINE_2022)):
+        raise ValueError('2022 monthly benchmark differs from authoritative 2024 report')
+    if any(bymonth.get(f'2023-{i+1:02d}')!=v for i,v in enumerate(BASELINE_2023)):
+        raise ValueError('2023 monthly benchmark differs from authoritative 2024 report')
     if any(bymonth.get(f'2024-{i+1:02d}')!=v for i,v in enumerate(BASELINE_2024)):
         raise ValueError('2024 reported benchmark differs')
     if any(bymonth.get(f'2025-{i+1:02d}')!=v for i,v in enumerate(BASELINE_2025)):
         raise ValueError('2025 official Jan-May benchmark differs')
     print('VALIDATED_SEMEN_RECORDS',len(results),'new',added,'latest',results[-1]['month'])
     if args.dry_run:
-        print('SEED_COUNTS '+json.dumps({str(y):sum(r['month'].startswith(str(y)) for r in results) for y in range(2024,2027)}))
+        print('SEED_COUNTS '+json.dumps({str(y):sum(r['month'].startswith(str(y)) for r in results) for y in range(2022,2027)}))
         return
     if added==0:return
     out={**previous,'records':results,'coverage':f'{results[0]["month"]} ~ {results[-1]["month"]} (검증된 월만)',
