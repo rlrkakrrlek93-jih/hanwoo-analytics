@@ -3,6 +3,14 @@ on:
   pull_request:
     paths:
       - 'semen_source_probe.py'
+      - 'semen_sales_sync.py'
+      - 'semen_sales_chart.js'
+      - 'semen_sales_data.json'
+      - 'test_semen_sales_sync.py'
+      - 'test_semen_sales_browser.py'
+      - 'index.html'
+      - 'dashboard_template.html'
+      - 'market-indicators.js'
       - '.github/workflows/semen-probe.yml'
   workflow_dispatch:
 permissions:
@@ -10,7 +18,7 @@ permissions:
 jobs:
   semen-probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 9
+    timeout-minutes: 13
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,6 +30,21 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Extract monthly semen sale values from Association report PDFs
         run: python semen_report_probe.py
+      - name: Validate published source and parsing
+        run: python -m unittest test_semen_sales_sync -v
+      - name: Validate chart JavaScript
+        run: node --check semen_sales_chart.js && node --check market-indicators.js
+      - name: Live monthly collector dry-run
+        run: python semen_sales_sync.py --dry-run
+      - name: Browser regression
+        run: python test_semen_sales_browser.py
+      - name: Upload browser screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semen-year-chart-preview
+          path: test_artifacts/semen_sales_annual_compare.png
+          if-no-files-found: warn
       - name: Capture source diagnostics
         run: python semen_source_probe.py
       - name: Upload source summary
