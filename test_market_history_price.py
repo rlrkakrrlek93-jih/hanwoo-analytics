@@ -1,4 +1,6 @@
 import unittest
+import json
+from pathlib import Path
 from unittest.mock import patch
 from market_supply_sync import parse_grading,build,desired_months
 
@@ -34,6 +36,19 @@ class TestHistoricalPrice(unittest.TestCase):
         self.assertNotIn('auction_price_total',r)
         self.assertEqual(r['auction_price_by_sex']['steer'],19800)
         self.assertEqual(r['graded_head'],102500)
+    def test_published_2024_backfill_is_gap_free(self):
+        data=json.loads(Path(__file__).with_name('market_supply_data.json').read_text(encoding='utf-8'))
+        rows=data['records']
+        self.assertEqual(rows[0]['month'],'2024-01')
+        self.assertEqual(rows[-1]['month'],'2026-10')
+        self.assertEqual(len(rows),34)
+        self.assertEqual(len(set(r['month'] for r in rows)),34)
+        for r in rows:
+            self.assertEqual(sum(r['graded_by_sex'].values()),r['graded_head'])
+            self.assertEqual(sum(r['inventory_by_farm'].values()),r['inventory_head'])
+            self.assertIsInstance(r['auction_price_by_sex']['steer'],int)
+            self.assertIsInstance(r['auction_price_by_sex']['female'],int)
+
     def test_no_unverified_future_month(self):
         with patch('market_supply_sync.last_complete',return_value='2026-10'):
             months=desired_months()
