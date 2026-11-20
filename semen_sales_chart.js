@@ -42,7 +42,7 @@ function render(){
   let d='',last=0;
   for(let m=1;m<=12;m++){
     const r=vals.get(m);if(!r)continue;
-    d+=(last===m-1?' L':' M')+x(m).toFixed(1)+' '+y(r.sold_thousand_str).toFixed(1);last=m;
+    d+=(last>0&&last===m-1?' L':' M')+x(m).toFixed(1)+' '+y(r.sold_thousand_str).toFixed(1);last=m;
   }
   if(!mine.length)continue;
   const path=svgEl('path',{d:d.trim(),stroke:col,'stroke-width':3.5,'stroke-linecap':'round','stroke-linejoin':'round',fill:'none','data-year':year});
