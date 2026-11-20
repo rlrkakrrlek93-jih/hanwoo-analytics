@@ -19,8 +19,8 @@ const scroll=el('div','mk-chartscroll'),svg=document.createElementNS('http://www
 svg.setAttribute('viewBox','0 0 980 345');svg.setAttribute('role','img');svg.setAttribute('aria-label','월별 한우 사육두수와 판정두수 이중축 그래프');scroll.append(svg);card.append(scroll);
 card.append(el('div','mk-note','해석 주의: 사육두수는 월말에 사육 중인 소의 재고량이고, 판정두수는 해당 월 도체 등급판정 마릿수입니다. 단위와 규모가 달라 좌측·우측 축을 따로 사용하며, 두 선의 높이를 직접 비교하면 안 됩니다.'));
 const semen=el('div','mk-semen');
-semen.append(el('strong','','번식 선행지표 · 한우 정액 판매량'),el('p','mk-sub','농협경제지주 한우개량사업소의 지역별·월별 정액 판매량 자료가 공공데이터로 등록되어 있지만 제공 페이지에 오류가 발생해 아직 검증된 수치를 연결하지 못했습니다. 정액 판매량은 실제 인공수정 횟수가 아닙니다.'));
-const semenLink=el('a','','공식 정액 판매량 자료 안내');semenLink.href='https://www.data.go.kr/data/15147844/fileData.do';semenLink.target='_blank';semenLink.rel='noopener noreferrer';semen.append(semenLink);card.append(semen);
+semen.append(el('strong','','번식 선행지표 · 한우 정액 판매량'),el('p','mk-sub','농협경제지주 한우개량사업소의 지역별·월별 정액 판매량 자료가 공개되어 있고, 축산물품질평가원 2026년 11월부터 발간하는 월간 수급 동향 보고서에도 포함됩니다. 현재 자동 수집 가능한 원자료를 검증 중이므로 숫자를 임의로 표시하지 않습니다. 정액 판매량은 실제 인공수정 실시 횟수가 아닙니다.'));
+const semenLink=el('a','','공식 정액 판매량 자료 안내');semenLink.href='https://www.data.go.kr/data/15147844/fileData.do';semenLink.target='_blank';semenLink.rel='noopener noreferrer';semen.append(semenLink);const semenReport=el('a','',' / 최신 공식 월간 수급 보고서 안내');semenReport.href='https://www.ekape.or.kr/board/view.do?boardInfoNo=0025&boardNo=1439&menuId=menu160301';semenReport.target='_blank';semenReport.rel='noopener noreferrer';semen.append(semenReport);card.append(semen);
 const footer=el('div','mk-footer'),invLink=el('a','','사육두수 공식 원표'),gradingLink=el('a','','판정두수 공식 원표');
 invLink.href='https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323901_A100000011&conn_path=I2';
 gradingLink.href='https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2';
