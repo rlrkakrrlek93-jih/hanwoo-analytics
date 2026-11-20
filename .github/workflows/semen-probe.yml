@@ -1,0 +1,31 @@
+name: Probe public semen sales sources
+on:
+  pull_request:
+    paths:
+      - 'semen_source_probe.py'
+      - '.github/workflows/semen-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  semen-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Capture source diagnostics
+        run: python semen_source_probe.py
+      - name: Upload source summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semen-source-diagnostics
+          path: semen_probe_result/
+          if-no-files-found: warn
