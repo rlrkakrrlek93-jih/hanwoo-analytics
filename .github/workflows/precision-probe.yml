@@ -7,6 +7,7 @@ on:
       - 'test_precision_probe.py'
       - 'precision_compatibility.py'
       - 'test_precision_compatibility.py'
+      - 'quality-check.js'
       - '.github/workflows/precision-probe.yml'
   workflow_dispatch:
   schedule:
@@ -29,6 +30,8 @@ jobs:
           python -m pip install -r requirements.txt
           python -m pip install playwright
           python -m playwright install --with-deps chromium
+      - name: Check quality panel JavaScript syntax
+        run: node --check quality-check.js
       - name: Test parsing logic
         run: python -m unittest test_precision_probe test_precision_compatibility -v
       - name: Inspect public official tables without updating website
