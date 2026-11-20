@@ -5,6 +5,8 @@ on:
     paths:
       - 'precision_probe.py'
       - 'test_precision_probe.py'
+      - 'precision_compatibility.py'
+      - 'test_precision_compatibility.py'
       - '.github/workflows/precision-probe.yml'
   workflow_dispatch:
 
@@ -26,9 +28,11 @@ jobs:
           python -m pip install playwright
           python -m playwright install --with-deps chromium
       - name: Test parsing logic
-        run: python -m unittest test_precision_probe -v
+        run: python -m unittest test_precision_probe test_precision_compatibility -v
       - name: Inspect public official tables without updating website
         run: python precision_probe.py --output-dir precision_probe_result
+      - name: Check whether candidate source has comparable population
+        run: python precision_compatibility.py --input-dir precision_probe_result
       - name: Store diagnostic evidence (not a published dataset)
         if: always()
         uses: actions/upload-artifact@v4
