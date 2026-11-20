@@ -18,8 +18,10 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: |
-          pip install -r requirements.txt
+          pip install -r requirements.txt pymupdf requests
           python -m playwright install --with-deps chromium
+      - name: Extract monthly semen sale values from Association report PDFs
+        run: python semen_report_probe.py
       - name: Capture source diagnostics
         run: python semen_source_probe.py
       - name: Upload source summary
