@@ -95,6 +95,7 @@ function draw(rows){
      svg.append(svgNode('text',{x:x0-11,y:y+4,'text-anchor':'end','font-size':11,fill:'#667d91'},
        ((lower+(upper-lower)*k/3)/p.div).toLocaleString('ko-KR',{maximumFractionDigits:1})));
    }
+   const markers=[];
    for(const year of years){
      if(!selectedYears.has(year))continue;
      const col=yearColor(year,years),byMonth=byYear.get(year);
@@ -110,15 +111,16 @@ function draw(rows){
          'data-year':year,'data-month':month,'data-metric':p.key});
        dot.append(svgNode('title',{},year+'년 '+month+'월 · '+p.title+' '+
          Number(v).toLocaleString('ko-KR')+(p.key==='auction_price'?'원/kg':'두')));
-       svg.append(dot);
+       markers.push(dot);
      }
      if(hasPoints)svg.append(svgNode('path',{d:d.trim(),stroke:col,
        'stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round',
        fill:'none','data-year':year,'data-metric':p.key}));
    }
+   for(const marker of markers)svg.append(marker);
  }
  const last=a.at(-1),yr=last.month.slice(0,4),mo=Number(last.month.slice(5));
- const note=mo<12?yr+'년은 '+mo+'월까지 발표 · 11~12월처럼 미발표 월은 빈칸으로 표시':
+ const note=mo<12?yr+'년은 '+mo+'월까지만 발표 · 나머지 월은 빈칸으로 표시':
    '2024년부터 월별 공식 통계를 같은 1~12월 기준으로 비교';
  svg.append(svgNode('text',{x:500,y:548,'text-anchor':'middle','font-size':12,fill:'#73869a'},note));
  if(!selectedYears.size)svg.append(svgNode('text',{x:500,y:341,'text-anchor':'middle','font-size':17,fill:'#61758a'},'비교할 연도를 선택하세요.'));
