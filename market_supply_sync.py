@@ -263,6 +263,8 @@ def main():
         print('Verified official supply',result['latest_month'],len(result['records']),
               'inventory',result['records'][-1]['inventory_head'],
               'graded',result['records'][-1]['graded_head'])
+        if args.dry_run:
+            print('MARKET_DATA_PAYLOAD='+json.dumps(result,ensure_ascii=False,separators=(',',':')))
         if not args.dry_run:
             atomic_write(OUT,result)
             atomic_write(STATUS,{'status':'verified','checked_at_kst':kst_now(),
@@ -272,7 +274,8 @@ def main():
         if not args.dry_run:
             atomic_write(STATUS,{'status':'blocked_previous_kept','checked_at_kst':kst_now(),
                 'message':str(exc)[:450]})
-        # Do not break unrelated original update jobs, but no fabricated new values.
+        # A dry run must fail CI; scheduled updates preserve previous verified files.
+        if args.dry_run: raise
         return 0
     return 0
 
