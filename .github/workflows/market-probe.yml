@@ -7,6 +7,7 @@ on:
       - 'market-indicators.js'
       - 'test_market_supply.py'
       - 'test_market_history_price.py'
+      - 'test_market_chart_browser.py'
       - '.github/workflows/market-probe.yml'
   workflow_dispatch:
 permissions:
@@ -26,6 +27,15 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: JavaScript syntax validation
         run: node --check market-indicators.js
+      - name: Browser regression - overlay year comparison
+        run: python test_market_chart_browser.py
+      - name: Save year comparison screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: market-year-comparison-preview
+          path: test_artifacts/hanwoo_yearly_overlay.png
+          if-no-files-found: warn
       - name: Validate market supply parser
         run: python -m unittest test_market_supply test_market_history_price -v
       - name: Live supply collector dry-run (no published file changed)

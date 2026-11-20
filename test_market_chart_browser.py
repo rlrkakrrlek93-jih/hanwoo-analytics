@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+"""Live local-browser regression test for 2024/25/26 overlay without modifying site files."""
+from __future__ import annotations
+
+import contextlib
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from threading import Thread
+
+from playwright.sync_api import sync_playwright
+
+ROOT = Path(__file__).resolve().parent
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        pass
+
+def test_page():
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(ROOT)))
+    worker = Thread(target=server.serve_forever, daemon=True)
+    worker.start()
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
+            try:
+                page = browser.new_page(viewport={"width": 1440, "height": 960}, locale="ko-KR")
+                page.goto(f"http://127.0.0.1:{server.server_port}/index.html",
+                          wait_until="domcontentloaded", timeout=30000)
+                svg = page.locator("#marketScope svg")
+                svg.locator('path[data-year="2024"]').first.wait_for(timeout=18000)
+                assert svg.locator("path[data-year]").count() == 9, "3 metrics x 3 yearly lines required"
+                assert svg.locator("circle[data-year]").count() == 34 * 3, "34 published months x 3 metrics"
+                assert svg.locator('circle[data-year="2024"][data-metric="graded_head"]').count() == 12
+                assert svg.locator('circle[data-year="2025"][data-metric="graded_head"]').count() == 12
+                assert svg.locator('circle[data-year="2026"][data-metric="graded_head"]').count() == 10
+                jan = [
+                    svg.locator(f'circle[data-year="{y}"][data-month="1"][data-metric="inventory_head"]')
+                    .get_attribute("cx")
+                    for y in ("2024", "2025", "2026")
+                ]
+                assert len(set(jan)) == 1, "January points must share identical X position"
+                months = page.locator("#marketScope svg text").all_text_contents()
+                assert all(f"{i}월" in months for i in range(1, 13)), "Jan-Dec axis is not complete"
+                first_title = svg.locator('circle[data-year="2024"][data-month="1"][data-metric="auction_price"] title').text_content()
+                assert "17,609" in first_title and "원/kg" in first_title, "2024 Jan steer price mismatched"
+                panel = page.locator("#marketScope")
+                output = ROOT / "test_artifacts"
+                output.mkdir(exist_ok=True)
+                panel.screenshot(path=str(output / "hanwoo_yearly_overlay.png"))
+                page.locator('#marketScope select').select_option('female')
+                cow_title = svg.locator('circle[data-year="2024"][data-month="1"][data-metric="auction_price"] title').text_content()
+                assert "14,360" in cow_title, "Cow auction price selector is not changing the plot"
+                page.locator('#marketScope .mk-year input[value="2025"]').uncheck()
+                assert svg.locator("path[data-year]").count() == 6, "Year toggle should hide 2025 plots"
+                assert svg.locator("path[data-year='2025']").count() == 0
+                assert svg.locator("circle[data-year='2026'][data-month='11']").count() == 0
+                assert svg.locator("circle[data-year='2026'][data-month='12']").count() == 0
+                print("PASS: 9 curves, aligned Jan-Dec, 34 monthly samples x 3 metrics, toggles and price selector")
+            finally:
+                browser.close()
+    finally:
+        server.shutdown()
+        server.server_close()
+
+if __name__ == "__main__":
+    test_page()
