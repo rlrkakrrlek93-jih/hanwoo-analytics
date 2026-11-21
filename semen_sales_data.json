@@ -6,8 +6,8 @@
   "source": "전국한우협회 한우동향분석 <표 6> (원자료: 농협경제지주 한우개량사업소)",
   "source_report_2024": "https://www.ihanwoo.org/file_c/file_download?fname=ax_6049658841.pdf&furl=%2Fupload&orifname=2025%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
   "source_report_2025": "https://www.ihanwoo.org/file_c/file_download?furl=/upload&fname=ax_9838022113.pdf&orifname=2025%EB%85%84+6%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
-  "coverage": "2022-01 ~ 2025-05 (검증된 월만 수록; 2026년 미확보)",
-  "last_verified_kst": "2026-11-20",
+  "coverage": "2022-01 ~ 2026-02 (공식 출처가 확인된 50개월; 2026-03 이후 미확보)",
+  "last_verified_kst": "2026-11-21",
   "records": [
     {
       "month": "2022-01",
@@ -213,6 +213,78 @@
       "month": "2025-05",
       "sold_thousand_str": 179,
       "source_url": "https://www.ihanwoo.org/file_c/file_download?furl=/upload&fname=ax_9838022113.pdf&orifname=2025%EB%85%84+6%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf"
+    },
+    {
+      "month": "2025-06",
+      "sold_thousand_str": 157.6,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-07",
+      "sold_thousand_str": 166.3,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-08",
+      "sold_thousand_str": 218.7,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-09",
+      "sold_thousand_str": 223.4,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-10",
+      "sold_thousand_str": 195,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-11",
+      "sold_thousand_str": 221,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2025-12",
+      "sold_thousand_str": 196.1,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2026-01",
+      "sold_thousand_str": 170.6,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
+    },
+    {
+      "month": "2026-02",
+      "sold_thousand_str": 201.8,
+      "source_url": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+      "source_name": "한국농촌경제연구원(KREI) 2026년 3월 한육우 축산관측",
+      "source_unit": "천 스트로 (소수 첫째 자리)",
+      "source_type": "국책연구기관 공표 / 원자료 농협중앙회 가축개량원"
     }
   ],
   "source_report_2022_2023": "https://www.ihanwoo.org/file_c/file_download?fname=ax_8793429404.pdf&furl=%2Fupload&orifname=2024%EB%85%84+2%EC%9B%94+%ED%95%9C%EC%9A%B0+%EB%8F%99%ED%96%A5+%EB%B6%84%EC%84%9D.pdf",
@@ -221,5 +293,7 @@
     "2023": 2030,
     "2024": 2020
   },
-  "annual_total_note": "2022년은 월별 반올림 공표값의 합계 2,286천 str와 공식 연간 집계 합계 2,281천 str가 다릅니다. 보고서 안내처럼 반올림 또는 집계 차이로 연간 공식값을 별도 유지합니다."
+  "annual_total_note": "2022년은 월별 반올림 공표값의 합계 2,286천 str와 공식 연간 집계 합계 2,281천 str가 다릅니다. 보고서 안내처럼 반올림 또는 집계 차이로 연간 공식값을 별도 유지합니다.",
+  "krei_monthly_source": "https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf",
+  "source_note": "2025년 6월 이후 및 2026년 확인 월은 KREI 축산관측에서 제공. 2025년 1~5월 및 2022~2024년은 전국한우협회 자료(천 str 정수 공표)로 이전 저장된 값을 유지. KREI 자료는 천 str 소수 첫째 자리이며 연도별 발표값·집계 기준·개정 시점 차이로 수치가 조금 다를 수 있음."
 }
