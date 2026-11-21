@@ -14,6 +14,8 @@ try:
  if r.ok and r.content[:4]==b"%PDF":
   doc=fitz.open(stream=r.content,filetype="pdf")
   report["pdf_pages"]=len(doc)
+  report["pdf_text_samples"]=[{"page":i+1,"text":page.get_text(sort=True)[:1400]} for i,page in enumerate(doc) if i<4]
+  (out/"krei_march_2026.pdf").write_bytes(r.content)
   for i,page in enumerate(doc):
    raw=page.get_text(sort=True)
    if "정액" in raw and "2025" in raw:
@@ -35,6 +37,19 @@ try:
     "body_head":page.locator("body").inner_text()[:2500],
     "links":page.locator("a").evaluate_all("els=>els.filter(x=>/PDF|다운로드|한육우/.test(x.innerText||'')).map(x=>({text:x.innerText.slice(0,70),href:x.href,onclick:x.getAttribute('onclick')})).slice(0,35)"),
     "events":events[:30]}
+  for ident,href in [('sep_2026','https://www.aglook.kr/main/uObserveMonth/OVR0000000015/download/8752/ORGTEXT_FILE'),
+     ('jun_2026','https://www.aglook.kr/main/uObserveMonth/OVR0000000015/download/8708/ORGTEXT_FILE')]:
+    try:
+     req=page.request.get(href,timeout=35000,headers={'Referer':HOME})
+     body=req.body()
+     item={'status':req.status,'bytes':len(body),'type':req.headers.get('content-type'),'prefix':repr(body[:20])}
+     if body[:4]==b'%PDF' and len(body)<25000000:
+       (out/(ident+'.pdf')).write_bytes(body)
+       pdf=fitz.open(stream=body,filetype='pdf')
+       item['pages']=len(pdf)
+       item['text_sample']=[{'page':i+1,'text':pg.get_text(sort=True)[:1500]} for i,pg in enumerate(pdf) if i<5]
+     report[ident]=item
+    except Exception as e:report[ident]={'error':str(e)[:350]}
   browser.close()
 except Exception as e:report["site_error"]=str(e)
 (out/"report.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf8")
