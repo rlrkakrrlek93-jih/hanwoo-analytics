@@ -101,7 +101,7 @@ def merge(existing,reports):
                 if prior is None:
                     old[month]=candidate;imported+=1
     records=[old[k] for k in sorted(old)]
-    if not records or any(type(r.get('sold_thousand_str')) is not int or not 25<=r['sold_thousand_str']<=400 for r in records):
+    if not records or any(type(r.get('sold_thousand_str')) not in (int,float) or not 25<=r['sold_thousand_str']<=400 for r in records):
         raise ValueError('Semen sales validation failed')
     return records,imported
 
