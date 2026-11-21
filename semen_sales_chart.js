@@ -10,12 +10,13 @@ card.append(e('p','2022년부터 1~12월을 같은 위치에 놓고 연도별 �
 const label=e('div',null,'ss-badges');card.append(label);
 const description=e('p','자료 확인 중…','ss-meta');card.append(description);
 const container=e('div',null,'ss-scroll'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 970 388');svg.setAttribute('role','img');svg.setAttribute('aria-label','1월부터 12월까지 한우 정액 판매량의 연도별 비교');container.append(svg);card.append(container);
-const message=e('div','단위: 천 str(천 스트로). 2022~2024년의 매월 판매량을 공식 보고서 발표값 그대로 표시합니다. 2022년 공식 연간 합계는 2,281천 str이지만 월별 반올림 값의 합은 2,286천 str로 5천 str 차이가 있습니다. 2025년 6월 이후와 2026년의 미확인 월은 0으로 간주하지 않고 빈칸 처리합니다. 판매량은 실제 인공수정 사용량과 다릅니다.','ss-note');card.append(message);
+const message=e('div','단위: 천 str. 2022~2025년 5월까지는 전국한우협회 정수 단위 공표값, 2025년 6월부터는 한국농촌경제연구원(KREI) 축산관측의 소수 첫째 자리 공표값을 사용합니다. 원자료·발표시점·표시 정밀도가 달라 소폭의 차이가 있을 수 있습니다. 각 점의 출처는 마우스를 올리거나 상세표에서 확인할 수 있습니다. 정액 판매량은 실제 인공수정 사용량이 아닙니다.','ss-note');card.append(message);
 const details=e('details'),sum=e('summary','월별 공식 수치와 출처 보기');details.append(sum);
 const tablediv=e('div',null,'ss-table');details.append(tablediv);card.append(details);
 const link=e('a','원본 자료: 전국한우협회 월별 한우 동향 분석');
 link.href='https://www.ihanwoo.org/board/sub4?Ncode=publication&code=3&tabsNum=3';link.target='_blank';link.rel='noopener noreferrer';
-const foot=e('p');foot.append('원자료 제공: 농협경제지주 한우개량사업소 · ',link);card.append(foot);
+const kreiLink=e('a','KREI 2026년 3월 한육우 축산관측');kreiLink.href='https://www.aglook.kr/upload/observeFiles/cb83caf9fe9648a58f43611e1d0c06b3.pdf';kreiLink.target='_blank';kreiLink.rel='noopener noreferrer';
+const foot=e('p');foot.append('출처: ',link,' / ',kreiLink,' · 보고서별 제공기관과 소수 정밀도를 확인하세요.');card.append(foot);
 const market=document.querySelector('#marketScope');
 if(market&&market.parentNode)market.insertAdjacentElement('afterend',section);
 else(document.querySelector('main')||document.body).append(section);
@@ -50,7 +51,7 @@ function render(){
   for(const r of mine){
     const m=Number(r.month.slice(5));
     const dot=svgEl('circle',{cx:x(m),cy:y(r.sold_thousand_str),r:4.5,fill:'#fff',stroke:col,'stroke-width':2.4,'data-year':year,'data-month':m});
-    dot.append(svgEl('title',{},year+'년 '+m+'월: '+r.sold_thousand_str.toLocaleString('ko-KR')+'천 str (보고서 공표값)'));
+    dot.append(svgEl('title',{},year+'년 '+m+'월: '+r.sold_thousand_str.toLocaleString('ko-KR',{maximumFractionDigits:1})+'천 str | 출처: '+(r.source_name||'전국한우협회 한우 동향 분석')+' (공표값)'));
     svg.append(dot);
   }
  }
@@ -61,13 +62,13 @@ function table(){
  for(const title of ['월',...years.map(y=>y+'년 · 천 str')])thead.append(e('th',title));t.append(thead);
  for(let mo=1;mo<=12;mo++){
   const tr=e('tr');tr.append(e('td',mo+'월'));
-  for(const y of years){const r=rows.find(x=>x.month===y+'-'+String(mo).padStart(2,'0'));const c=e('td',r?r.sold_thousand_str.toLocaleString('ko-KR'):'미확인');if(r){const a=e('a',c.textContent);a.href=r.source_url;a.target='_blank';a.rel='noopener noreferrer';c.replaceChildren(a);}tr.append(c)}
+  for(const y of years){const r=rows.find(x=>x.month===y+'-'+String(mo).padStart(2,'0'));const c=e('td',r?r.sold_thousand_str.toLocaleString('ko-KR',{maximumFractionDigits:1}):'미확인');if(r){const a=e('a',c.textContent);a.href=r.source_url;a.target='_blank';a.rel='noopener noreferrer';a.title='출처: '+(r.source_name||'전국한우협회 한우 동향 분석');c.replaceChildren(a);}tr.append(c)}
   t.append(tr);
  }tablediv.append(t);
 }
 fetch('semen_sales_data.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(obj=>{
  if(!Array.isArray(obj.records))throw Error('공식 수집자료 형식 불일치');
- rows=obj.records.filter(x=>/^(202[2-9])-(0[1-9]|1[0-2])$/.test(x.month)&&Number.isInteger(x.sold_thousand_str)&&x.sold_thousand_str>0).sort((a,b)=>a.month.localeCompare(b.month));
+ rows=obj.records.filter(x=>/^(202[2-9])-(0[1-9]|1[0-2])$/.test(x.month)&&Number.isFinite(x.sold_thousand_str)&&x.sold_thousand_str>0).sort((a,b)=>a.month.localeCompare(b.month));
  const known=[...new Set(rows.map(x=>x.month.slice(0,4)))];
  years=[...new Set(['2022','2023','2024','2025','2026',...known])].sort();selected=new Set(years);
  label.replaceChildren();
@@ -77,7 +78,7 @@ fetch('semen_sales_data.json?t='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.o
    input.addEventListener('change',()=>{if(input.checked)selected.add(year);else selected.delete(year);render()});
    item.append(input,circle,document.createTextNode(year+'년'+(rows.some(r=>r.month.startsWith(year))?'':' (미확인)')));label.append(item);
  }
- description.textContent='검증된 '+rows.length+'개월 · 최근 확인 월 '+(rows.at(-1)?.month||'없음')+' · 2022~2024년 전월 확보, 2025년 일부 월 확인';
+ const covered=years.map(y=>y+'년 '+rows.filter(r=>r.month.startsWith(y+'-')).length+'개월').join(' · ');description.textContent='확보 '+rows.length+'개월 · 최근 '+(rows.at(-1)?.month||'없음')+' · '+covered;
  render();table();
 }).catch(err=>{description.textContent='판매량 통계 수신 실패: '+err.message;svg.replaceChildren()});
 })();

@@ -47,7 +47,13 @@ class TestSemenSales(unittest.TestCase):
         self.assertEqual([obs[f'2025-{m:02d}'] for m in range(1,6)],BASELINE_2025)
         self.assertEqual(sum(BASELINE_2024),2020)
         self.assertEqual(sum(BASELINE_2025),719)
-        self.assertEqual(len(obs),41)
+        self.assertEqual(len(obs),55)
+        self.assertEqual([obs[f'2025-{m:02d}'] for m in range(6,13)],[157.6,166.3,218.7,223.4,195.0,221.0,196.1])
+        self.assertEqual([obs[f'2026-{m:02d}'] for m in range(1,8)],[170.6,201.8,171.9,181.3,181.2,179.3,171.3])
+        self.assertTrue(all(r.get('source_name','').startswith('한국농촌경제연구원(KREI)')
+            for r in data['records'] if r['month']>='2025-06'))
+        self.assertEqual(len({r['month'] for r in data['records']}),55)
+        self.assertEqual(len([r for r in data['records'] if r['month'].startswith('2025-')]),12)
 
 if __name__=="__main__":
     unittest.main()
