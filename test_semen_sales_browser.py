@@ -28,7 +28,7 @@ def main():
                 assert svg.locator('circle[data-year="2023"]').count()==12
                 assert svg.locator('circle[data-year="2024"]').count()==12
                 assert svg.locator('circle[data-year="2025"]').count()==12
-                assert svg.locator('circle[data-year="2026"]').count()==2
+                assert svg.locator('circle[data-year="2026"]').count()==7
                 assert svg.locator('path[data-year="2022"]').count()==1
                 assert svg.locator('path[data-year="2023"]').count()==1
                 assert svg.locator('path[data-year="2024"]').count()==1
@@ -50,6 +50,8 @@ def main():
                 assert "157.6천 str" in svg.locator('circle[data-year="2025"][data-month="6"] title').text_content()
                 assert "KREI" in svg.locator('circle[data-year="2025"][data-month="6"] title').text_content()
                 assert "201.8천 str" in svg.locator('circle[data-year="2026"][data-month="2"] title').text_content()
+                assert "171.3천 str" in svg.locator('circle[data-year="2026"][data-month="7"] title').text_content()
+                assert "KREI" in svg.locator('circle[data-year="2026"][data-month="7"] title').text_content()
                 assert "한국농촌경제연구원(KREI)" in scope.inner_text()
                 folder=ROOT/"test_artifacts"
                 folder.mkdir(exist_ok=True)
@@ -59,7 +61,7 @@ def main():
                 assert svg.locator('path[data-year="2024"]').count()==1
                 assert svg.locator('path[data-year="2025"]').count()==1
                 assert not errors, errors[:3]
-                print("PASS: semen Jan-Dec year overlay, 50 confirmed months, unpublished months hidden")
+                print("PASS: semen Jan-Dec year overlay, 55 confirmed months, unpublished months hidden")
             finally:browser.close()
     finally:server.shutdown();server.server_close()
 if __name__=="__main__":
