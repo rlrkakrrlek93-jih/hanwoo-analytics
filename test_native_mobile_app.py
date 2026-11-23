@@ -126,6 +126,33 @@ def run():
      assert quality_line.count()==1
      assert quality_line.get_attribute('d').startswith('M ')
      assert ' L ' in quality_line.get_attribute('d')
+     # Breed must be distinguished: Hanwoo steer, Hanwoo female, beef steer.
+     assert page.locator('#quality [data-quality-kind]').count()==3
+     page.locator('[data-quality-kind="beef-steer"]').click()
+     assert page.locator('[data-quality-kind="beef-steer"]').get_attribute('aria-selected')=='true'
+     assert '육우 거세우' in page.locator('#qualityContent .quality-breed-description').inner_text()
+     assert '4,112' in page.locator('#quality .stat-card').first.inner_text()
+     assert '441' in page.locator('#quality .stat-card').nth(1).inner_text()
+     assert '12,790' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '—' in page.locator('#quality .stat-card').nth(3).inner_text()
+     assert page.locator('#quality [data-chart-point="beef"]').count()==10
+     assert page.locator('#quality .data-table tbody tr').count()==10
+     assert '육우 1++ 등급 출현율은' in page.locator('#qualityContent').inner_text()
+     page.locator('[data-quality-mode="ytd"]').click()
+     assert '40,782' in page.locator('#quality .stat-card').first.inner_text()
+     assert '432.7' in page.locator('#quality .stat-card').nth(1).inner_text()
+     assert '12,605.1' in page.locator('#quality .stat-card').nth(2).inner_text()
+     page.locator('#beefMonth').select_option('2026-09')
+     assert '1~9월' in page.locator('#quality .stat-card').first.inner_text()
+     page.locator('#beefMonth').select_option('2026-10')
+     page.locator('[data-quality-mode="month"]').click()
+     page.locator('#beefMetric').select_option('price')
+     assert '경락단가' in page.locator('#qualityContent .chart-heading').inner_text()
+     assert page.locator('#quality svg path[data-chart-line="beef"]').count()==1
+     page.locator('[data-quality-kind="hanwoo-steer"]').click()
+     assert page.locator('[data-quality-kind="hanwoo-steer"]').get_attribute('aria-selected')=='true'
+     assert '48.3' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert page.locator('#quality .grade-item').count()==5
 
      if w==390:
       output=ROOT/'test_artifacts';output.mkdir(exist_ok=True)
@@ -153,6 +180,8 @@ def run():
     dpage.locator('#marketScope .mk-card').first.wait_for(timeout=18000)
     assert '/app.html' not in dpage.url
     assert dpage.locator('#semenSalesScope .ss-table tbody tr').count()==12
+    assert dpage.locator('#nationalBeef').count()==1, 'desktop beef steer section must remain available'
+    assert dpage.locator('#chooseBeef').count()==1
     assert not dpage.locator('#marketScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public market chart must be outside admin details"
     assert not dpage.locator('#semenSalesScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public semen chart must be outside admin details"
     assert dpage.locator('#hanwooAdminDetails').count()==1
