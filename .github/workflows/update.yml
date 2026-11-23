@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       - name: Checkout
@@ -31,11 +31,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pymupdf requests
+          pip install pymupdf requests beautifulsoup4 pillow pytesseract
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr
           pip install playwright
           python -m playwright install --with-deps chromium
 
       - name: Safe collect, verify, and automatically recover
+        id: quality
+        continue-on-error: true
         run: python auto_quality.py
 
       - name: Commit verified quality data and agent report
@@ -49,6 +53,8 @@ jobs:
           fi
 
       - name: Collect grade incidence
+        id: grades
+        continue-on-error: true
         run: python grade_sync.py
       - name: Commit grade statistics
         run: |
@@ -59,6 +65,8 @@ jobs:
           fi
 
       - name: Collect monthly slaughter age
+        id: ages
+        continue-on-error: true
         run: python age_sync.py
       - name: Commit slaughter age statistics
         run: |
@@ -70,6 +78,8 @@ jobs:
 
 
       - name: Refresh monthly Hanwoo supply indicators (safe)
+        id: market
+        continue-on-error: true
         run: python market_supply_sync.py
       - name: Commit independently verified supply data
         run: |
@@ -80,16 +90,25 @@ jobs:
           fi
 
       - name: Collect newly published verified Hanwoo semen sales
+        id: semen_association
+        continue-on-error: true
         run: python semen_sales_sync.py
+      - name: Extract and validate new KREI image-PDF semen sales
+        id: semen_krei
+        continue-on-error: true
+        run: python semen_krei_sync.py
       - name: Commit confirmed monthly semen sales only
         run: |
           git add semen_sales_data.json
+          if [ -f semen_krei_status.json ]; then git add semen_krei_status.json; fi
           if ! git diff --cached --quiet; then
-            git commit -m "Update verified NongHyup Hanwoo semen sales"
+            git commit -m "Update verified Hanwoo semen sales (Association / KREI)"
             git push
           fi
 
       - name: Probe new cattle statistics
+        id: diagnostic
+        continue-on-error: true
         run: python probe_new_stats.py
       - name: Save cattle statistics diagnostic
         if: always()
@@ -100,6 +119,8 @@ jobs:
           if-no-files-found: warn
 
       - name: Collect national beef steer statistics
+        id: beef
+        continue-on-error: true
         run: python beef_national_sync.py
       - name: Commit national beef steer data
         run: |
@@ -108,3 +129,50 @@ jobs:
             git commit -m "Update national beef steer"
             git push
           fi
+
+      - name: Save collector health and latest published months
+        if: always()
+        id: health
+        env:
+          COLLECT_QUALITY: ${{ steps.quality.outcome }}
+          COLLECT_GRADES: ${{ steps.grades.outcome }}
+          COLLECT_AGES: ${{ steps.ages.outcome }}
+          COLLECT_MARKET: ${{ steps.market.outcome }}
+          COLLECT_SEMEN_ASSOCIATION: ${{ steps.semen_association.outcome }}
+          COLLECT_SEMEN_KREI: ${{ steps.semen_krei.outcome }}
+          COLLECT_BEEF: ${{ steps.beef.outcome }}
+        run: python hanwoo_update_health.py
+
+      - name: Publish daily collector health status
+        if: always()
+        run: |
+          for FILE in auto_update_status.json semen_krei_status.json; do
+            if [ -f "$FILE" ]; then git add "$FILE"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m "Record verified Hanwoo data refresh health by indicator"
+            git push
+          fi
+
+      - name: Report collector failures after saving successful data
+        if: always()
+        env:
+          COLLECT_QUALITY: ${{ steps.quality.outcome }}
+          COLLECT_GRADES: ${{ steps.grades.outcome }}
+          COLLECT_AGES: ${{ steps.ages.outcome }}
+          COLLECT_MARKET: ${{ steps.market.outcome }}
+          COLLECT_SEMEN_ASSOCIATION: ${{ steps.semen_association.outcome }}
+          COLLECT_SEMEN_KREI: ${{ steps.semen_krei.outcome }}
+          COLLECT_BEEF: ${{ steps.beef.outcome }}
+          COLLECT_HEALTH: ${{ steps.health.outcome }}
+        run: |
+          FAILED=0
+          for NAME in QUALITY GRADES AGES MARKET SEMEN_ASSOCIATION SEMEN_KREI BEEF HEALTH; do
+            VAR="COLLECT_$NAME"
+            RESULT="${!VAR}"
+            if [ "$RESULT" != "success" ]; then
+              echo "::error::Hanwoo collector $NAME: $RESULT. Successful independent updates were saved."
+              FAILED=1
+            fi
+          done
+          exit "$FAILED"
