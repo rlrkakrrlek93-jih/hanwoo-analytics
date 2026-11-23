@@ -47,8 +47,8 @@ def run():
      dims=page.evaluate('({scroll:document.documentElement.scrollWidth,viewport:innerWidth})')
      assert dims['scroll']<=dims['viewport']+2,('page horizontal overflow',w,dims)
      page.locator('a[data-tab="market"]').click()
-     assert page.locator('#market').is_visible()
-     assert page.locator('#home').is_hidden()
+     page.locator('#market').wait_for(state='visible',timeout=10000)
+     page.locator('#home').wait_for(state='hidden',timeout=10000)
      assert page.locator('#market .data-table tbody tr').count()==12
      assert page.locator('#market [data-chart-point="market"]').count()>25
      page.locator('[data-market-metric="graded"]').click()
@@ -60,7 +60,7 @@ def run():
      page.locator('button[data-month-choice="market"][data-month="1"]').click()
      assert '1월 · 암소 경락가격' in page.locator('#marketContent .month-detail b').inner_text()
      page.locator('a[data-tab="semen"]').click()
-     assert page.locator('#semen').is_visible()
+     page.locator('#semen').wait_for(state='visible',timeout=10000)
      assert page.locator('#semen .data-table tbody tr').count()==12
      assert page.locator('#semen .data-table thead th').count()==6
      assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(3).inner_text()=='157.6'
@@ -70,7 +70,7 @@ def run():
      page.locator('button[data-semen-year="2023"]').click()
      assert page.locator('#semen [data-chart-point="semen"]').count()==43
      page.locator('a[data-tab="quality"]').click()
-     assert page.locator('#quality').is_visible()
+     page.locator('#quality').wait_for(state='visible',timeout=10000)
      assert page.locator('#quality .grade-item').count()==5
      page.locator('[data-quality-sex="암소"]').click()
      assert page.locator('[data-quality-sex="암소"]').get_attribute('aria-selected')=='true'
