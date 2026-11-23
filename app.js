@@ -9,7 +9,7 @@ const validLink=u=>{try{const x=new URL(u,location.href);return x.protocol==='ht
 const yearColors={'2022':'#8969c0','2023':'#c76e78','2024':'#4c83bd','2025':'#d69a45','2026':'#2c9481'};
 const names={steer:'거세우',female:'암소',male:'수소'};
 const screenNames=['home','market','semen','quality'];
-const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityMonth:'',qualityMetric:'weight'};
+const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityMonth:'',qualityMetric:'weight',qualityMode:'month'};
 let loading=false,installPrompt=null;
 const tabs=[...document.querySelectorAll('.bottom-tabs [data-tab]')];
 const sourceLine=(label,url)=>'<p class="source-line">자료 출처 · <a href="'+validLink(url)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a></p>';
@@ -247,6 +247,29 @@ function renderSemen(){
  headerSmall('전체 월별 숫자표','출처 링크 포함')+table+
  sourceLine('전국한우협회·KREI 공식자료',last.source_url);
 }
+// PC and mobile share the same count-weighted approximation rule for averages.
+// Do not combine grade totals with quality totals; they come from different official tables.
+function aggregateQualityPeriod(quality,grade,sex,through){
+ const year=through.slice(0,4),throughMonth=Number(through.slice(5));
+ const keys=Array.from({length:throughMonth},(_,i)=>year+'-'+String(i+1).padStart(2,'0'));
+ const months=quality?.records||[],gradeMonths=grade?.records||[];
+ const filtered=keys.map(month=>months.find(r=>r.month===month&&r.sex===sex));
+ const complete=filtered.every(r=>r&&Number.isFinite(r.count)&&r.count>0&&
+   ['weight','price','marbling','rea'].every(k=>Number.isFinite(r[k])));
+ const count=complete?filtered.reduce((sum,r)=>sum+r.count,0):null;
+ const avg=key=>complete&&count>0?filtered.reduce((sum,r)=>sum+r[key]*r.count,0)/count:null;
+ const gRows=keys.map(month=>gradeMonths.find(r=>r.month===month&&r.sex===sex));
+ const gradeKeys=['1++','1+','1','2','3'];
+ const gradesComplete=gRows.every(r=>r&&Number.isFinite(r.count)&&r.count>0&&gradeKeys.every(k=>Number.isFinite(r.grades?.[k]?.count)));
+ const gradeCount=gradesComplete?gRows.reduce((sum,r)=>sum+r.count,0):null;
+ const gradeCounts=gradesComplete?Object.fromEntries(gradeKeys.map(key=>[key,gRows.reduce((sum,r)=>sum+r.grades[key].count,0)])):null;
+ return {
+  period:year+'년 1~'+throughMonth+'월',complete,count,
+  weight:avg('weight'),price:avg('price'),
+  gradesComplete:gradesComplete&&gradeCount>0,gradeCount,gradeCounts,
+  gradeRate:key=>gradesComplete&&gradeCount>0?gradeCounts[key]/gradeCount*100:null
+ };
+}
 function renderQuality(){
  const d=state.data.quality,g=state.data.grades,a=state.data.ages;
  if(!d){$('#qualityContent').innerHTML='<div class="loading-block">품질 데이터를 불러올 수 없습니다.</div>';return}
@@ -255,33 +278,57 @@ function renderQuality(){
  const row=d.records.find(r=>r.month===state.qualityMonth&&r.sex===state.qualitySex);
  const gr=g?.records?.find(r=>r.month===state.qualityMonth&&r.sex===state.qualitySex);
  const age=a?.records?.find(r=>r.month===state.qualityMonth&&r.sex===state.qualitySex);
+ const cumulative=state.qualityMode==='ytd';
+ const summary=cumulative?aggregateQualityPeriod(d,g,state.qualitySex,state.qualityMonth):null;
+ const periodLabel=summary?.period||dateText(state.qualityMonth);
+ const gradeKeys=['1++','1+','1','2','3'];
  const ss='<div class="segmented" role="group" aria-label="성별 선택">'+['거세우','암소'].map(sex=>'<button data-quality-sex="'+sex+'" type="button" aria-selected="'+(state.qualitySex===sex)+'">'+sex+'</button>').join('')+'</div>';
  const sel='<div class="quality-selects"><select class="mini-select" id="qualityMonth" aria-label="통계 월 선택">'+months.map(m=>'<option value="'+m+'"'+(m===state.qualityMonth?' selected':'')+'>'+dateText(m)+'</option>').join('')+'</select><select class="mini-select" id="qualityMetric" aria-label="그래프 지표 선택">'+[
  ['weight','평균 도체중'],['price','경락가격'],['marbling','근내지방도'],['rea','등심단면적']
  ].map(([key,n])=>'<option value="'+key+'"'+(state.qualityMetric===key?' selected':'')+'>'+n+'</option>').join('')+'</select></div>';
- const cards=row?'<div class="stat-grid">'+
-  card('▣','평균 도체중',fmt(row.weight),'kg',dateText(row.month))+
-  card('₩','평균 경락단가',fmt(row.price),'원/kg',dateText(row.month),'price')+
-  card('✦','1++ 출현율',Number.isFinite(gr?.grades?.['1++']?.rate)?fmt(gr.grades['1++'].rate,1):'—','%',Number.isFinite(gr?.grades?.['1++']?.count)?dateText(state.qualityMonth)+' · '+fmt(gr.grades['1++'].count)+'두':'해당 월 등급 통계 미발표')+
-  card('◷','평균 도축개월령',age?fmt(age.age_months,1):'—','개월',age?'선택 월 공식 발표':(a?.records?.some(r=>r.sex===state.qualitySex&&r.month<state.qualityMonth)?'선택 월 미발표 · 이전 월 자료 있음':'해당 월 미발표'))+
- '</div>':'<div class="loading-block">선택한 월·성별 자료가 없습니다.</div>';
+ const modePicker='<div class="segmented quality-period-switch" role="group" aria-label="품질 통계 집계 기간">'+
+ '<button type="button" data-quality-mode="month" aria-selected="'+!cumulative+'">선택 월</button>'+
+ '<button type="button" data-quality-mode="ytd" aria-selected="'+cumulative+'">1월~선택 월 누적</button></div>';
+ const gradeCount=cumulative?summary?.gradeCounts?.['1++']:gr?.grades?.['1++']?.count;
+ const gradeRate=cumulative?summary?.gradeRate('1++'):gr?.grades?.['1++']?.rate;
+ const gradeNote=Number.isFinite(gradeCount)?periodLabel+' · '+fmt(gradeCount)+'두':periodLabel+' · 등급 자료 미확인';
+ let cards='<div class="loading-block">선택한 월·성별 자료가 없습니다.</div>';
+ if(row||cumulative){
+  const weight=cumulative?summary?.weight:row?.weight;
+  const price=cumulative?summary?.price:row?.price;
+  const statNote=cumulative?periodLabel+' · 판정두수 가중 추정':dateText(state.qualityMonth);
+  const fourth=cumulative?
+   card('∑','누적 판정두수',summary?.count==null?'—':fmt(summary.count),'두',summary?.complete?periodLabel+' · 월별 판정두수 합산':'월별 자료 누락 · 누적 계산 불가'):
+   card('◷','평균 도축개월령',age?fmt(age.age_months,1):'—','개월',age?'선택 월 공식 발표':(a?.records?.some(r=>r.sex===state.qualitySex&&r.month<state.qualityMonth)?'선택 월 미발표 · 이전 월 자료 있음':'해당 월 미발표'));
+  cards='<div class="stat-grid">'+
+    card('▣','평균 도체중',Number.isFinite(weight)?fmt(weight,cumulative?1:0):'—','kg',statNote)+
+    card('₩','평균 경락단가',Number.isFinite(price)?fmt(price,cumulative?1:0):'—','원/kg',statNote,'price')+
+    card('✦','1++ 출현율',Number.isFinite(gradeRate)?fmt(gradeRate,1):'—','%',gradeNote)+
+    fourth+'</div>';
+ }
+ const modeNote=cumulative?
+  '<p class="quality-rollup-note">누적은 '+esc(periodLabel)+'을 기준으로 합니다. 판정두수는 월별 합계이며 도체중·경락단가는 월별 판정두수 가중 추정치입니다. 육질등급 출현율은 별도 공식 표의 등급별 두수로 계산합니다. 누락된 월이 있으면 누적값을 표시하지 않습니다.</p>':'';
  const metricMap={weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],rea:['등심단면적','㎠']};
  const [label,unit]=metricMap[state.qualityMetric];
  const series=[{year:state.qualityMonth.slice(0,4),legendLabel:state.qualitySex,color:state.qualitySex==='거세우'?'#357d73':'#ca776d',values:Array.from({length:12},(_,i)=>{
    const mon=i+1,r=d.records.find(r=>r.month===state.qualityMonth.slice(0,4)+'-'+String(mon).padStart(2,'0')&&r.sex===state.qualitySex);
    return {month:mon,value:r?.[state.qualityMetric]??null};
  })}];
- const grades=gr?['1++','1+','1','2','3'].map((key,i)=>{
-  const v=gr.grades?.[key];
-  const percent=Number.isFinite(v?.rate)?v.rate:null,col=['#b45f4d','#d39763','#dfa970','#8bae98','#8caaa0'][i];
-  return '<div class="grade-item"><span>'+key+'</span><div class="grade-bar"><i style="width:'+Math.min(100,Math.max(0,percent??0))+'%;background:'+col+'"></i></div><div class="grade-number">'+(percent===null?'—':fmt(percent,1)+'%')+'<small>'+(Number.isFinite(v?.count)?fmt(v.count)+'두':'자료 미확인')+'</small></div></div>';
- }).join(''):'<p style="font-size:12px;color:#819084">이 월의 등급 비율 자료가 없습니다.</p>';
- $('#qualityContent').innerHTML=ss+sel+cards+
+ const grades=gradeKeys.map((key,i)=>{
+  const v=gr?.grades?.[key];
+  const percent=cumulative?summary?.gradeRate(key):(Number.isFinite(v?.rate)?v.rate:null);
+  const count=cumulative?summary?.gradeCounts?.[key]:v?.count;
+  const col=['#b45f4d','#d39763','#dfa970','#8bae98','#8caaa0'][i];
+  return '<div class="grade-item"><span>'+key+'</span><div class="grade-bar"><i style="width:'+Math.min(100,Math.max(0,percent??0))+'%;background:'+col+'"></i></div><div class="grade-number">'+(Number.isFinite(percent)?fmt(percent,1)+'%':'—')+'<small>'+(Number.isFinite(count)?fmt(count)+'두':'자료 미확인')+'</small></div></div>';
+ }).join('');
+ $('#qualityContent').innerHTML=ss+sel+modePicker+cards+modeNote+
  headerSmall('월별 성적 추이',state.qualitySex)+lineChart(series,{label,unit,metric:'quality',monthKey:Number(state.qualityMonth.slice(5))})+
- headerSmall('육질등급 출현율',dateText(state.qualityMonth))+'<div class="paper-card"><div class="grade-list">'+grades+'</div></div>'+
+ (cumulative?'<p class="quality-rollup-note quality-chart-notice">그래프는 월별 변화이고, 위의 요약 카드와 아래 육질등급 표는 누적 기준입니다.</p>':'')+
+ headerSmall(cumulative?'육질등급 누적 출현율':'육질등급 출현율',periodLabel)+'<div class="paper-card"><div class="grade-list">'+grades+'</div></div>'+
  '<div class="paper-card" style="margin-top:12px"><strong style="font-size:12px">판정 통계 안내</strong><p class="chart-note">육질등급 출현율과 일반 품질 통계는 서로 다른 공식 표에서 수집되어 판정두수가 다를 수 있습니다. 공표 자료를 임의로 합치지 않습니다.</p></div>'+
  sourceLine('축산물품질평가원 · 전국 품질 성적 통계',d.source);
 }
+
 const main=$('#appMain');
 main.addEventListener('click',event=>{
  const btn=event.target.closest('button');
@@ -295,6 +342,7 @@ main.addEventListener('click',event=>{
    return;
   }
   if(btn.hasAttribute('data-quality-sex')){state.qualitySex=btn.dataset.qualitySex;renderQuality();return}
+  if(btn.hasAttribute('data-quality-mode')){state.qualityMode=btn.dataset.qualityMode==='ytd'?'ytd':'month';renderQuality();return}
  }
  const dot=event.target.closest('[data-chart-point]');
  if(dot){
