@@ -34,9 +34,9 @@ for(const a of [invLink,gradingLink]){a.target='_blank';a.rel='noopener noreferr
 footer.append('출처: 축산물품질평가원 · ',invLink,' / ',gradingLink,' · 공식 원자료를 별도로 대조한 수치입니다.');card.append(footer);
 // Public statistics must never be mounted inside the collapsed admin/validation panel.
 const admin=document.querySelector('#hanwooAdminDetails');
-const footer=document.querySelector('main .footer')||document.querySelector('footer');
+const footerAnchor=document.querySelector('main .footer')||document.querySelector('footer');
 if(admin&&admin.parentNode)admin.parentNode.insertBefore(section,admin);
-else if(footer&&footer.parentNode)footer.parentNode.insertBefore(section,footer);
+else if(footerAnchor&&footerAnchor.parentNode)footerAnchor.parentNode.insertBefore(section,footerAnchor);
 else (document.querySelector('main')||document.body).append(section);
 const nf=n=>Number(n).toLocaleString('ko-KR'),svgNode=(tag,attrs,text)=>{
  const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
