@@ -70,40 +70,53 @@ function formatPointValue(key,value){
   return value.toLocaleString('ko-KR',{maximumFractionDigits:0});
 }
 function drawValueLabels(panel,years,byYear,monthX,yFor){
-  if(!numberCheck.checked)return;
-  const gap=17.5, minY=panel.y0+13, maxY=panel.y1-5;
-  const group=svgNode('g',{'data-value-labels':panel.key,'aria-label':panel.title+' 월별 수치'});
-  for(let month=1;month<=12;month++){
-    const labels=[];
-    for(const year of years){
-      if(!selectedYears.has(year))continue;
-      const row=byYear.get(year).get(month);
-      const value=row?panel.get(row):null;
-      if(!Number.isFinite(value))continue;
-      labels.push({year,value,originY:yFor(value),idealY:yFor(value)-9});
-    }
-    labels.sort((a,b)=>a.idealY-b.idealY);
-    let previous=-Infinity;
-    for(let i=0;i<labels.length;i++){
-      const remaining=labels.length-i-1;
-      const highBound=maxY-remaining*gap;
-      labels[i].labelY=Math.min(highBound,Math.max(labels[i].idealY,minY,previous+gap));
-      previous=labels[i].labelY;
-    }
-    for(const v of labels){
-      const label=svgNode('text',{
-        x:monthX(month),y:v.labelY,
-        'text-anchor':'middle','font-size':11.5,'font-weight':750,
-        fill:yearColor(v.year,years),stroke:'#fff','stroke-width':3.7,
-        'stroke-linejoin':'round','paint-order':'stroke',
-        'data-value-label':'true','data-year':v.year,'data-month':month,
-        'data-metric':panel.key,
-        'aria-label':v.year+'년 '+month+'월 '+panel.title+' '+Number(v.value).toLocaleString('ko-KR')
-      },formatPointValue(panel.key,v.value));
-      group.append(label);
-    }
-  }
-  svg.append(group);
+ if(!numberCheck.checked)return;
+ const fontSize=10.5, gap=19, minY=panel.y0+11, maxY=panel.y1-8;
+ const group=svgNode('g',{'data-value-labels':panel.key,'aria-label':panel.title+' 월별 수치'});
+ for(let month=1;month<=12;month++){
+   const labels=[];
+   for(const year of years){
+     if(!selectedYears.has(year))continue;
+     const row=byYear.get(year)?.get(month);
+     const value=row?panel.get(row):null;
+     if(!Number.isFinite(value))continue;
+     labels.push({year,value,pointY:yFor(value),desired:yFor(value)-11});
+   }
+   if(!labels.length)continue;
+   // Spread labels vertically when several yearly series meet at the same point.
+   // Positions remain in data-value order and are clamped within the plot panel.
+   labels.sort((a,b)=>a.desired-b.desired);
+   for(let i=0;i<labels.length;i++){
+     const remaining=labels.length-i-1;
+     const upperLimit=maxY-remaining*gap;
+     labels[i].labelY=Math.min(upperLimit,Math.max(minY+i*gap,labels[i].desired));
+   }
+   // Relax the stack upward rather than letting the bottom value run into the next panel.
+   for(let i=labels.length-2;i>=0;i--){
+     labels[i].labelY=Math.min(labels[i].labelY,labels[i+1].labelY-gap);
+   }
+   const xx=monthX(month);
+   for(const item of labels){
+     if(Math.abs(item.labelY-(item.pointY-11))>15){
+       // Tiny leader lines connect displaced values to their original data points.
+       group.append(svgNode('line',{
+         x1:xx,y1:item.pointY-4,x2:xx,y2:item.labelY+3,
+         stroke:yearColor(item.year,years),'stroke-width':0.85,'stroke-opacity':0.40,
+         'pointer-events':'none'
+       }));
+     }
+     group.append(svgNode('text',{
+       x:xx,y:item.labelY,
+       'text-anchor':'middle','font-size':fontSize,'font-weight':750,
+       fill:yearColor(item.year,years),stroke:'#fff','stroke-width':3.4,
+       'stroke-linejoin':'round','paint-order':'stroke',
+       'data-value-label':'true','data-year':item.year,'data-month':month,
+       'data-metric':panel.key,
+       'aria-label':item.year+'년 '+month+'월 '+panel.title+' '+Number(item.value).toLocaleString('ko-KR')
+     },formatPointValue(panel.key,item.value)));
+   }
+ }
+ svg.append(group);
 }
 function reviewedInventory(row,rows){
  if(!row||!Number.isFinite(row.inventory_head))return null;
@@ -123,7 +136,7 @@ function draw(rows){
  const years=[...new Set(a.map(r=>r.month.slice(0,4)))].sort();
  const byYear=new Map(years.map(year=>[year,new Map(a.filter(r=>r.month.startsWith(year+'-'))
    .map(r=>[Number(r.month.slice(5)),r]))]));
- const x0=91,x1=909,monthX=month=>x0+(month-1)*(x1-x0)/11;
+ const x0=140,x1=910,monthX=month=>x0+(month-1)*(x1-x0)/11;
  const sex=select.value;
  const panels=[
   {key:'inventory_head',title:'사육두수',unit:'만 두',y0:54,y1:162,
