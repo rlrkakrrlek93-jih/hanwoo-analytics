@@ -29,6 +29,11 @@ def main():
                 assert svg.locator('circle[data-year="2024"]').count()==12
                 assert svg.locator('circle[data-year="2025"]').count()==12
                 assert svg.locator('circle[data-year="2026"]').count()==7
+                assert svg.locator('text[data-semen-value="true"]').count()==55
+                assert svg.locator('text[data-semen-value="true"][data-year="2022"][data-month="1"]').text_content() == "171"
+                assert svg.locator('text[data-semen-value="true"][data-year="2025"][data-month="6"]').text_content() == "157.6"
+                assert svg.locator('text[data-semen-value="true"][data-year="2026"][data-month="7"]').text_content() == "171.3"
+                assert scope.locator('.ss-values input').is_checked()
                 assert svg.locator('path[data-year="2022"]').count()==1
                 assert svg.locator('path[data-year="2023"]').count()==1
                 assert svg.locator('path[data-year="2024"]').count()==1
@@ -60,8 +65,14 @@ def main():
                 assert svg.locator('path[data-year="2022"]').count()==0
                 assert svg.locator('path[data-year="2024"]').count()==1
                 assert svg.locator('path[data-year="2025"]').count()==1
+                assert svg.locator('text[data-semen-value="true"]').count()==43
+                scope.locator('.ss-values input').uncheck()
+                assert svg.locator('text[data-semen-value="true"]').count()==0
+                assert svg.locator('path[data-year]').count()==4
+                scope.locator('.ss-values input').check()
+                assert svg.locator('text[data-semen-value="true"]').count()==43
                 assert not errors, errors[:3]
-                print("PASS: semen Jan-Dec year overlay, 55 confirmed months, unpublished months hidden")
+                print("PASS: semen annual chart has 55 numeric value labels with year/value toggles")
             finally:browser.close()
     finally:server.shutdown();server.server_close()
 if __name__=="__main__":
