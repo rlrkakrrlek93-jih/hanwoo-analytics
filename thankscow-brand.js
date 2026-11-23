@@ -37,7 +37,50 @@ function embedSvgWatermark(svg){
  svg.append(group);
 }
 
+
+// Decorative countryside artwork, inspired by thankscow's warm farm illustration.
+function heroArtwork(){
+ const hero=document.querySelector('.hero');
+ if(!hero||hero.querySelector('.tc-pasture-art'))return;
+ const wrap=document.createElement('div');
+ wrap.className='tc-pasture-art';
+ wrap.setAttribute('aria-hidden','true');
+ wrap.innerHTML=`<svg viewBox="0 0 900 390" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" role="presentation">
+ <defs>
+ <linearGradient id="tcSky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fff7ed"/><stop offset="1" stop-color="#f9e9d9"/></linearGradient>
+ <linearGradient id="tcHill" x1="0" x2="1"><stop stop-color="#dda897"/><stop offset="1" stop-color="#b96759"/></linearGradient>
+ </defs>
+ <path d="M0 200Q140 170 270 219T580 204T900 189V390H0Z" fill="#f1d6c4" opacity=".68"/>
+ <circle cx="764" cy="67" r="44" fill="#c65e4e" opacity=".74"/>
+ <g fill="#f9ded2" opacity=".9"><path d="M110 98c-5-15 11-28 27-25 4-17 32-23 44-5 13-3 27 5 28 18 21-2 30 12 23 19H110Z"/><path d="M588 126c-8-12 5-26 19-23 6-16 31-16 39-4 20-5 30 9 29 22 22-1 26 12 20 17H588Z"/></g>
+ <path d="M0 283C135 221 196 258 312 276S507 225 628 250S794 204 900 256V390H0Z" fill="url(#tcHill)" opacity=".58"/>
+ <path d="M0 332C142 288 261 345 396 308S675 293 900 319V390H0Z" fill="#b6a581" opacity=".64"/>
+ <path d="M0 362C190 332 280 359 442 341S734 332 900 358V390H0Z" fill="#739078" opacity=".54"/>
+ <g stroke="#fdf3e5" stroke-width="6" stroke-linecap="round" opacity=".87"><path d="M0 311Q275 345 560 310T900 320" fill="none"/><path d="M0 338Q275 372 560 338T900 346" fill="none"/><path d="M61 307v57M153 313v52M247 322v49M346 322v49M448 320v50M548 311v50M650 307v52M754 308v54M853 314v51"/></g>
+ <g transform="translate(634 161)" stroke="#905e50" stroke-width="3" stroke-linejoin="round"><path d="M-5 61L52 18l64 41v87H-5Z" fill="#f7e9d8"/><path d="M-16 62l68-55 74 55-9 8-65-48-60 48Z" fill="#a45342"/><rect x="68" y="85" width="28" height="61" rx="2" fill="#c49b7d"/><path d="M11 87h31v31H11Z" fill="#e0b79b"/><path d="M26 87v31M11 102h31" stroke="#fff0db" stroke-width="2"/><rect x="137" y="-31" width="22" height="157" rx="8" fill="#dec6b0"/><path d="M133-17q15-19 30 0" fill="#d2a69a"/></g>
+ <g transform="translate(526 265)" stroke="#4b3a32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M-32 32Q-52-5-17-27Q14-50 64-18Q89 6 73 49Z" fill="#fff8e9"/>
+ <path d="M-18-22Q14-42 28-15Q9 7 35 27Q11 48-20 30Z" fill="#68574d"/>
+ <path d="M-27-16q-36-26-39 0q-5 21 28 25M56-19q30-33 42-8q3 19-22 32" fill="#554038"/>
+ <ellipse cx="23" cy="33" rx="36" ry="25" fill="#efc6ad"/>
+ <ellipse cx="12" cy="33" rx="6" ry="8" fill="#aa7e6f"/><ellipse cx="36" cy="33" rx="6" ry="8" fill="#aa7e6f"/>
+ <circle cx="-10" cy="-1" r="4" fill="#352a27"/><circle cx="52" cy="-3" r="4" fill="#352a27"/>
+ <path d="M-18 51v14M63 48v16" stroke-width="10"/>
+ </g>
+ <g transform="translate(767 286)" stroke="#62483a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M-56 14q-8-61 54-66q70-1 72 64v34H-53Z" fill="#bb7953"/>
+ <path d="M-42-23q-30-26-45-8q-6 17 31 29M48-25q32-25 47-9q11 17-27 35" fill="#b47b54"/>
+ <ellipse cx="7" cy="17" rx="40" ry="27" fill="#e8b393"/>
+ <ellipse cx="-6" cy="17" rx="6" ry="7" fill="#a56b57"/><ellipse cx="23" cy="17" rx="6" ry="7" fill="#a56b57"/>
+ <circle cx="-22" cy="-11" r="4" fill="#463329"/><circle cx="41" cy="-11" r="4" fill="#463329"/>
+ </g>
+ <g fill="#718365" opacity=".87"><path d="M430 332q-23-25-23-52q25 1 27 39q8-46 38-53q9 30-31 67Z"/><path d="M875 349q-23-34-14-59q22 10 21 37q8-48 30-49v61Z"/></g>
+ </svg>`;
+ hero.append(wrap);
+}
+
 function paint(){
+ heroArtwork();
  const header=document.querySelector('.top,.app-header');
  if(header&&!header.querySelector('.tc-topbrand')){const sig=signature('tc-topbrand');const mobile=header.classList.contains('app-header');(mobile?header.querySelector('.header-actions'):header)?.prepend(sig)}
  const hero=document.querySelector('.hero-row');
