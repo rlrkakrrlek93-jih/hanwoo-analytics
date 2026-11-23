@@ -51,6 +51,14 @@ def run():
      page.locator('#home').wait_for(state='hidden',timeout=10000)
      assert page.locator('#market .data-table tbody tr').count()==12
      assert page.locator('#market [data-chart-point="market"]').count()>25
+     market_lines=page.locator('#market svg [data-chart-line="market"]')
+     assert market_lines.count()==3
+     for line in market_lines.all():
+      assert line.get_attribute('d').startswith('M '), "SVG year paths must begin with move-to"
+      assert ' L ' in line.get_attribute('d'), "Months must join with solid line segments"
+      assert line.get_attribute('stroke-width')=='1.9'
+      assert line.get_attribute('stroke-dasharray') is None
+
      page.locator('[data-market-metric="graded"]').click()
      assert '판정두수' in page.locator('#marketContent .chart-heading').inner_text()
      page.locator('[data-market-metric="price"]').click()
@@ -66,6 +74,15 @@ def run():
      assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(4).inner_text()=='157.6'
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).inner_text()=='171.3'
      assert page.locator('#semen [data-chart-point="semen"]').count()==55
+     semen_lines=page.locator('#semen svg [data-chart-line="semen"]')
+     assert semen_lines.count()==5
+     for line in semen_lines.all():
+      assert line.get_attribute('d').startswith('M ')
+      assert ' L ' in line.get_attribute('d'), "Semen sale monthly dots should be connected"
+      assert line.get_attribute('stroke-width')=='1.9'
+     july_2026=page.locator('#semen svg path[data-chart-line="semen"][data-year="2026"]')
+     assert july_2026.get_attribute('d').count(' L ')==6, "2026 seven published months yield six line segments"
+
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).locator('a').get_attribute('href').startswith('https://')
      page.locator('button[data-semen-year="2023"]').click()
      assert page.locator('#semen [data-chart-point="semen"]').count()==43
@@ -76,6 +93,11 @@ def run():
      assert page.locator('[data-quality-sex="암소"]').get_attribute('aria-selected')=='true'
      page.locator('#qualityMetric').select_option('marbling')
      assert '근내지방도' in page.locator('#qualityContent .chart-heading').inner_text()
+     quality_line=page.locator('#quality svg path[data-chart-line="quality"]')
+     assert quality_line.count()==1
+     assert quality_line.get_attribute('d').startswith('M ')
+     assert ' L ' in quality_line.get_attribute('d')
+
      if w==390:
       output=ROOT/'test_artifacts';output.mkdir(exist_ok=True)
       page.locator('#quality').screenshot(path=str(output/'native_mobile_quality.png'))
