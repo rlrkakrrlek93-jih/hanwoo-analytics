@@ -41,3 +41,29 @@
 .tc-svg-watermark{opacity:.33;pointer-events:none!important;user-select:none!important;filter:none}
 .app-shell .tc-svg-watermark{opacity:.31}
 @media print{.tc-svg-watermark{opacity:.44!important}}
+
+/* thankscow v4 — softer chart signature and illustrated pastoral masthead */
+.tc-svg-watermark{opacity:.16!important}
+.app-shell .tc-svg-watermark{opacity:.14!important}
+.tc-watermark{opacity:.27!important}
+.app-shell .tc-watermark{opacity:.24!important}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:345px}
+.hero .hero-row{position:relative;z-index:2}
+.hero .hero-row>div:first-child{position:relative;z-index:3;max-width:min(62%,850px)}
+.tc-pasture-art{position:absolute;right:0;bottom:0;width:min(58%,940px);height:100%;pointer-events:none;z-index:1;opacity:.82;display:flex;align-items:flex-end;justify-content:flex-end}
+.tc-pasture-art svg{display:block;width:100%;height:auto;max-height:100%;filter:saturate(.85)}
+.hero .tc-hero-stamp{color:#9c806b!important;position:relative;z-index:4}
+.hero .tc-hero-stamp:before{background:#be9983}
+@media(max-width:900px){
+ .hero{min-height:345px}
+ .tc-pasture-art{width:68%;opacity:.63}
+ .hero .hero-row>div:first-child{max-width:78%}
+}
+@media(max-width:650px){
+ .hero{min-height:400px;padding-bottom:132px!important}
+ .tc-pasture-art{width:100%;height:220px;opacity:.76}
+ .hero .hero-row>div:first-child{max-width:100%}
+ .hero .hero-row{align-items:start}
+ .hero .tc-hero-stamp{margin-top:12px;font-size:10px}
+}
+@media print{.tc-svg-watermark{opacity:.23!important}}
