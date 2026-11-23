@@ -1,6 +1,12 @@
 name: Hanwoo Daily Update
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'semen_krei_sync.py'
+      - 'hanwoo_update_health.py'
+      - '.github/workflows/update.yml'
   workflow_dispatch:
   schedule:
     - cron: '15 9 * * *'
