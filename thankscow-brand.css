@@ -1,0 +1,26 @@
+/* thankscow identity layer · visual only, no data or chart logic changes */
+:root{--tc-gold:#d5b174;--tc-ink:#20354c}
+.tc-signature{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:inherit;white-space:nowrap}
+.tc-emblem{width:29px;height:29px;display:inline-grid;place-items:center;flex:none;border-radius:10px;background:linear-gradient(145deg,#f1d5a0,#b98146);color:#253d39;box-shadow:0 3px 12px #172e2820;position:relative;font-size:17px;font-weight:900}
+.tc-emblem:after{content:"";position:absolute;inset:4px;border:1px solid #ffffff99;border-radius:7px;pointer-events:none}
+.tc-sig-copy{display:grid;gap:1px;line-height:1.15}.tc-sig-copy small{font-size:9px;letter-spacing:1.3px;font-weight:800;opacity:.65}.tc-sig-copy strong{font-size:13px;font-weight:900;letter-spacing:-.3px}
+.tc-topbrand{padding:5px 10px;border:1px solid #ffffff26;border-radius:12px;background:#ffffff0b;color:#f5e6c9}
+.tc-hero-stamp{margin-top:22px;display:inline-flex;align-items:center;gap:10px;color:#e9dfc8;font-size:11px;letter-spacing:.3px}
+.tc-hero-stamp:before{content:"";width:22px;height:1px;background:#d9bf8b}
+.tc-watermark-target{position:relative}
+.tc-watermark{position:absolute;right:14px;bottom:13px;display:flex;align-items:center;gap:5px;z-index:2;opacity:.30;pointer-events:none!important;user-select:none!important;color:#59717b;font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.45px}
+.tc-watermark svg{width:15px;height:15px;display:block}
+.tc-footer{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:23px 25px;margin-top:32px;border:1px solid #e3e8ed;border-radius:18px;background:linear-gradient(120deg,#fff,#f4f8f6);font-size:11px;color:#71818c;line-height:1.7}
+.tc-footer .tc-signature{color:#263e42}.tc-footer .tc-note{max-width:720px}.tc-footer a{color:inherit}
+.tc-source{margin-top:8px;color:#829397;font-size:10px;line-height:1.6}
+.tc-source b{font-weight:800;color:#586b70}
+.app-header .tc-topbrand{border:0;background:transparent;padding:0;margin-left:5px;color:#43645a}
+.app-header .tc-emblem{width:24px;height:24px;font-size:14px;border-radius:8px}
+.app-header .tc-emblem:after{border-radius:5px}
+.app-header .tc-sig-copy small{font-size:8px}
+.app-header .tc-sig-copy strong{font-size:10px}
+.app-shell .tc-watermark{opacity:.20;right:12px;bottom:9px}
+.app-shell .tc-footer{margin:30px 0 16px;padding:16px;border-radius:15px;font-size:10px}
+@media(max-width:650px){.tc-footer{padding:18px;display:grid}.tc-topbrand .tc-sig-copy small{display:none}.tc-topbrand .tc-emblem{width:25px;height:25px;font-size:14px}.tc-topbrand .tc-sig-copy strong{font-size:11px}}
+@media(max-width:390px){.app-header .tc-topbrand .tc-sig-copy{display:none}.app-header .tc-topbrand{margin-left:0}}
+@media print{.tc-watermark{opacity:.55!important}.tc-footer{break-inside:avoid}}
