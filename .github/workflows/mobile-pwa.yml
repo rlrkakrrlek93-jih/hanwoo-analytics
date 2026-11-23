@@ -5,11 +5,15 @@ on:
       - 'index.html'
       - 'dashboard_template.html'
       - 'mobile.css'
+      - 'app.html'
+      - 'app.css'
+      - 'app.js'
       - 'mobile-app.js'
       - 'manifest.webmanifest'
       - 'service-worker.js'
       - 'pwa/**'
       - 'test_mobile_pwa_browser.py'
+      - 'test_native_mobile_app.py'
       - '.github/workflows/mobile-pwa.yml'
   workflow_dispatch:
 permissions:
@@ -30,9 +34,10 @@ jobs:
       - name: Check mobile JavaScript syntax
         run: |
           node --check mobile-app.js
+          node --check app.js
           node --check service-worker.js
       - name: Test PWA installation assets and mobile/desktop browser
-        run: python test_mobile_pwa_browser.py
+        run: python test_native_mobile_app.py
       - name: Save mobile screenshots
         if: always()
         uses: actions/upload-artifact@v4

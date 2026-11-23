@@ -2,9 +2,9 @@
   "id": "./",
   "name": "HANWOO INSIGHT - 한우시장 데이터",
   "short_name": "한우 인사이트",
-  "description": "전국 한우 사육·판정·경락가격·정액 판매량 공식 통계 대시보드",
+  "description": "한우시장·경락가격·사육두수·판정두수·정액 판매량·품질 성적을 보는 전용 모바일 앱",
   "lang": "ko-KR",
-  "start_url": "./?app=1",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "display_override": [
@@ -29,9 +29,9 @@
   ],
   "shortcuts": [
     {
-      "name": "한우 시장",
+      "name": "시장 분석",
       "short_name": "시장",
-      "url": "./#marketScope",
+      "url": "./app.html#market",
       "icons": [
         {
           "src": "./pwa/icon-192.png",
@@ -43,7 +43,19 @@
     {
       "name": "정액 판매량",
       "short_name": "정액",
-      "url": "./#semenSalesScope",
+      "url": "./app.html#semen",
+      "icons": [
+        {
+          "src": "./pwa/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "품질 성적",
+      "short_name": "품질",
+      "url": "./app.html#quality",
       "icons": [
         {
           "src": "./pwa/icon-192.png",
