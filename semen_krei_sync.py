@@ -61,7 +61,11 @@ def discover(session,current_year=None):
             if parts.netloc not in ("www.aglook.kr","aglook.kr") or not parts.path.startswith("/main/uObserveMonth/OVR0000000015/download/"):
                 continue
             found[issue]=url
-    return sorted(found.items(),reverse=True)
+    # Only parse the most recent available publication year, and keep the
+    # previous year solely as a fallback when January has no new releases yet.
+    newest=max(int(issue[:4]) for issue in found) if found else None
+    return sorted(((issue,url) for issue,url in found.items()
+                   if int(issue[:4])==newest),reverse=True)
 
 def known_value(existing,year,month):
     if year==2025:return REFERENCE_2025[month-1]
