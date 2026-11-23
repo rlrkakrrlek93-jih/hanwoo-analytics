@@ -1,8 +1,8 @@
 /* HANWOO INSIGHT PWA — online always fetches current official data first. */
-const CACHE='hanwoo-insight-mobile-20261123-v1';
+const CACHE='hanwoo-insight-mobile-20261123-v2';
 const ROOT=new URL('./',self.registration.scope).href;
 const REQUIRED=[
- './','./index.html','./manifest.webmanifest','./mobile.css','./mobile-app.js',
+ './','./index.html','./app.html','./app.css','./app.js','./manifest.webmanifest','./mobile.css','./mobile-app.js',
  './market-indicators.js','./semen_sales_chart.js','./quality-check.js',
  './pwa/icon-192.png','./pwa/icon-512.png','./pwa/apple-touch-icon.png',
  './data.json','./grade_data.json','./age_data.json',
