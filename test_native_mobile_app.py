@@ -89,7 +89,13 @@ def run():
      page.locator('a[data-tab="quality"]').click()
      page.locator('#quality').wait_for(state='visible',timeout=10000)
      assert page.locator('#quality .grade-item').count()==5
+     # Regression: cattle category is not a calendar year ("거세우년").
+     assert page.locator('#quality .chart-legend').inner_text().strip()=='거세우'
+     assert '거세우년' not in page.locator('#qualityContent').inner_text()
+     assert page.locator('#quality svg [data-chart-point="quality"]').first.get_attribute('aria-label').startswith('거세우 2026년')
      page.locator('[data-quality-sex="암소"]').click()
+     assert page.locator('#quality .chart-legend').inner_text().strip()=='암소'
+     assert '암소년' not in page.locator('#qualityContent').inner_text()
      assert page.locator('[data-quality-sex="암소"]').get_attribute('aria-selected')=='true'
      page.locator('#qualityMetric').select_option('marbling')
      assert '근내지방도' in page.locator('#qualityContent .chart-heading').inner_text()
@@ -124,6 +130,10 @@ def run():
     dpage.locator('#marketScope .mk-card').first.wait_for(timeout=18000)
     assert '/app.html' not in dpage.url
     assert dpage.locator('#semenSalesScope .ss-table tbody tr').count()==12
+    assert not dpage.locator('#marketScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public market chart must be outside admin details"
+    assert not dpage.locator('#semenSalesScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public semen chart must be outside admin details"
+    assert dpage.locator('#hanwooAdminDetails').count()==1
+    assert not dpage.locator('#hanwooAdminDetails').get_attribute('open'),"diagnostic info should be collapsed"
     desktop.close()
     forced=browser.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
     fpage=forced.new_page()
