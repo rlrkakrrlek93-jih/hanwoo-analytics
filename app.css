@@ -129,3 +129,10 @@ a{color:inherit}
 .app-screen .month-pills{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;overflow:visible;padding:11px 0;margin:0 0 4px}
 .app-screen .month-pills button{min-width:0;width:100%;min-height:36px;padding:5px 1px;font-size:10px}
 @media(max-width:350px){.app-screen .month-pills{gap:4px}.app-screen .month-pills button{font-size:9px;min-height:34px}}
+
+/* Quality dashboard: monthly vs year-to-selected-month cumulative summary */
+.quality-period-switch{margin:5px 0 14px;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);grid-auto-columns:auto}
+.quality-period-switch button{font-size:11px;min-height:39px;padding:7px 4px;white-space:normal;line-height:1.35}
+.quality-rollup-note{margin:1px 2px 16px;padding:11px 13px;border-radius:12px;background:#f1f5ef;border:1px solid #e1e9df;color:#637b6c;font-size:10.5px;line-height:1.75;word-break:keep-all}
+.quality-rollup-note.quality-chart-notice{margin:9px 0 15px;background:#fbfaf5;border-color:#ece9de}
+@media(max-width:350px){.quality-period-switch button{font-size:10px}.quality-rollup-note{font-size:10px}}
