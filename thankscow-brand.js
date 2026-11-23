@@ -1,8 +1,8 @@
 /* thankscow identity for HANWOO INSIGHT · safe to re-run */
 (()=>{'use strict';
-const url='https://www.youtube.com/@thankscow';
+// Brand credit stays on-site until the owner specifies an official brand URL.
 const icon='<svg viewBox="0 0 32 32" aria-hidden="true" fill="none"><path d="M8 13C6 9 7 6 10 5l5 6M24 13c2-4 1-7-2-8l-5 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M9 12c3-3 11-3 14 0 4 4 3 13-2 16-3 2-7 2-10 0-5-3-6-12-2-16Z" stroke="currentColor" stroke-width="2"/><path d="M12 19h.1M20 19h.1" stroke="currentColor" stroke-width="3.3" stroke-linecap="round"/><path d="M12 23c2 2 6 2 8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-function signature(cls=''){const a=document.createElement('a');a.className='tc-signature '+cls;a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label','제작 브랜드 thankscow');a.innerHTML='<span class="tc-emblem" aria-hidden="true">牛</span><span class="tc-sig-copy"><small>CREATED & CURATED BY</small><strong>thankscow</strong></span>';return a}
+function signature(cls=''){const a=document.createElement('span');a.className='tc-signature '+cls;a.setAttribute('aria-label','제작 브랜드 thankscow');a.innerHTML='<span class="tc-emblem" aria-hidden="true">牛</span><span class="tc-sig-copy"><small>CREATED & CURATED BY</small><strong>thankscow</strong></span>';return a}
 function watermark(node){if(!node||node.querySelector(':scope > .tc-watermark'))return;node.classList.add('tc-watermark-target');const mark=document.createElement('span');mark.className='tc-watermark';mark.setAttribute('aria-hidden','true');mark.innerHTML='<span class="tc-sprout" aria-hidden="true"><svg viewBox="0 0 34 30" fill="none"><path d="M17 28V16" stroke="#536846" stroke-width="3" stroke-linecap="round"/><path d="M16 15C8 16 3 10 4 4c7-1 13 3 12 11Z" fill="#75864F"/><path d="M18 16C19 7 25 3 32 3c1 8-4 13-14 13Z" fill="#657B46"/></svg></span><span class="tc-wordmark"><span>thanks</span><span>cow</span></span>';node.append(mark)}
 
 function embedSvgWatermark(svg){
