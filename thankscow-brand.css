@@ -152,3 +152,24 @@
  .app-shell #home .tc-mobile-hero-unified .tc-mobile-studio,
  .app-shell #home .tc-mobile-hero-unified .tc-mobile-studio svg{height:128px!important;max-height:128px!important}
 }
+
+/* v8: remove duplicate animal badge in compact mobile header, preserve thankscow credit */
+@media(max-width:530px){
+ .app-header{padding-left:12px!important;padding-right:12px!important;gap:5px!important}
+ .app-brand{gap:7px!important;min-width:0}
+ .app-brand-mark{width:35px;height:35px;font-size:20px;border-radius:11px;flex-shrink:0}
+ .app-brand-text strong{font-size:13px;letter-spacing:.7px}
+ .app-brand-text small{font-size:9px;letter-spacing:1px}
+ .app-header .tc-topbrand{margin-left:0!important;gap:0!important;flex-shrink:0}
+ .app-header .tc-topbrand .tc-emblem{display:none!important}
+ .app-header .tc-topbrand .tc-sig-copy{display:grid!important}
+ .app-header .tc-topbrand .tc-sig-copy small{display:none!important}
+ .app-header .tc-topbrand .tc-sig-copy strong{font-size:10px;white-space:nowrap}
+ .app-header .header-actions{gap:5px!important}
+ .app-header .icon-button{width:34px;height:34px;border-radius:11px}
+ .app-header .network-flag{font-size:9px;padding:7px 6px}
+}
+@media(max-width:380px){
+ .app-header .network-flag{font-size:0!important;width:20px;min-width:20px;overflow:hidden;padding:7px 6px}
+ .app-header .network-flag i{margin-right:0}
+}
