@@ -1,5 +1,5 @@
 /* HANWOO INSIGHT PWA — online always fetches current official data first. */
-const CACHE='hanwoo-insight-mobile-20261123-v5';
+const CACHE='hanwoo-insight-mobile-20261123-v6';
 const ROOT=new URL('./',self.registration.scope).href;
 const REQUIRED=[
  './','./index.html','./app.html','./app.css','./app.js','./data-health-widget.js','./manifest.webmanifest','./mobile.css','./mobile-app.js',
