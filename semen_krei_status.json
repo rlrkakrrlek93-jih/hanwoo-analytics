@@ -1,0 +1,14 @@
+{
+  "checked_at_kst": "2026-11-23 15:18 KST",
+  "status": "verified_no_new_months",
+  "last_verified_month": "2026-07",
+  "new_months": [],
+  "verified_issues": [
+    "2026-09",
+    "2026-06",
+    "2026-03"
+  ],
+  "source_errors": [],
+  "conflicts_preserved": [],
+  "method": "KREI official image-PDF OCR with strict historical control and published total verification"
+}
