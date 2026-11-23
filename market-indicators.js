@@ -148,8 +148,8 @@ function draw(rows){
  ];
  for(let month=1;month<=12;month++){
    const xx=monthX(month);
-   svg.append(svgNode('line',{x1:xx,y1:42,x2:xx,y2:490,
-     stroke:month===1?'#cad6e5':'#edf1f5','stroke-dasharray':month===1?'0':'3 5'}));
+   if(month!==1)svg.append(svgNode('line',{x1:xx,y1:42,x2:xx,y2:490,
+     stroke:'#edf1f5','stroke-dasharray':'3 5'}));
    svg.append(svgNode('text',{x:xx,y:517,'text-anchor':'middle','font-size':12,fill:'#52687d'},month+'월'));
  }
  for(const p of panels){
