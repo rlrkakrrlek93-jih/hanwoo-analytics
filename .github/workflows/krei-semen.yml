@@ -1,0 +1,28 @@
+name: Verify KREI image PDF semen collector
+on:
+  pull_request:
+    paths:
+      - 'semen_krei_sync.py'
+      - 'semen_sales_data.json'
+      - '.github/workflows/krei-semen.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-krei:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install OCR for numeric-only image tables
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr
+          python -m pip install requests beautifulsoup4 pymupdf pillow pytesseract
+      - name: Self-check against verified official March and September reports
+        run: python semen_krei_sync.py --self-check
+      - name: Verify live KREI discovery and safe no-write sync
+        run: python semen_krei_sync.py --dry-run

@@ -1,0 +1,59 @@
+name: Verify complete Hanwoo auto-refresh
+on:
+  pull_request:
+    paths:
+      - 'semen_krei_sync.py'
+      - 'hanwoo_update_health.py'
+      - '.github/workflows/update.yml'
+      - '.github/workflows/full-auto-refresh-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install collectors
+        run: |
+          pip install -r requirements.txt
+          pip install pymupdf requests beautifulsoup4 pillow pytesseract playwright
+          sudo apt-get update -qq
+          sudo apt-get install -y tesseract-ocr
+          python -m playwright install --with-deps chromium
+      - name: Python and daily workflow syntax sanity
+        run: |
+          python -m py_compile semen_krei_sync.py hanwoo_update_health.py auto_quality.py grade_sync.py age_sync.py market_supply_sync.py semen_sales_sync.py beef_national_sync.py
+      - name: Verify official KREI historical PDF exact numeric parsing
+        run: python semen_krei_sync.py --self-check
+      - name: Verify all auto update collectors without a GitHub push
+        run: |
+          set -e
+          python auto_quality.py
+          python grade_sync.py
+          python age_sync.py
+          python market_supply_sync.py
+          python semen_sales_sync.py --dry-run
+          python semen_krei_sync.py
+          python beef_national_sync.py
+          python hanwoo_update_health.py
+      - name: Confirm all public datasets and source audit flags
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          status=json.loads(Path("auto_update_status.json").read_text(encoding="utf8"))
+          d=status["datasets"]
+          assert {"quality","grades","ages","market","semen_association","semen_krei","beef"} <= set(d)
+          assert all(x.get("record_count",0)>0 for x in d.values())
+          semen=json.loads(Path("semen_sales_data.json").read_text(encoding="utf8"))
+          assert len(semen["records"])>=55
+          assert max(x["month"] for x in semen["records"])>="2026-07"
+          krei=json.loads(Path("semen_krei_status.json").read_text(encoding="utf8"))
+          assert krei["verified_issues"] and krei["status"] != "source_unverifiable"
+          print("ALL_DATASET_INDEPENDENT_COLLECTORS_OK", {k:v["latest_published_month"] for k,v in d.items()})
+          PY
