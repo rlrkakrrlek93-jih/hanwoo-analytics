@@ -40,10 +40,11 @@ function embedSvgWatermark(svg){
 
 // Decorative countryside artwork, inspired by thankscow's warm farm illustration.
 function heroArtwork(){
- const hero=document.querySelector('.hero');
+ const hero=document.querySelector('.hero')||document.querySelector('#home');
  if(!hero||hero.querySelector('.tc-pasture-art'))return;
+ const mobile=hero.id==='home';
  const wrap=document.createElement('div');
- wrap.className='tc-pasture-art tc-data-center-art';
+ wrap.className=mobile?'tc-pasture-art tc-data-center-art tc-mobile-studio':'tc-pasture-art tc-data-center-art';
  wrap.setAttribute('aria-hidden','true');
  wrap.innerHTML=`<svg viewBox="0 0 760 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="presentation">
   <defs>
@@ -102,7 +103,7 @@ function heroArtwork(){
   </g>
   <g fill="#dbb48d" opacity=".9"><path d="M86 211l4 10 11 1-8 7 2 12-9-6-10 6 3-12-8-7 11-1Z"/><circle cx="681" cy="206" r="6"/><circle cx="699" cy="188" r="3"/></g>
  </svg>`;
- hero.append(wrap);
+ if(mobile){const intro=hero.querySelector('.hero-description');if(intro)intro.insertAdjacentElement('afterend',wrap);else hero.prepend(wrap)}else hero.append(wrap);
 }
 function paint(){
  heroArtwork();
