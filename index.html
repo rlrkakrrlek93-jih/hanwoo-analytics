@@ -102,7 +102,7 @@ body[data-sex="beef"] #nationalBeef{display:grid!important;gap:14px;margin-top:2
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="application-name" content="HANWOO INSIGHT"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-</head><body>
+<link rel="stylesheet" href="./thankscow-brand.css?v=1"/></head><body>
 <header><div class="top"><div class="brand"><div class="logo">牛</div>HANWOO <span style="font-weight:400;color:#afbdd0">INSIGHT</span></div><nav aria-label="바로가기" class="mini-nav"><a href="#quality">품질 비교</a><a href="#grades">육질등급</a><a href="#details">월별 상세표</a><a href="https://www.youtube.com/@thankscow" rel="noopener" target="_blank">땡스카우 ↗</a></nav><div class="topsmall">공식 공개자료 기반</div></div></header>
 <div class="hero"><div class="shell hero-row"><div><div class="eyebrow">전국 한우 성적 한눈에</div><h1>우리 한우, 전국 평균은 어떨까요?</h1><p>거세우·암소 품질과 육질등급을 쉽고 빠르게 확인하세요.</p></div><div class="hero-foot"><span class="tag">✓ 전국 통계</span><span class="tag">✓ 축산물품질평가원 자료</span><span class="tag">월별·누적 비교</span></div></div></div>
 <main class="shell"><div class="filterbox"><div class="field"><label for="month">조회 기준 월</label><select id="month"></select></div><div class="field"><label for="mode">평균 집계 기준</label><select id="mode"><option value="month">선택 월 평균</option><option value="ytd">1월부터 선택 월까지 누적 평균(추정)</option></select></div><button class="smallbtn" id="csv">↓ 조회 자료 내려받기 (CSV)</button><div class="status">매일 자동 갱신</div></div>
@@ -418,5 +418,6 @@ Object.entries(METRICS).forEach(([key,[title]])=>{let b=document.createElement('
 <script src="semen_sales_chart.js" defer></script>
 <script src="mobile-app.js" defer></script>
 <script src="data-health-widget.js" defer></script>
+<script src="./thankscow-brand.js?v=1" defer></script>
 </body>
 </html>
