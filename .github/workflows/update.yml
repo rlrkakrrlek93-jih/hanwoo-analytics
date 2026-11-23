@@ -6,6 +6,7 @@ on:
     paths:
       - 'semen_krei_sync.py'
       - 'hanwoo_update_health.py'
+      - 'market_supply_sync.py'
       - '.github/workflows/update.yml'
   workflow_dispatch:
   schedule:
