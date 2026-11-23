@@ -102,6 +102,17 @@ function drawValueLabels(panel,years,byYear,monthX,yFor){
   }
   svg.append(group);
 }
+function reviewedInventory(row,rows){
+ if(!row||!Number.isFinite(row.inventory_head))return null;
+ const i=rows.findIndex(r=>r.month===row.month);
+ if(i<1||i>=rows.length-1)return row.inventory_head;
+ const before=rows[i-1],after=rows[i+1];
+ const sequence=m=>Number(m.slice(0,4))*12+Number(m.slice(5));
+ if(sequence(before.month)+1!==sequence(row.month)||sequence(after.month)!==sequence(row.month)+1)return row.inventory_head;
+ const a=before.inventory_head,b=row.inventory_head,c=after.inventory_head;
+ if(Math.abs(b-a)/a>.075&&Math.abs(b-c)/c>.075&&Math.abs(a-c)/a<.075)return null;
+ return b;
+}
 function draw(rows){
  svg.replaceChildren();
  const a=rows.slice().sort((x,y)=>x.month.localeCompare(y.month));
@@ -113,7 +124,7 @@ function draw(rows){
  const sex=select.value;
  const panels=[
   {key:'inventory_head',title:'사육두수',unit:'만 두',y0:54,y1:162,
-    get:r=>r.inventory_head,div:10000},
+    get:r=>reviewedInventory(r,a),div:10000},
   {key:'graded_head',title:'판정두수',unit:'천 두',y0:214,y1:322,
     get:r=>r.graded_head,div:1000},
   {key:'auction_price',title:'경락가격 ('+({steer:'거세우',female:'암소',male:'수소'}[sex])+')',unit:'원/kg',
@@ -171,6 +182,9 @@ function draw(rows){
  const note=mo<12?yr+'년은 '+mo+'월까지만 발표 · 나머지 월은 빈칸으로 표시':
    '2024년부터 월별 공식 통계를 같은 1~12월 기준으로 비교';
  svg.append(svgNode('text',{x:500,y:548,'text-anchor':'middle','font-size':12,fill:'#73869a'},note));
+ if(a.some(row=>Number.isFinite(row.inventory_head)&&reviewedInventory(row,a)===null)){
+  svg.append(svgNode('text',{x:500,y:566,'text-anchor':'middle','font-size':10,fill:'#a16e53'},'급격한 단일월 사육두수는 원자료 대조 전까지 표시 제외 · 임의 보정 없음'));
+ }
  if(!selectedYears.size)svg.append(svgNode('text',{x:500,y:341,'text-anchor':'middle','font-size':17,fill:'#61758a'},'비교할 연도를 선택하세요.'));
 }
 
@@ -199,7 +213,7 @@ function renderTable(rows){
  for(const r of rows.slice().reverse()){
    const tr=el('tr');
    const p=r.auction_price_by_sex||{};
-   for(const v of [r.month,r.inventory_head,r.graded_head,p.steer,p.female]){
+   for(const v of [r.month,reviewedInventory(r,rows)??'검증 중',r.graded_head,p.steer,p.female]){
      tr.append(el('td','',Number.isFinite(v)?v.toLocaleString('ko-KR'):v??'미발표'));
    }t.append(tr);
  }tableWrap.append(t);
