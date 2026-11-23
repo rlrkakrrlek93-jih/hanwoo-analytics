@@ -123,10 +123,16 @@ function lineChart(series,{label,unit,metric,monthKey}){
  const axis=ticks.map(z=>'<line x1="28" y1="'+z.y.toFixed(1)+'" x2="332" y2="'+z.y.toFixed(1)+'" stroke="#edf1eb"/><text x="26" y="'+(z.y+3).toFixed(1)+'" text-anchor="end" font-size="8" fill="#9ca89f">'+esc(shortNum(z.v))+'</text>').join('');
  const monthLabels=[1,3,5,7,9,12].map(m=>'<text x="'+x(m).toFixed(1)+'" y="188" text-anchor="middle" font-size="10" fill="#9aa89f">'+m+'월</text>').join('');
  const lines=series.map(s=>{
-  let path='',prev=0;
-  for(const v of s.values){if(!Number.isFinite(v.value))continue;path+=(prev===v.month-1?' L':' M')+x(v.month).toFixed(1)+' '+y(v.value).toFixed(1);prev=v.month}
+  // SVG paths must start with M. Break the line across unpublished months.
+  let path='',previousMonth=null;
+  for(const v of s.values){
+   if(!Number.isFinite(v.value)){previousMonth=null;continue;}
+   const joined=previousMonth!==null&&v.month===previousMonth+1;
+   path+=(joined?' L ':' M ')+x(v.month).toFixed(1)+' '+y(v.value).toFixed(1);
+   previousMonth=v.month;
+  }
   const dots=s.values.filter(r=>Number.isFinite(r.value)).map(v=>'<circle data-chart-point="'+esc(metric)+'" data-month="'+v.month+'" data-year="'+esc(s.year)+'" tabindex="0" role="button" aria-label="'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'" cx="'+x(v.month).toFixed(1)+'" cy="'+y(v.value).toFixed(1)+'" r="'+(v.month===monthKey?4.8:3.1)+'" fill="'+esc(s.color)+'" stroke="#fff" stroke-width="1.6"><title>'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'</title></circle>').join('');
-  return '<path d="'+path.trim()+'" fill="none" stroke="'+esc(s.color)+'" stroke-width="2.7" stroke-linejoin="round" stroke-linecap="round"/>'+dots;
+  return '<path data-chart-line="'+esc(metric)+'" data-year="'+esc(s.year)+'" d="'+path.trim()+'" fill="none" stroke="'+esc(s.color)+'" stroke-width="1.9" stroke-opacity="0.68" stroke-linejoin="round" stroke-linecap="round"/>'+dots;
  }).join('');
  const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.year)+'년</span>').join('');
  return '<div class="chart-surface"><div class="chart-heading"><strong>'+esc(label)+'</strong><span>'+esc(unit)+'</span></div>'+
