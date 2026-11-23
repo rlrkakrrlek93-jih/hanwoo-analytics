@@ -106,8 +106,23 @@ function miniTrend(vals,label){
  '</svg><div class="chart-note">최신 값 '+fmt(vals.at(-1))+'원/kg · 자세한 연도별 비교는 시장 탭에서 확인</div></div>';
 }
 
+
+// Isolated stock-count shocks require independent source verification.
+// An outlier is hidden, not replaced or interpolated.
+function inventoryOutlier(record,records){
+ if(!record||!Number.isFinite(record.inventory_head))return false;
+ const i=records.findIndex(r=>r.month===record.month);
+ if(i<1||i>=records.length-1)return false;
+ const a=records[i-1],b=records[i+1];
+ if(!Number.isFinite(a.inventory_head)||!Number.isFinite(b.inventory_head))return false;
+ const monthNum=v=>Number(v.month.slice(0,4))*12+Number(v.month.slice(5));
+ if(monthNum(record)!==monthNum(a)+1||monthNum(b)!==monthNum(record)+1)return false;
+ const n=record.inventory_head,p=a.inventory_head,q=b.inventory_head;
+ return Math.abs(n-p)/p>.075&&Math.abs(n-q)/q>.075&&Math.abs(p-q)/p<.075;
+}
+
 function panelMetric(row,key,sex){
- if(key==='inventory')return row?.inventory_head;
+ if(key==='inventory')return inventoryOutlier(row,state.data.market?.records||[])?null:row?.inventory_head;
  if(key==='graded')return row?.graded_head;
  if(key==='price')return row?.auction_price_by_sex?.[sex];
  return null;
@@ -165,6 +180,7 @@ function renderMarket(){
  const m=state.data.market;
  if(!m){$('#marketContent').innerHTML='<div class="loading-block">시장 통계를 불러올 수 없습니다.</div>';return}
  const latest=m.records.at(-1);
+ const latestVerified=m.records.map(r=>r.month).sort().at(-1);
  const metricNames={inventory:'사육두수',graded:'판정두수',price:'경락가격'};
  const label=(state.metric==='price'?names[state.sex]+' ':'')+metricNames[state.metric];
  const activeYears=marketSeries();
@@ -176,7 +192,7 @@ function renderMarket(){
  const selector='<div class="year-toggles" role="group" aria-label="비교 연도">'+toggles+'</div>';
  const detail=monthDetail(activeYears.map(s=>({...s,value:s.values[state.marketMonth-1]?.value})),state.marketMonth,label,marketUnit(state.metric));
  const numbers='<div class="kpi-strip">'+
-   '<div class="kpi-mini"><span>최신 '+esc(label)+'</span><strong>'+fmt(panelMetric(latest,state.metric,state.sex),0)+'</strong><small>'+dateText(latest.month)+' · '+marketUnit(state.metric)+'</small></div>'+
+   '<div class="kpi-mini"><span>최신 '+esc(label)+'</span><strong>'+fmt(panelMetric(latest,state.metric,state.sex),0)+'</strong><small>'+dateText(latestVerified)+' · '+marketUnit(state.metric)+'</small></div>'+
    '</div>';
  const tableRows=Array.from({length:12},(_,i)=>{
  const month=i+1;return '<tr><td>'+month+'월</td>'+['2024','2025','2026'].map(y=>{
@@ -185,11 +201,13 @@ function renderMarket(){
   return '<td'+(!Number.isFinite(v)?' class="missing"':'')+'>'+(Number.isFinite(v)?fmt(v):'—')+'</td>';
  }).join('')+'</tr>';
  }).join('');
+ const flagged=state.metric==='inventory'&&m.records.some(r=>inventoryOutlier(r,m.records));
+ const validationNote=flagged?'<p class="chart-note" style="color:#a36a44;padding:0 3px 9px">※ 2025년 10월 사육두수는 전후 월과 큰 차이가 있어 원자료 재확인 전까지 그래프·표에서 제외합니다. 임의 보정값을 사용하지 않습니다.</p>':'';
  const table='<div class="data-table-card"><div class="data-table-header"><h2>월별 전체 수치</h2><span class="meta-dot">'+marketUnit(state.metric)+'</span></div>'+
  '<div class="scroll-table"><table class="data-table"><thead><tr><th>월</th><th>2024년</th><th>2025년</th><th>2026년</th></tr></thead><tbody>'+tableRows+'</tbody></table></div><p class="table-hint">숫자는 공표된 원자료 기준 · 미발표 월은 — 표시</p></div>';
  $('#marketContent').innerHTML=numbers+controls+sexSelect+selector+
  lineChart(activeYears,{label,unit:marketUnit(state.metric),metric:'market',monthKey:state.marketMonth})+
- pills('market',state.marketMonth)+detail+
+ validationNote+pills('market',state.marketMonth)+detail+
  headerSmall('월별 비교표','1~12월')+table+
  sourceLine('축산물품질평가원 · 전국 한우 공식 월별 통계',m.source_grading);
 }
