@@ -136,7 +136,7 @@ function draw(rows){
  const years=[...new Set(a.map(r=>r.month.slice(0,4)))].sort();
  const byYear=new Map(years.map(year=>[year,new Map(a.filter(r=>r.month.startsWith(year+'-'))
    .map(r=>[Number(r.month.slice(5)),r]))]));
- const x0=140,x1=910,monthX=month=>x0+(month-1)*(x1-x0)/11;
+ const x0=140,x1=910,firstPointX=x0+62,monthX=month=>firstPointX+(month-1)*(x1-firstPointX)/11;
  const sex=select.value;
  const panels=[
   {key:'inventory_head',title:'사육두수',unit:'만 두',y0:54,y1:162,
