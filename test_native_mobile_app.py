@@ -39,10 +39,10 @@ def run():
      page.wait_for_url('**/app.html*',timeout=12000)
      assert page.locator('.app-screen').count()==4
      assert page.locator('.bottom-tabs a').count()==4
-     page.locator('.overview-hero .lead-number').wait_for(timeout=18000)
-     assert '24,616' in page.locator('.overview-hero .lead-number').inner_text()
-     assert '313.9' in page.locator('.stat-grid').inner_text()
-     assert '171.3' in page.locator('.stat-grid').inner_text()
+     page.locator('#home .overview-hero .lead-number').wait_for(timeout=18000)
+     assert '24,616' in page.locator('#home .overview-hero .lead-number').inner_text()
+     assert '313.9' in page.locator('#home .stat-grid').inner_text()
+     assert '171.3' in page.locator('#home .stat-grid').inner_text()
      assert page.locator('#home').is_visible()
      dims=page.evaluate('({scroll:document.documentElement.scrollWidth,viewport:innerWidth})')
      assert dims['scroll']<=dims['viewport']+2,('page horizontal overflow',w,dims)
