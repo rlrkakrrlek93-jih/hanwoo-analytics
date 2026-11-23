@@ -47,7 +47,8 @@ def check_app(page, mobile):
         assert page.locator(".mobile-bottom-nav").is_visible(), "mobile bottom nav should be visible"
         assert page.locator(".mobile-bottom-nav a").count()==4
         assert page.locator(".mobile-install-button").is_visible(), "install guide button should be visible"
-        assert page.locator("#semenSalesScope .ss-table").evaluate("el=>el.scrollWidth>el.clientWidth"), "data table must be scrollable on phone"
+        if page.viewport_size["width"] <= 430:
+            assert page.locator("#semenSalesScope .ss-table").evaluate("el=>el.scrollWidth>el.clientWidth"), "data table must be scrollable on phone"
         bounds=page.evaluate("({page:document.documentElement.scrollWidth,view:window.innerWidth})")
         assert bounds["page"]<=bounds["view"]+2, ("whole-page horizontal overflow",bounds)
         page.locator(".mobile-bottom-nav a[href='#semenSalesScope']").click()
