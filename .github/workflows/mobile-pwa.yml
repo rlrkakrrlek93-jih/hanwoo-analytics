@@ -1,5 +1,20 @@
 name: HANWOO Mobile PWA verification
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'app.html'
+      - 'app.js'
+      - 'app.css'
+      - 'index.html'
+      - 'dashboard_template.html'
+      - 'market-indicators.js'
+      - 'thankscow-brand.js'
+      - 'thankscow-brand.css'
+      - 'quality-check.js'
+      - 'service-worker.js'
+      - 'test_native_mobile_app.py'
+      - 'test_market_chart_browser.py'
   pull_request:
     paths:
       - 'index.html'
@@ -35,9 +50,14 @@ jobs:
         run: |
           node --check mobile-app.js
           node --check app.js
+          node --check market-indicators.js
+          node --check thankscow-brand.js
+          node --check quality-check.js
           node --check service-worker.js
       - name: Test PWA installation assets and mobile/desktop browser
         run: python test_native_mobile_app.py
+      - name: Test numeric market charts and desktop UI
+        run: python test_market_chart_browser.py
       - name: Save mobile screenshots
         if: always()
         uses: actions/upload-artifact@v4
