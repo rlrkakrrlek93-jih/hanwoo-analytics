@@ -24,7 +24,7 @@ function setScreen(name,scroll=true){
  if(scroll)window.scrollTo({top:0,behavior:'instant'});
  document.title=({home:'홈',market:'시장 분석',semen:'정액 판매량',quality:'품질 성적'}[screen])+' | '+logoText;
 }
-function route(){setScreen(location.hash.replace('#','')||'home')}
+function route(){const value=location.hash.replace('#','')||'home';const aliases={marketScope:'market',semenSalesScope:'semen',details:'quality',grades:'quality'};setScreen(aliases[value]||value)}
 window.addEventListener('hashchange',route);route();
 
 function updateNet(){
