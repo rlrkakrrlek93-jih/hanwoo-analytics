@@ -36,3 +36,8 @@
 .app-shell .tc-watermark .tc-wordmark{font-size:12px}
 .app-shell .tc-watermark .tc-sprout,.app-shell .tc-watermark .tc-sprout svg{width:13px;height:13px}
 @media print{.tc-watermark{opacity:.65!important}}
+
+/* Branded watermark printed INSIDE each SVG plotting area */
+.tc-svg-watermark{opacity:.33;pointer-events:none!important;user-select:none!important;filter:none}
+.app-shell .tc-svg-watermark{opacity:.31}
+@media print{.tc-svg-watermark{opacity:.44!important}}
