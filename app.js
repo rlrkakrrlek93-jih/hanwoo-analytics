@@ -3,7 +3,7 @@
 (()=>{'use strict';
 const $=selector=>document.querySelector(selector);
 const nf=new Intl.NumberFormat('ko-KR');
-const fmt=(n,d=0)=>Number.isFinite(Number(n))?Number(n).toLocaleString('ko-KR',{maximumFractionDigits:d,minimumFractionDigits:d}):'—';
+const fmt=(n,d=0)=>(n===null||n===undefined||n===''||!Number.isFinite(Number(n)))?'—':Number(n).toLocaleString('ko-KR',{maximumFractionDigits:d,minimumFractionDigits:d});
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const validLink=u=>{try{const x=new URL(u,location.href);return x.protocol==='https:'?esc(x.href):'#'}catch(_){return '#'}};
 const yearColors={'2022':'#8969c0','2023':'#c76e78','2024':'#4c83bd','2025':'#d69a45','2026':'#2c9481'};
@@ -152,7 +152,7 @@ function lineChart(series,{label,unit,metric,monthKey}){
   const dots=s.values.filter(r=>Number.isFinite(r.value)).map(v=>'<circle data-chart-point="'+esc(metric)+'" data-month="'+v.month+'" data-year="'+esc(s.year)+'" tabindex="0" role="button" aria-label="'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'" cx="'+x(v.month).toFixed(1)+'" cy="'+y(v.value).toFixed(1)+'" r="'+(v.month===monthKey?4.8:3.1)+'" fill="'+esc(s.color)+'" stroke="#fff" stroke-width="1.6"><title>'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'</title></circle>').join('');
   return '<path data-chart-line="'+esc(metric)+'" data-year="'+esc(s.year)+'" d="'+path.trim()+'" fill="none" stroke="'+esc(s.color)+'" stroke-width="1.9" stroke-opacity="0.68" stroke-linejoin="round" stroke-linecap="round"/>'+dots;
  }).join('');
- const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.year)+'년</span>').join('');
+ const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.legendLabel||s.year+'년')+'</span>').join('');
  return '<div class="chart-surface"><div class="chart-heading"><strong>'+esc(label)+'</strong><span>'+esc(unit)+'</span></div>'+
  '<svg viewBox="0 0 360 201" role="img" aria-label="'+esc(label+' 연도별 월간 비교')+'">'+axis+monthLabels+lines+'</svg>'+
  '<div class="chart-legend">'+legend+'</div><p class="chart-note">점을 누르면 해당 월 수치가 아래에 표시됩니다. 미발표 월은 연결하지 않습니다.</p></div>';
@@ -267,7 +267,7 @@ function renderQuality(){
  '</div>':'<div class="loading-block">선택한 월·성별 자료가 없습니다.</div>';
  const metricMap={weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],rea:['등심단면적','㎠']};
  const [label,unit]=metricMap[state.qualityMetric];
- const series=[{year:state.qualitySex,color:state.qualitySex==='거세우'?'#357d73':'#ca776d',values:Array.from({length:12},(_,i)=>{
+ const series=[{year:state.qualityMonth.slice(0,4),legendLabel:state.qualitySex,color:state.qualitySex==='거세우'?'#357d73':'#ca776d',values:Array.from({length:12},(_,i)=>{
    const mon=i+1,r=d.records.find(r=>r.month===state.qualityMonth.slice(0,4)+'-'+String(mon).padStart(2,'0')&&r.sex===state.qualitySex);
    return {month:mon,value:r?.[state.qualityMetric]??null};
  })}];
