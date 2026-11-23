@@ -70,7 +70,20 @@ def test_page():
                 assert labels.count() == 66
                 assert svg.locator("circle[data-year='2026'][data-month='11']").count() == 0
                 assert svg.locator("circle[data-year='2026'][data-month='12']").count() == 0
-                print("PASS: Jan-Dec chart numeric labels (units and colors), 102 samples, year toggles, price selector")
+                quality = page.locator("#maleChart")
+                quality.locator('[data-quality-value="true"]').first.wait_for(timeout=7000)
+                assert quality.locator('text[data-quality-value="true"]').count() == quality.locator("circle").count()
+                assert page.locator("#femaleChart text[data-quality-value='true']").count() == page.locator("#femaleChart circle").count()
+                assert quality.locator('text[data-quality-value="true"]').first.text_content().strip()
+                metric_button=page.get_by_role("button",name="경락단가",exact=True)
+                metric_button.click()
+                assert quality.locator('text[data-quality-value="true"][data-metric="price"]').count()>0
+                assert quality.locator('text[data-quality-value="true"][data-metric="price"]').first.text_content().strip().replace(',','').isdigit()
+                grade=page.locator('#gradeMale')
+                grade.locator('small').first.wait_for(timeout=8000)
+                assert grade.locator('small').count()==5, "Each grade bar should show its official headcount"
+                assert all('두' in x for x in grade.locator('small').all_text_contents())
+                print("PASS: market, quality trend and grade-bar numeric labels, filters and source counts")
             finally:
                 browser.close()
     finally:
