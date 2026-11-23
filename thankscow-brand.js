@@ -43,42 +43,67 @@ function heroArtwork(){
  const hero=document.querySelector('.hero');
  if(!hero||hero.querySelector('.tc-pasture-art'))return;
  const wrap=document.createElement('div');
- wrap.className='tc-pasture-art';
+ wrap.className='tc-pasture-art tc-data-center-art';
  wrap.setAttribute('aria-hidden','true');
- wrap.innerHTML=`<svg viewBox="0 0 900 390" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" role="presentation">
- <defs>
- <linearGradient id="tcSky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#fff7ed"/><stop offset="1" stop-color="#f9e9d9"/></linearGradient>
- <linearGradient id="tcHill" x1="0" x2="1"><stop stop-color="#dda897"/><stop offset="1" stop-color="#b96759"/></linearGradient>
- </defs>
- <path d="M0 200Q140 170 270 219T580 204T900 189V390H0Z" fill="#f1d6c4" opacity=".68"/>
- <circle cx="764" cy="67" r="44" fill="#c65e4e" opacity=".74"/>
- <g fill="#f9ded2" opacity=".9"><path d="M110 98c-5-15 11-28 27-25 4-17 32-23 44-5 13-3 27 5 28 18 21-2 30 12 23 19H110Z"/><path d="M588 126c-8-12 5-26 19-23 6-16 31-16 39-4 20-5 30 9 29 22 22-1 26 12 20 17H588Z"/></g>
- <path d="M0 283C135 221 196 258 312 276S507 225 628 250S794 204 900 256V390H0Z" fill="url(#tcHill)" opacity=".58"/>
- <path d="M0 332C142 288 261 345 396 308S675 293 900 319V390H0Z" fill="#b6a581" opacity=".64"/>
- <path d="M0 362C190 332 280 359 442 341S734 332 900 358V390H0Z" fill="#739078" opacity=".54"/>
- <g stroke="#fdf3e5" stroke-width="6" stroke-linecap="round" opacity=".87"><path d="M0 311Q275 345 560 310T900 320" fill="none"/><path d="M0 338Q275 372 560 338T900 346" fill="none"/><path d="M61 307v57M153 313v52M247 322v49M346 322v49M448 320v50M548 311v50M650 307v52M754 308v54M853 314v51"/></g>
- <g transform="translate(634 161)" stroke="#905e50" stroke-width="3" stroke-linejoin="round"><path d="M-5 61L52 18l64 41v87H-5Z" fill="#f7e9d8"/><path d="M-16 62l68-55 74 55-9 8-65-48-60 48Z" fill="#a45342"/><rect x="68" y="85" width="28" height="61" rx="2" fill="#c49b7d"/><path d="M11 87h31v31H11Z" fill="#e0b79b"/><path d="M26 87v31M11 102h31" stroke="#fff0db" stroke-width="2"/><rect x="137" y="-31" width="22" height="157" rx="8" fill="#dec6b0"/><path d="M133-17q15-19 30 0" fill="#d2a69a"/></g>
- <g transform="translate(526 265)" stroke="#4b3a32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
- <path d="M-32 32Q-52-5-17-27Q14-50 64-18Q89 6 73 49Z" fill="#fff8e9"/>
- <path d="M-18-22Q14-42 28-15Q9 7 35 27Q11 48-20 30Z" fill="#68574d"/>
- <path d="M-27-16q-36-26-39 0q-5 21 28 25M56-19q30-33 42-8q3 19-22 32" fill="#554038"/>
- <ellipse cx="23" cy="33" rx="36" ry="25" fill="#efc6ad"/>
- <ellipse cx="12" cy="33" rx="6" ry="8" fill="#aa7e6f"/><ellipse cx="36" cy="33" rx="6" ry="8" fill="#aa7e6f"/>
- <circle cx="-10" cy="-1" r="4" fill="#352a27"/><circle cx="52" cy="-3" r="4" fill="#352a27"/>
- <path d="M-18 51v14M63 48v16" stroke-width="10"/>
- </g>
- <g transform="translate(767 286)" stroke="#62483a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
- <path d="M-56 14q-8-61 54-66q70-1 72 64v34H-53Z" fill="#bb7953"/>
- <path d="M-42-23q-30-26-45-8q-6 17 31 29M48-25q32-25 47-9q11 17-27 35" fill="#b47b54"/>
- <ellipse cx="7" cy="17" rx="40" ry="27" fill="#e8b393"/>
- <ellipse cx="-6" cy="17" rx="6" ry="7" fill="#a56b57"/><ellipse cx="23" cy="17" rx="6" ry="7" fill="#a56b57"/>
- <circle cx="-22" cy="-11" r="4" fill="#463329"/><circle cx="41" cy="-11" r="4" fill="#463329"/>
- </g>
- <g fill="#718365" opacity=".87"><path d="M430 332q-23-25-23-52q25 1 27 39q8-46 38-53q9 30-31 67Z"/><path d="M875 349q-23-34-14-59q22 10 21 37q8-48 30-49v61Z"/></g>
+ wrap.innerHTML=`<svg viewBox="0 0 760 320" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="presentation">
+  <defs>
+   <linearGradient id="tcScreen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffefd"/><stop offset="1" stop-color="#edf7f1"/></linearGradient>
+   <linearGradient id="tcLab" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f7f0e7"/><stop offset="1" stop-color="#efe4d8"/></linearGradient>
+  </defs>
+  <!-- playful analytics workspace, no agricultural landscape -->
+  <ellipse cx="390" cy="289" rx="331" ry="18" fill="#d8d4c8" opacity=".31"/>
+  <path d="M128 70Q132 34 181 34H582Q631 34 636 81V268H128Z" fill="url(#tcLab)" opacity=".72"/>
+  <path d="M128 104H636" stroke="#e9dbcd" stroke-width="2" stroke-dasharray="5 9"/>
+  <g transform="translate(180 34)">
+   <rect width="333" height="217" rx="22" fill="#fffdf9" stroke="#d7cabd" stroke-width="4"/>
+   <rect x="15" y="13" width="303" height="190" rx="13" fill="url(#tcScreen)" />
+   <circle cx="34" cy="30" r="5" fill="#d58b7b"/><circle cx="49" cy="30" r="5" fill="#e4c185"/><circle cx="64" cy="30" r="5" fill="#91b49e"/>
+   <text x="82" y="35" font-size="12" font-weight="800" font-family="sans-serif" fill="#6c7f74">HANWOO DATA CENTER</text>
+   <rect x="32" y="52" width="119" height="55" rx="10" fill="#e4f0e7"/>
+   <text x="44" y="70" font-size="10" fill="#607f71" font-family="sans-serif">DATA INSIGHT</text>
+   <text x="43" y="94" font-size="24" font-weight="900" fill="#345e52" font-family="sans-serif">01</text>
+   <rect x="165" y="52" width="135" height="55" rx="10" fill="#f9e9df"/>
+   <text x="176" y="70" font-size="10" fill="#a26e5c" font-family="sans-serif">STATISTICS</text>
+   <text x="175" y="94" font-size="24" font-weight="900" fill="#a96150" font-family="sans-serif">2026</text>
+   <path d="M36 172H296M36 149H296M36 126H296" stroke="#d5e2dc" stroke-width="1.5" stroke-dasharray="4 6"/>
+   <path d="M40 168L79 154L115 158L154 136L191 143L227 126L290 118" stroke="#478e7b" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <path d="M40 176L79 175L115 170L154 169L191 156L227 161L290 144" stroke="#c7886a" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+   <g fill="#fff" stroke="#478e7b" stroke-width="3"><circle cx="79" cy="154" r="4"/><circle cx="154" cy="136" r="4"/><circle cx="227" cy="126" r="4"/><circle cx="290" cy="118" r="4"/></g>
+   <path d="M133 218h68l8 28h-84Z" fill="#cabeb1"/><rect x="102" y="244" width="132" height="10" rx="5" fill="#bfaea1"/>
+  </g>
+  <!-- small friendly cow researcher on the right -->
+  <g transform="translate(505 140)" stroke="#57453b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+   <path d="M8 85C5 40 28 19 83 23C136 25 151 59 141 110L125 133H31Z" fill="#f9f2e7"/>
+   <path d="M18 53Q-13 22-23 46Q-27 65 18 75M130 52Q163 20 176 43Q183 61 136 74" fill="#c6b1a3"/>
+   <path d="M36 32Q62 15 89 26Q89 48 72 67Q48 69 31 59Z" fill="#64574d"/>
+   <ellipse cx="79" cy="102" rx="49" ry="35" fill="#e8bca8"/>
+   <ellipse cx="61" cy="105" rx="7" ry="10" fill="#a77869" stroke="none"/><ellipse cx="94" cy="105" rx="7" ry="10" fill="#a77869" stroke="none"/>
+   <circle cx="41" cy="73" r="5" fill="#483a33" stroke="none"/><circle cx="111" cy="73" r="5" fill="#483a33" stroke="none"/>
+   <path d="M68 121q12 8 25-1" fill="none"/>
+   <path d="M23 137Q53 115 70 148L45 177H15Z" fill="#b47e68"/>
+   <path d="M119 137Q105 118 92 146L103 177H148Z" fill="#b47e68"/>
+   <rect x="-7" y="141" width="104" height="69" rx="9" fill="#dce9e1" stroke="#789484"/>
+   <path d="M45 170l-8 12h16Z" fill="#76a98e" stroke="none"/>
+  </g>
+  <!-- floating analytics motifs -->
+  <g transform="translate(81 91) rotate(-8)">
+   <rect width="96" height="79" rx="16" fill="#fffdf9" stroke="#e2d5c8" stroke-width="3"/>
+   <rect x="15" y="44" width="15" height="21" rx="4" fill="#e6ad91"/>
+   <rect x="37" y="31" width="15" height="34" rx="4" fill="#96b7a5"/>
+   <rect x="59" y="19" width="15" height="46" rx="4" fill="#527d6d"/>
+   <path d="M13 14h60" stroke="#eadfd4" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(573 57) rotate(11)">
+   <rect width="96" height="67" rx="15" fill="#fffdf9" stroke="#e5dacf" stroke-width="3"/>
+   <circle cx="29" cy="34" r="18" fill="#f2d5c1"/>
+   <path d="M29 16A18 18 0 0 1 47 34H29Z" fill="#c88769"/>
+   <path d="M29 34v18A18 18 0 0 1 12 40Z" fill="#8eae9b"/>
+   <path d="M57 23h24M57 33h18M57 43h21" stroke="#b7bfb4" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g fill="#dbb48d" opacity=".9"><path d="M86 211l4 10 11 1-8 7 2 12-9-6-10 6 3-12-8-7 11-1Z"/><circle cx="681" cy="206" r="6"/><circle cx="699" cy="188" r="3"/></g>
  </svg>`;
  hero.append(wrap);
 }
-
 function paint(){
  heroArtwork();
  const header=document.querySelector('.top,.app-header');
