@@ -2,7 +2,7 @@
 (()=>{
  'use strict';
  const mobile=!!document.querySelector('.app-shell');
- const host=mobile?document.querySelector('#home'):document.querySelector('.footer');
+ const host=mobile?document.querySelector('#home'):document.querySelector('#hanwooAdminDetails .hanwoo-admin-body');
  if(!host)return;
  const panel=document.createElement('section');
  panel.id='hanwooAutoUpdateStatus';
