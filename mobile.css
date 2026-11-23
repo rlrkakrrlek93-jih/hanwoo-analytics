@@ -1,0 +1,94 @@
+/* HANWOO INSIGHT mobile app shell: responsive enhancement only. */
+html{scroll-behavior:smooth}
+#app-overview,#quality,#marketScope,#semenSalesScope,#details{scroll-margin-top:18px}
+.mobile-bottom-nav,.mobile-install-button,.mobile-offline-banner{display:none}
+.mobile-install-guide[hidden],.mobile-offline-banner[hidden]{display:none!important}
+.mobile-install-guide{position:fixed;inset:0;z-index:3000;background:rgba(25,37,33,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+.mobile-install-guide .guide-card{background:#fff;border:1px solid #dfe7df;border-radius:22px;padding:22px;width:min(100%,420px);box-shadow:0 20px 70px rgba(0,0,0,.2)}
+.mobile-install-guide h2{font-size:20px;line-height:1.4;margin:0 0 12px}
+.mobile-install-guide p{font-size:14px;line-height:1.8;color:#5b6d65;margin:0 0 16px}
+.mobile-install-guide button{width:100%;min-height:45px;border:0;border-radius:11px;background:#b8554d;color:white;font-weight:750;cursor:pointer}
+.mobile-offline-banner{position:fixed;top:0;left:0;right:0;z-index:1800;background:#fff1d6;color:#754b18;text-align:center;padding:8px 12px;font-size:12px;font-weight:700;box-shadow:0 2px 10px #55555513}
+@media (max-width:820px){
+ html{scroll-padding-bottom:95px}
+ body{overflow-x:hidden;padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+ .shell{width:100%;max-width:100%;padding-left:16px;padding-right:16px}
+ .top{padding:12px 16px;gap:12px}
+ .brand{font-size:17px;gap:8px;white-space:nowrap}
+ .brand .logo{width:34px;height:34px;flex:none}
+ .mobile-install-button{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid #ead8d1;background:#fff8f5;color:#98483d;font-weight:750;font-size:12px;padding:9px 12px;min-height:38px;border-radius:12px;margin-left:auto;white-space:nowrap;cursor:pointer}
+ .mobile-install-button[hidden]{display:none}
+ .hero{padding:24px 0 29px}
+ .hero .shell{padding-bottom:0}
+ .hero h1{font-size:clamp(23px,6vw,31px);letter-spacing:-1px}
+ .hero p{font-size:12px;line-height:1.7}
+ .filterbox{margin-top:12px;padding:15px;border-radius:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end;gap:10px}
+ .field{min-width:0}
+ .field select{width:100%;max-width:100%;font-size:13px;min-height:44px;padding:8px 6px}
+ .smallbtn{min-height:42px}
+ .trust-panel{margin:12px 0 2px;padding:10px 4px}
+ .trust-grid{gap:9px;flex-wrap:wrap}
+ .trust-cell{display:flex!important;gap:4px}
+ .trust-cell:nth-child(3),.trust-cell:nth-child(4){display:none!important}
+ .sex-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:15px 0 8px}
+ .sex-choice{min-width:0;min-height:79px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 3px!important;border-radius:13px;text-align:center}
+ .sex-choice strong{font-size:clamp(13px,3.5vw,16px);line-height:1.2;letter-spacing:-.5px}
+ .sex-choice small{font-size:10px;line-height:1.3}
+ .sex-choice .sex-icon{font-size:14px}
+ .farmer-overview{gap:9px}
+ .farmer-head{gap:6px}
+ .farmer-head h2{font-size:18px}
+ .farmer-primary,.farmer-secondary{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .farmer-tile{min-width:0;padding:13px 10px;border-radius:12px}
+ .farmer-label{font-size:11px;line-height:1.4}
+ .farmer-value{font-size:clamp(20px,5.1vw,27px);letter-spacing:-.9px;white-space:normal;overflow-wrap:anywhere}
+ .farmer-unit{font-size:10px}
+ .farmer-delta{font-size:10px}
+ .farmer-mini{min-width:0;padding:11px 10px}
+ .farmer-mini strong{font-size:16px}
+ .sectionhead h2{font-size:19px}
+ .panel,.tablecard,.grade-panel{min-width:0}
+ .panels .panel .chartbox{padding:10px 8px 0}
+ .panel .chart{width:100%;max-width:100%;height:auto;min-height:180px}
+ .below .tablecard{overflow:hidden}
+ .tablewrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ .tbl{min-width:650px}
+ .metric-controls{display:flex;flex-wrap:nowrap;max-width:100%;overflow-x:auto;padding:4px 0 9px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+ .metric-btn{flex:none;white-space:nowrap;min-height:40px}
+ #marketScope,#semenSalesScope{padding:0 14px!important;max-width:100%;margin:17px auto!important}
+ #marketScope .mk-panel,#semenSalesScope .ss-pane{padding:16px!important;border-radius:16px}
+ #marketScope h2,#semenSalesScope h2{font-size:19px!important}
+ #marketScope .mk-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #marketScope .mk-card{min-width:0;padding:13px 10px}
+ #marketScope .mk-card strong{font-size:clamp(17px,4.1vw,22px);overflow-wrap:anywhere}
+ #marketScope .mk-card:last-child{grid-column:span 2}
+ #marketScope .mk-card em{font-size:11px}
+ #marketScope .mk-legend{gap:6px}
+ #marketScope .mk-year,#semenSalesScope .ss-year{font-size:12px;padding:7px 9px;min-height:35px}
+ #marketScope .mk-filter{gap:7px}
+ #marketScope .mk-value-toggle{margin-left:0}
+ #marketScope .mk-chartscroll,#semenSalesScope .ss-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;scrollbar-width:thin}
+ #marketScope svg{min-width:790px}
+ #semenSalesScope svg{min-width:750px}
+ #semenSalesScope .ss-table{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ #semenSalesScope table{min-width:650px}
+ #semenSalesScope .ss-table tbody th{background:#fff}
+ #semenSalesScope .ss-table thead th{background:#eef4fa}
+ .mobile-swipe-hint{margin:7px 2px 10px!important;color:#8a6544!important;font-size:11px!important;font-weight:650}
+ .mobile-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:center;min-height:65px;padding:6px 7px calc(6px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.97);border-top:1px solid #e4e6e0;box-shadow:0 -4px 22px #25392e10;backdrop-filter:blur(12px)}
+ .mobile-bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:52px;text-decoration:none;color:#627267;border-radius:11px;font-size:11px;font-weight:700;transition:background .15s}
+ .mobile-bottom-nav a[aria-current="page"]{background:#f6ece6;color:#a64e44}
+ .mobile-bottom-nav .mobile-tab-icon{font-size:21px;line-height:1.1}
+ .mobile-offline-banner:not([hidden]){display:block}
+ .footer{padding-bottom:14px}
+}
+@media (max-width:360px){
+ .shell{padding-left:12px;padding-right:12px}
+ .top{padding:10px 12px}
+ .brand{font-size:15px}
+ .mobile-install-button{padding:7px 9px;font-size:11px}
+ #marketScope,#semenSalesScope{padding:0 10px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+}
