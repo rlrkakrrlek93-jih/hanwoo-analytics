@@ -262,7 +262,7 @@ function renderQuality(){
  const cards=row?'<div class="stat-grid">'+
   card('▣','평균 도체중',fmt(row.weight),'kg',dateText(row.month))+
   card('₩','평균 경락단가',fmt(row.price),'원/kg',dateText(row.month),'price')+
-  card('✦','평균 근내지방도',fmt(row.marbling),'No.',dateText(row.month))+
+  card('✦','1++ 출현율',Number.isFinite(gr?.grades?.['1++']?.rate)?fmt(gr.grades['1++'].rate,1):'—','%',Number.isFinite(gr?.grades?.['1++']?.count)?dateText(state.qualityMonth)+' · '+fmt(gr.grades['1++'].count)+'두':'해당 월 등급 통계 미발표')+
   card('◷','평균 도축개월령',age?fmt(age.age_months,1):'—','개월',age?'선택 월 공식 발표':(a?.records?.some(r=>r.sex===state.qualitySex&&r.month<state.qualityMonth)?'선택 월 미발표 · 이전 월 자료 있음':'해당 월 미발표'))+
  '</div>':'<div class="loading-block">선택한 월·성별 자료가 없습니다.</div>';
  const metricMap={weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],rea:['등심단면적','㎠']};
