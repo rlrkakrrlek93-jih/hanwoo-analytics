@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checked_at_kst": "2026-11-23 15:19 KST",
+  "kind": "collector_run_status_not_official_release_time",
+  "note": "수집 성공은 공식 데이터의 새 월 공개를 의미하지 않습니다. 갱신 월은 각 지표별 공표 시점에 따릅니다.",
+  "datasets": {
+    "quality": {
+      "label": "도체중·근내지방도·경락가격",
+      "filename": "data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-10",
+      "record_count": 20,
+      "last_collected_at_kst": "2026-11-23 15:16 KST",
+      "state": "reported_data_preserved"
+    },
+    "grades": {
+      "label": "육질등급",
+      "filename": "grade_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-10",
+      "record_count": 20,
+      "last_collected_at_kst": "2026-11-23 15:16 KST",
+      "state": "reported_data_preserved"
+    },
+    "ages": {
+      "label": "평균 도축개월령",
+      "filename": "age_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-09",
+      "record_count": 18,
+      "last_collected_at_kst": "2026-11-23 15:16 KST",
+      "state": "reported_data_preserved"
+    },
+    "market": {
+      "label": "한우 사육두수·판정두수·경락가격",
+      "filename": "market_supply_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-10",
+      "record_count": 34,
+      "last_collected_at_kst": "2026-11-23 15:17 KST",
+      "state": "reported_data_preserved"
+    },
+    "semen_association": {
+      "label": "정액 판매량: 전국한우협회",
+      "filename": "semen_sales_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-07",
+      "record_count": 55,
+      "last_collected_at_kst": "2026-11-21",
+      "state": "reported_data_preserved"
+    },
+    "semen_krei": {
+      "label": "정액 판매량: KREI",
+      "filename": "semen_sales_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-07",
+      "record_count": 55,
+      "last_collected_at_kst": "2026-11-21",
+      "state": "reported_data_preserved",
+      "krei_check_status": "verified_no_new_months",
+      "krei_last_check_at": "2026-11-23 15:18 KST",
+      "krei_verified_issues": [
+        "2026-09",
+        "2026-06",
+        "2026-03"
+      ],
+      "krei_new_months": [],
+      "krei_source_errors": [],
+      "krei_conflicts_preserved": []
+    },
+    "beef": {
+      "label": "육우 거세우",
+      "filename": "beef_national_data.json",
+      "collector_outcome": "success",
+      "latest_published_month": "2026-10",
+      "record_count": 10,
+      "last_collected_at_kst": null,
+      "state": "reported_data_preserved"
+    }
+  }
+}
