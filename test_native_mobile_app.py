@@ -13,6 +13,9 @@ class Quiet(SimpleHTTPRequestHandler):
  def log_message(self,*a):pass
 
 def run():
+ from test_mobile_pwa_browser import verify_png
+ for path,size in [('pwa/icon-192.png',192),('pwa/icon-512.png',512),('pwa/apple-touch-icon.png',180)]:
+  verify_png(path,size)
  manifest=json.loads((ROOT/'manifest.webmanifest').read_text('utf8'))
  assert manifest['start_url']=='./app.html'
  for name in ['app.html','app.css','app.js','service-worker.js','index.html','dashboard_template.html']:
@@ -60,7 +63,7 @@ def run():
      assert page.locator('#semen').is_visible()
      assert page.locator('#semen .data-table tbody tr').count()==12
      assert page.locator('#semen .data-table thead th').count()==6
-     assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(4).inner_text()=='157.6'
+     assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(3).inner_text()=='157.6'
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).inner_text()=='171.3'
      assert page.locator('#semen [data-chart-point="semen"]').count()==55
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).locator('a').get_attribute('href').startswith('https://')
