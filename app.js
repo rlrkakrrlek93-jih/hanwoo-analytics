@@ -50,6 +50,9 @@ async function loadAll(){
   if(result.status==='fulfilled')state.data[result.value[0]]=result.value[1];
   else console.warn('HANWOO official dataset not loaded:',Object.values(files)[i],String(result.reason).slice(0,200));
  }
+ // Always start on the latest month confirmed in the downloaded market dataset.
+ const actualLatest=state.data.market?.records?.map(r=>r.month).sort().at(-1);
+ if(actualLatest&&/^20\\d{2}-(0[1-9]|1[0-2])$/.test(actualLatest))state.marketMonth=Number(actualLatest.slice(5));
  for(const [key,fn] of [['home',renderHome],['market',renderMarket],['semen',renderSemen],['quality',renderQuality]]){
   try{fn()}catch(e){console.error('HANWOO '+key+' UI:',e);$('#'+key+'Content').innerHTML='<div class="loading-block">이 화면의 데이터를 불러오지 못했습니다.<br/>상단 새로고침을 눌러 주세요.</div>'}
  }
