@@ -103,7 +103,18 @@ function heroArtwork(){
   </g>
   <g fill="#dbb48d" opacity=".9"><path d="M86 211l4 10 11 1-8 7 2 12-9-6-10 6 3-12-8-7 11-1Z"/><circle cx="681" cy="206" r="6"/><circle cx="699" cy="188" r="3"/></g>
  </svg>`;
- if(mobile){const intro=hero.querySelector('.hero-description');if(intro)intro.insertAdjacentElement('afterend',wrap);else hero.prepend(wrap)}else hero.append(wrap);
+ if(mobile){
+  const eyebrow=hero.querySelector('.home-eyebrow');
+  const title=hero.querySelector('.hero-title');
+  const desc=hero.querySelector('.hero-description');
+  const content=hero.querySelector('#homeContent');
+  const card=document.createElement('div');card.className='tc-mobile-hero-unified';
+  const copy=document.createElement('div');copy.className='tc-mobile-hero-copy';
+  [eyebrow,title,desc].filter(Boolean).forEach(node=>copy.append(node));
+  card.append(copy,wrap);
+  const svg=wrap.querySelector('svg');if(svg){svg.setAttribute('viewBox','150 12 510 295');svg.setAttribute('preserveAspectRatio','xMidYMid meet')}
+  if(content)hero.insertBefore(card,content);else hero.prepend(card);
+ }else hero.append(wrap);
 }
 function paint(){
  heroArtwork();
