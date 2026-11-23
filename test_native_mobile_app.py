@@ -89,6 +89,12 @@ def run():
      page.locator('a[data-tab="quality"]').click()
      page.locator('#quality').wait_for(state='visible',timeout=10000)
      assert page.locator('#quality .grade-item').count()==5
+     # The summary uses the separately published grade-distribution table.
+     top_grade=page.locator('#quality .stat-card').nth(2)
+     assert '1++ 출현율' in top_grade.inner_text()
+     assert '48.3' in top_grade.inner_text() and '%' in top_grade.inner_text()
+     assert '16,604두' in top_grade.inner_text()
+     assert '평균 근내지방도' not in top_grade.inner_text()
      # Regression: cattle category is not a calendar year ("거세우년").
      assert page.locator('#quality .chart-legend').inner_text().strip()=='거세우'
      assert '거세우년' not in page.locator('#qualityContent').inner_text()
