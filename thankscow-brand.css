@@ -93,3 +93,23 @@
  .tc-data-center-art svg{width:100%;max-height:200px}
  .hero .tc-hero-stamp{margin-top:10px!important}
 }
+
+/* Mobile analytics-studio banner — native app layout */
+.app-shell #home .tc-mobile-studio{
+ position:relative!important;right:auto!important;bottom:auto!important;left:auto!important;
+ width:100%!important;height:166px!important;max-width:100%!important;min-height:0!important;
+ display:flex!important;justify-content:center!important;align-items:center!important;
+ opacity:1!important;overflow:hidden;border-radius:20px;margin:2px 0 17px;
+ padding:0 4px;background:linear-gradient(125deg,#fffaf4,#f5eee6 64%,#f0f5ef);
+ border:1px solid #eee5db;box-shadow:0 4px 16px #2b493908;
+}
+.app-shell #home .tc-mobile-studio svg{
+ display:block!important;width:100%!important;height:165px!important;max-height:none!important;
+ object-fit:contain!important;filter:none!important;
+}
+.app-shell #home .hero-description{margin-bottom:12px}
+.app-shell #home .tc-mobile-studio + #homeContent{margin-top:0}
+@media(max-width:350px){
+ .app-shell #home .tc-mobile-studio{height:143px!important;margin-bottom:13px}
+ .app-shell #home .tc-mobile-studio svg{height:142px!important}
+}
