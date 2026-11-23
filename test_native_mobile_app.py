@@ -95,11 +95,28 @@ def run():
      assert '48.3' in top_grade.inner_text() and '%' in top_grade.inner_text()
      assert '16,604두' in top_grade.inner_text()
      assert '평균 근내지방도' not in top_grade.inner_text()
+     assert page.locator('#quality [data-quality-mode="month"]').get_attribute('aria-selected')=='true'
+     page.locator('#quality [data-quality-mode="ytd"]').click()
+     assert page.locator('#quality [data-quality-mode="ytd"]').get_attribute('aria-selected')=='true'
+     assert '46.2%' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '175,381두' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '379,210' in page.locator('#quality .stat-card').nth(3).inner_text()
+     assert '누적' in page.locator('#quality .quality-rollup-note').first.inner_text()
+     assert '월별 성적 추이' in page.locator('#qualityContent').inner_text()
+     page.locator('#qualityMonth').select_option('2026-09')
+     assert '1~9월' in page.locator('#quality .stat-card').nth(2).inner_text()
+     page.locator('#qualityMonth').select_option('2026-10')
+     assert '46.2%' in page.locator('#quality .stat-card').nth(2).inner_text()
      # Regression: cattle category is not a calendar year ("거세우년").
      assert page.locator('#quality .chart-legend').inner_text().strip()=='거세우'
      assert '거세우년' not in page.locator('#qualityContent').inner_text()
      assert page.locator('#quality svg [data-chart-point="quality"]').first.get_attribute('aria-label').startswith('거세우 2026년')
      page.locator('[data-quality-sex="암소"]').click()
+     assert '16.8%' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '60,583두' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '358,938' in page.locator('#quality .stat-card').nth(3).inner_text()
+     page.locator('[data-quality-mode="month"]').click()
+     assert '18.5%' in page.locator('#quality .stat-card').nth(2).inner_text()
      assert page.locator('#quality .chart-legend').inner_text().strip()=='암소'
      assert '암소년' not in page.locator('#qualityContent').inner_text()
      assert page.locator('[data-quality-sex="암소"]').get_attribute('aria-selected')=='true'
