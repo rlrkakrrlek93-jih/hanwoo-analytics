@@ -4,12 +4,24 @@
  const mobile=!!document.querySelector('.app-shell');
  const host=mobile?document.querySelector('#home'):document.querySelector('#hanwooAdminDetails .hanwoo-admin-body');
  if(!host)return;
+ let destination=host;
+ if(mobile){
+   const admin=document.createElement('details');
+   admin.id='hanwooMobileAdminDetails';
+   admin.style.cssText='margin:28px 0 12px;font-size:11px;color:#5d7365;';
+   const title=document.createElement('summary');
+   title.textContent='⚙ 관리자 정보 · 데이터 점검';
+   title.style.cssText='display:inline-block;cursor:pointer;padding:11px 15px;border:1px solid #e1e6de;border-radius:12px;background:#fff;font-weight:700;list-style:none;';
+   admin.append(title);
+   host.append(admin);
+   destination=admin;
+ }
  const panel=document.createElement('section');
  panel.id='hanwooAutoUpdateStatus';
  panel.setAttribute('aria-label','한우 통계 자동 갱신 점검 현황');
  panel.style.cssText='margin:18px 0 5px;padding:14px;border:1px solid #e5e8e1;background:#fff;border-radius:15px;color:#40564b;font-size:11px;line-height:1.7';
  panel.hidden=true;
- host.append(panel);
+ destination.append(panel);
  const stamp=document.createElement('div');
  stamp.style.cssText='font-size:12px;font-weight:800;margin-bottom:9px;';
  const list=document.createElement('div');
