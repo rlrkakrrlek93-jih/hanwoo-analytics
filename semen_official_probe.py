@@ -23,6 +23,7 @@ for key,url in URLS.items():
   r=session.get(url,headers=headers,timeout=30,allow_redirects=True)
   info=dict(code=r.status_code,final_url=r.url,content_type=r.headers.get('Content-Type'),bytes=len(r.content),encoding=r.encoding,header=r.content[:35].hex())
   if r.content.startswith(b'%PDF'):
+   (DIR/(key+'.pdf')).write_bytes(r.content)
    pdf=fitz.open(stream=r.content,filetype='pdf')
    info['pages']=len(pdf)
    info['page_samples']=[]
