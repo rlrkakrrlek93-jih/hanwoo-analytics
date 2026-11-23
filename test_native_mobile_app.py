@@ -63,7 +63,7 @@ def run():
      page.locator('#semen').wait_for(state='visible',timeout=10000)
      assert page.locator('#semen .data-table tbody tr').count()==12
      assert page.locator('#semen .data-table thead th').count()==6
-     assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(3).inner_text()=='157.6'
+     assert page.locator('#semen .data-table tbody tr').nth(5).locator('td').nth(4).inner_text()=='157.6'
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).inner_text()=='171.3'
      assert page.locator('#semen [data-chart-point="semen"]').count()==55
      assert page.locator('#semen .data-table tbody tr').nth(6).locator('td').nth(5).locator('a').get_attribute('href').startswith('https://')
