@@ -21,7 +21,29 @@
  const status=el('div','hq-message','검사를 준비하고 있습니다…');const link=el('a','', '축산유통 통계누리 공식 통계표 열기');link.href=OFFICIAL;link.target='_blank';link.rel='noopener noreferrer';
  const details=el('details','hq-details'),sum=el('summary','', '검사 결과 상세보기'),tableHolder=el('div','hq-table');details.append(sum,tableHolder);
  card.append(badges,actions,status,link,details,el('p','hq-quiet','정밀도 안내: 현재 공식 소도체 항목별 평균표에서 근내지방도 등 평균 지표는 정수로 제공됩니다. 예를 들어 7.0 표시는 원본 정수 7의 화면 표기이지, 실제 평균이 소수 첫째 자리까지 7.0이라는 증거가 아닙니다. 동일 집계 기준의 소수점 공식 원본은 아직 확보되지 않았습니다.'),el('p','hq-quiet','공식 자동 검증의 범위는 수집한 응답에 포함된 월에 한정됩니다. 파일 수동 업로드만으로 출처가 인증되지는 않습니다.'));
- const anchor=document.querySelector('main .footer')||document.querySelector('footer');if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(panel,anchor);else (document.querySelector('main')||document.body).append(panel);
+ const admin=el('details','hanwoo-admin-details');
+ admin.id='hanwooAdminDetails';
+ const adminTitle=el('summary','hanwoo-admin-summary','⚙ 관리자 정보 · 데이터 점검');
+ const adminBody=el('div','hanwoo-admin-body');
+ admin.append(adminTitle,adminBody);
+ const overview=document.querySelector('main .trust-panel');
+ if(overview)adminBody.append(overview);
+ adminBody.append(panel);
+ const anchor=document.querySelector('main .footer')||document.querySelector('footer');
+ if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(admin,anchor);
+ else (document.querySelector('main')||document.body).append(admin);
+ const adminCSS=el('style');adminCSS.textContent=`
+ #hanwooAdminDetails{max-width:1440px;margin:22px auto 34px;padding:0 32px;color:#304a49}
+ #hanwooAdminDetails>.hanwoo-admin-summary{list-style:none;display:inline-flex;align-items:center;gap:10px;padding:13px 17px;border:1px solid #dbe4de;border-radius:12px;background:#f7faf7;color:#556b61;font:700 13px system-ui,sans-serif;cursor:pointer}
+ #hanwooAdminDetails>.hanwoo-admin-summary::-webkit-details-marker{display:none}
+ #hanwooAdminDetails>.hanwoo-admin-summary:after{content:'▾';font-size:13px;margin-left:8px}
+ #hanwooAdminDetails[open]>.hanwoo-admin-summary:after{content:'▴'}
+ #hanwooAdminDetails>.hanwoo-admin-body{margin-top:12px;border:1px solid #e7ebe6;background:#fcfdfb;border-radius:15px;padding:4px 12px 12px}
+ #hanwooAdminDetails .trust-panel{margin:18px 0 8px}
+ #hanwooAdminDetails #hq{margin:10px 0 8px;padding:0}
+ #hanwooAdminDetails #hanwooAutoUpdateStatus{margin:12px 0}
+ @media(max-width:650px){#hanwooAdminDetails{padding:0 14px;margin:20px auto}#hanwooAdminDetails>.hanwoo-admin-body{padding:5px 9px}}
+ `;document.head.append(adminCSS);
  let current=null;
  const badge=(title,value,type='')=>badges.append(el('span','hq-pill '+(type?'hq-'+type:''),title+': '+value));
  const entry=(severity,type,id,message)=>({severity,type,id,message});
