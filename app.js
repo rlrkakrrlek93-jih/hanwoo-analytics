@@ -149,7 +149,7 @@ function lineChart(series,{label,unit,metric,monthKey}){
    path+=(joined?' L ':' M ')+x(v.month).toFixed(1)+' '+y(v.value).toFixed(1);
    previousMonth=v.month;
   }
-  const dots=s.values.filter(r=>Number.isFinite(r.value)).map(v=>'<circle data-chart-point="'+esc(metric)+'" data-month="'+v.month+'" data-year="'+esc(s.year)+'" tabindex="0" role="button" aria-label="'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'" cx="'+x(v.month).toFixed(1)+'" cy="'+y(v.value).toFixed(1)+'" r="'+(v.month===monthKey?4.8:3.1)+'" fill="'+esc(s.color)+'" stroke="#fff" stroke-width="1.6"><title>'+esc(s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'</title></circle>').join('');
+  const dots=s.values.filter(r=>Number.isFinite(r.value)).map(v=>'<circle data-chart-point="'+esc(metric)+'" data-month="'+v.month+'" data-year="'+esc(s.year)+'" tabindex="0" role="button" aria-label="'+esc((s.legendLabel?s.legendLabel+' ':'')+s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'" cx="'+x(v.month).toFixed(1)+'" cy="'+y(v.value).toFixed(1)+'" r="'+(v.month===monthKey?4.8:3.1)+'" fill="'+esc(s.color)+'" stroke="#fff" stroke-width="1.6"><title>'+esc((s.legendLabel?s.legendLabel+' ':'')+s.year+'년 '+v.month+'월 '+fmt(v.value,1)+' '+unit)+'</title></circle>').join('');
   return '<path data-chart-line="'+esc(metric)+'" data-year="'+esc(s.year)+'" d="'+path.trim()+'" fill="none" stroke="'+esc(s.color)+'" stroke-width="1.9" stroke-opacity="0.68" stroke-linejoin="round" stroke-linecap="round"/>'+dots;
  }).join('');
  const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.legendLabel||s.year+'년')+'</span>').join('');
@@ -227,7 +227,7 @@ function renderSemen(){
  if(!s){$('#semenContent').innerHTML='<div class="loading-block">정액 판매량 자료를 불러올 수 없습니다.</div>';return}
  const last=s.records.at(-1),series=semenSeries();
  const info='<div class="overview-hero semen-hero"><div class="hero-meta"><span>번식 동향 지표</span><span>'+dateText(last.month)+'</span></div><div class="lead-label">최근 확인된 정액 판매량</div><div class="lead-number">'+fmt(last.sold_thousand_str,1)+'<small>천 str</small></div>'+
- '<div class="hero-line"><span>전국한우협회·KREI 공표값</span><b>총 '+s.records.length+'개월</b></div></div>';
+ '<div class="hero-line"><span>전국한우협회·KREI 공표값</span><b>공식 발표자료 기준</b></div></div>';
  const tabs='<div class="year-toggles semen-years" role="group" aria-label="정액 판매량 연도 선택">'+['2022','2023','2024','2025','2026'].map(y=>
  '<button type="button" data-semen-year="'+y+'" aria-pressed="'+state.semenYears.has(y)+'" style="--year-color:'+yearColors[y]+'">'+y.slice(2)+'년</button>').join('')+'</div>';
  const selected=series.map(s=>({...s,value:s.values[state.semenMonth-1]?.value,decimal:1}));
@@ -263,7 +263,7 @@ function renderQuality(){
   card('▣','평균 도체중',fmt(row.weight),'kg',dateText(row.month))+
   card('₩','평균 경락단가',fmt(row.price),'원/kg',dateText(row.month),'price')+
   card('✦','평균 근내지방도',fmt(row.marbling),'No.',dateText(row.month))+
-  card('◷','평균 도축개월령',age?fmt(age.age_months,1):'—','개월',age?'공식 발표 자료':'해당 월 미발표')+
+  card('◷','평균 도축개월령',age?fmt(age.age_months,1):'—','개월',age?'선택 월 공식 발표':(a?.records?.some(r=>r.sex===state.qualitySex&&r.month<state.qualityMonth)?'선택 월 미발표 · 이전 월 자료 있음':'해당 월 미발표'))+
  '</div>':'<div class="loading-block">선택한 월·성별 자료가 없습니다.</div>';
  const metricMap={weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],rea:['등심단면적','㎠']};
  const [label,unit]=metricMap[state.qualityMetric];
@@ -273,8 +273,8 @@ function renderQuality(){
  })}];
  const grades=gr?['1++','1+','1','2','3'].map((key,i)=>{
   const v=gr.grades?.[key];
-  const percent=v?.rate??0,col=['#b45f4d','#d39763','#dfa970','#8bae98','#8caaa0'][i];
-  return '<div class="grade-item"><span>'+key+'</span><div class="grade-bar"><i style="width:'+Math.min(100,Math.max(0,percent))+'%;background:'+col+'"></i></div><div class="grade-number">'+fmt(percent,1)+'%<small>'+fmt(v?.count)+'두</small></div></div>';
+  const percent=Number.isFinite(v?.rate)?v.rate:null,col=['#b45f4d','#d39763','#dfa970','#8bae98','#8caaa0'][i];
+  return '<div class="grade-item"><span>'+key+'</span><div class="grade-bar"><i style="width:'+Math.min(100,Math.max(0,percent??0))+'%;background:'+col+'"></i></div><div class="grade-number">'+(percent===null?'—':fmt(percent,1)+'%')+'<small>'+(Number.isFinite(v?.count)?fmt(v.count)+'두':'자료 미확인')+'</small></div></div>';
  }).join(''):'<p style="font-size:12px;color:#819084">이 월의 등급 비율 자료가 없습니다.</p>';
  $('#qualityContent').innerHTML=ss+sel+cards+
  headerSmall('월별 성적 추이',state.qualitySex)+lineChart(series,{label,unit,metric:'quality',monthKey:Number(state.qualityMonth.slice(5))})+
