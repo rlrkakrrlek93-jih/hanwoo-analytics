@@ -44,6 +44,13 @@ def test_page():
                 assert all(f"{i}월" in months for i in range(1, 13)), "Jan-Dec axis is not complete"
                 first_title = svg.locator('circle[data-year="2024"][data-month="1"][data-metric="auction_price"] title').text_content()
                 assert "17,609" in first_title and "원/kg" in first_title, "2024 Jan steer price mismatched"
+                labels = svg.locator('text[data-value-label="true"]')
+                assert labels.count() == 102, "Every published monthly point should show a numeric label"
+                assert svg.locator('text[data-value-label="true"][data-year="2024"][data-month="1"][data-metric="inventory_head"]').text_content() == "335.8"
+                assert svg.locator('text[data-value-label="true"][data-year="2024"][data-month="1"][data-metric="graded_head"]').text_content() == "123.6"
+                assert svg.locator('text[data-value-label="true"][data-year="2024"][data-month="1"][data-metric="auction_price"]').text_content() == "17,609"
+                assert svg.locator('text[data-value-label="true"][data-year="2026"][data-month="11"]').count() == 0
+                assert page.locator('#marketScope .mk-value-toggle input').is_checked()
                 panel = page.locator("#marketScope")
                 output = ROOT / "test_artifacts"
                 output.mkdir(exist_ok=True)
@@ -51,12 +58,19 @@ def test_page():
                 page.locator('#marketScope select').select_option('female')
                 cow_title = svg.locator('circle[data-year="2024"][data-month="1"][data-metric="auction_price"] title').text_content()
                 assert "14,360" in cow_title, "Cow auction price selector is not changing the plot"
+                assert svg.locator('text[data-value-label="true"][data-year="2024"][data-month="1"][data-metric="auction_price"]').text_content() == "14,360"
                 page.locator('#marketScope .mk-year input[value="2025"]').uncheck()
                 assert svg.locator("path[data-year]").count() == 6, "Year toggle should hide 2025 plots"
                 assert svg.locator("path[data-year='2025']").count() == 0
+                assert labels.count() == 66, "Hiding one complete year should hide its numeric labels"
+                page.locator('#marketScope .mk-value-toggle input').uncheck()
+                assert labels.count() == 0, "Label checkbox should hide numbers without hiding curves"
+                assert svg.locator('path[data-year]').count() == 6
+                page.locator('#marketScope .mk-value-toggle input').check()
+                assert labels.count() == 66
                 assert svg.locator("circle[data-year='2026'][data-month='11']").count() == 0
                 assert svg.locator("circle[data-year='2026'][data-month='12']").count() == 0
-                print("PASS: 9 curves, aligned Jan-Dec, 34 monthly samples x 3 metrics, toggles and price selector")
+                print("PASS: Jan-Dec chart numeric labels (units and colors), 102 samples, year toggles, price selector")
             finally:
                 browser.close()
     finally:

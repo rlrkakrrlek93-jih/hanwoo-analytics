@@ -1,6 +1,6 @@
 /* Read-only market supply chart, three color-coded annual comparison bands. */
 (()=>{'use strict';
-const css="#marketScope{max-width:1440px;margin:26px auto;padding:0 32px;font-family:inherit;color:#243449}#marketScope *{box-sizing:border-box}#marketScope .mk-panel{background:white;border:1px solid #e5ebf2;border-radius:18px;padding:24px;box-shadow:0 7px 25px #0d2e4a06}#marketScope .mk-top{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap}#marketScope h2{margin:0 0 7px;font-size:22px}#marketScope .mk-sub{font-size:13px;line-height:1.7;color:#64778b;margin:0}#marketScope .mk-status{font-size:12px;background:#eff4f8;padding:7px 10px;border-radius:8px}#marketScope .mk-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}#marketScope .mk-card{padding:16px;background:#f6f9fc;border-radius:12px}#marketScope .mk-card small{display:block;font-size:12px;color:#687c91;margin-bottom:8px}#marketScope .mk-card strong{font-size:25px;letter-spacing:-.6px}#marketScope .mk-card em{font-style:normal;font-size:12px;color:#6b7f91;display:block;margin-top:6px}#marketScope .mk-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;margin:14px 0;color:#3e566c}#marketScope .mk-year{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #dce5ee;border-radius:9px;background:#f9fbfd;cursor:pointer;font-weight:700}#marketScope .mk-year input{accent-color:#365e91;cursor:pointer}#marketScope .mk-hint{font-size:12px;color:#728396}#marketScope .mk-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}#marketScope .mk-chartscroll{width:100%;overflow-x:auto}#marketScope svg{display:block;width:100%;min-width:650px;height:auto;font-family:inherit}#marketScope .mk-note{background:#f6f8fb;border-left:3px solid #89b7cb;border-radius:0 8px 8px 0;padding:13px 16px;font-size:12px;line-height:1.8;color:#536b81;margin-top:16px}#marketScope .mk-footer{font-size:12px;color:#708196;line-height:1.8;margin-top:14px}#marketScope a{color:#176b9c}#marketScope .mk-semen{margin-top:16px;border-top:1px solid #e9eef4;padding-top:16px}#marketScope .mk-semen strong{font-size:14px}#marketScope .mk-error{color:#9b3c31;font-size:13px;padding:15px 0}#marketScope .mk-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:#536a80}#marketScope select{font:inherit;padding:7px 10px;border:1px solid #d2e0eb;border-radius:7px;background:#fff;color:#344a60}#marketScope .mk-table-wrap{overflow:auto;max-height:340px}#marketScope table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}#marketScope td,#marketScope th{padding:9px 12px;text-align:right;border-bottom:1px solid #eaf0f4}#marketScope th:first-child,#marketScope td:first-child{text-align:left}#marketScope th{background:#f5f8fb;position:sticky;top:0}@media(max-width:680px){#marketScope{padding:0 14px}#marketScope .mk-panel{padding:16px}#marketScope h2{font-size:19px}#marketScope .mk-card strong{font-size:21px}#marketScope .mk-cards{grid-template-columns:1fr}}";
+const css="#marketScope{max-width:1440px;margin:26px auto;padding:0 32px;font-family:inherit;color:#243449}#marketScope *{box-sizing:border-box}#marketScope .mk-panel{background:white;border:1px solid #e5ebf2;border-radius:18px;padding:24px;box-shadow:0 7px 25px #0d2e4a06}#marketScope .mk-top{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap}#marketScope h2{margin:0 0 7px;font-size:22px}#marketScope .mk-sub{font-size:13px;line-height:1.7;color:#64778b;margin:0}#marketScope .mk-status{font-size:12px;background:#eff4f8;padding:7px 10px;border-radius:8px}#marketScope .mk-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0}#marketScope .mk-card{padding:16px;background:#f6f9fc;border-radius:12px}#marketScope .mk-card small{display:block;font-size:12px;color:#687c91;margin-bottom:8px}#marketScope .mk-card strong{font-size:25px;letter-spacing:-.6px}#marketScope .mk-card em{font-style:normal;font-size:12px;color:#6b7f91;display:block;margin-top:6px}#marketScope .mk-legend{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px;margin:14px 0;color:#3e566c}#marketScope .mk-year{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid #dce5ee;border-radius:9px;background:#f9fbfd;cursor:pointer;font-weight:700}#marketScope .mk-year input{accent-color:#365e91;cursor:pointer}#marketScope .mk-hint{font-size:12px;color:#728396}#marketScope .mk-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}#marketScope .mk-chartscroll{width:100%;overflow-x:auto}#marketScope svg{display:block;width:100%;min-width:650px;height:auto;font-family:inherit}#marketScope .mk-note{background:#f6f8fb;border-left:3px solid #89b7cb;border-radius:0 8px 8px 0;padding:13px 16px;font-size:12px;line-height:1.8;color:#536b81;margin-top:16px}#marketScope .mk-footer{font-size:12px;color:#708196;line-height:1.8;margin-top:14px}#marketScope a{color:#176b9c}#marketScope .mk-semen{margin-top:16px;border-top:1px solid #e9eef4;padding-top:16px}#marketScope .mk-semen strong{font-size:14px}#marketScope .mk-error{color:#9b3c31;font-size:13px;padding:15px 0}#marketScope .mk-filter{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;color:#536a80}#marketScope .mk-value-toggle{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:7px 11px;border-radius:8px;border:1px solid #c9dbe9;background:#edf6fc;color:#31536e;font-weight:700;cursor:pointer}#marketScope .mk-value-toggle input{accent-color:#2563eb;cursor:pointer}#marketScope select{font:inherit;padding:7px 10px;border:1px solid #d2e0eb;border-radius:7px;background:#fff;color:#344a60}#marketScope .mk-table-wrap{overflow:auto;max-height:340px}#marketScope table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}#marketScope td,#marketScope th{padding:9px 12px;text-align:right;border-bottom:1px solid #eaf0f4}#marketScope th:first-child,#marketScope td:first-child{text-align:left}#marketScope th{background:#f5f8fb;position:sticky;top:0}@media(max-width:680px){#marketScope{padding:0 14px}#marketScope .mk-panel{padding:16px}#marketScope h2{font-size:19px}#marketScope .mk-card strong{font-size:21px}#marketScope .mk-cards{grid-template-columns:1fr}}";
 const s=document.createElement('style');s.textContent=css;document.head.appendChild(s);
 const el=(tag,cl,txt)=>{const x=document.createElement(tag);if(cl)x.className=cl;if(txt!==undefined)x.textContent=txt;return x};
 const section=el('section');section.id='marketScope';const card=el('div','mk-panel');section.append(card);
@@ -15,6 +15,11 @@ cards.append(stock,flow,priceCard);card.append(cards);
 const legend=el('div','mk-legend');legend.setAttribute('aria-label','연도별 표시 여부');
 const filter=el('div','mk-filter');filter.append(el('span','','경락가격 성별:'),el('span','','공식 발표값 기준'));
 const select=el('select');for(const [value,label] of [['steer','거세우'],['female','암소'],['male','수소']]){const op=el('option','',label);op.value=value;select.append(op)}filter.insertBefore(select,filter.children[1]);
+const numberToggle=el('label','mk-value-toggle');
+const numberCheck=el('input');numberCheck.type='checkbox';numberCheck.checked=true;
+numberCheck.setAttribute('aria-label','그래프 숫자 표시');
+numberToggle.append(numberCheck,document.createTextNode(' 그래프 숫자 표시'));
+filter.append(numberToggle);
 card.append(filter,legend);
 const scroll=el('div','mk-chartscroll'),svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
 svg.setAttribute('viewBox','0 0 980 570');svg.setAttribute('role','img');svg.setAttribute('aria-label','1~12월을 기준으로 2024~2026년 사육두수 판정두수 경락가격을 색으로 겹쳐 비교한 3단 그래프');scroll.append(svg);card.append(scroll);
@@ -37,6 +42,7 @@ const nf=n=>Number(n).toLocaleString('ko-KR'),svgNode=(tag,attrs,text)=>{
 const colors={'2024':'#2563eb','2025':'#e27b29','2026':'#0d9475'};
 const overflowColors=['#8b5cf6','#b35a8c','#64748b','#db2777'];
 let selectedYears=new Set();
+numberCheck.addEventListener('change',()=>draw(cachedRows));
 const yearColor=(year,years)=>colors[year]||overflowColors[Math.max(0,years.indexOf(year)-3)%overflowColors.length];
 function makeYearLegend(rows){
  const years=[...new Set(rows.map(r=>r.month.slice(0,4)))].sort();
@@ -54,6 +60,47 @@ function makeYearLegend(rows){
    item.append(checkbox,dot,document.createTextNode(year+'년'));legend.append(item);
  }
  legend.append(el('span','mk-hint','체크로 연도를 선택할 수 있어요.'));
+}
+function formatPointValue(key,value){
+  if(key==='inventory_head')return (value/10000).toLocaleString('ko-KR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  if(key==='graded_head')return (value/1000).toLocaleString('ko-KR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  return value.toLocaleString('ko-KR',{maximumFractionDigits:0});
+}
+function drawValueLabels(panel,years,byYear,monthX,yFor){
+  if(!numberCheck.checked)return;
+  const gap=17.5, minY=panel.y0+13, maxY=panel.y1-5;
+  const group=svgNode('g',{'data-value-labels':panel.key,'aria-label':panel.title+' 월별 수치'});
+  for(let month=1;month<=12;month++){
+    const labels=[];
+    for(const year of years){
+      if(!selectedYears.has(year))continue;
+      const row=byYear.get(year).get(month);
+      const value=row?panel.get(row):null;
+      if(!Number.isFinite(value))continue;
+      labels.push({year,value,originY:yFor(value),idealY:yFor(value)-9});
+    }
+    labels.sort((a,b)=>a.idealY-b.idealY);
+    let previous=-Infinity;
+    for(let i=0;i<labels.length;i++){
+      const remaining=labels.length-i-1;
+      const highBound=maxY-remaining*gap;
+      labels[i].labelY=Math.min(highBound,Math.max(labels[i].idealY,minY,previous+gap));
+      previous=labels[i].labelY;
+    }
+    for(const v of labels){
+      const label=svgNode('text',{
+        x:monthX(month),y:v.labelY,
+        'text-anchor':'middle','font-size':11.5,'font-weight':750,
+        fill:yearColor(v.year,years),stroke:'#fff','stroke-width':3.7,
+        'stroke-linejoin':'round','paint-order':'stroke',
+        'data-value-label':'true','data-year':v.year,'data-month':month,
+        'data-metric':panel.key,
+        'aria-label':v.year+'년 '+month+'월 '+panel.title+' '+Number(v.value).toLocaleString('ko-KR')
+      },formatPointValue(panel.key,v.value));
+      group.append(label);
+    }
+  }
+  svg.append(group);
 }
 function draw(rows){
  svg.replaceChildren();
@@ -118,6 +165,7 @@ function draw(rows){
        fill:'none','data-year':year,'data-metric':p.key}));
    }
    for(const marker of markers)svg.append(marker);
+   drawValueLabels(p,years,byYear,monthX,yy);
  }
  const last=a.at(-1),yr=last.month.slice(0,4),mo=Number(last.month.slice(5));
  const note=mo<12?yr+'년은 '+mo+'월까지만 발표 · 나머지 월은 빈칸으로 표시':
