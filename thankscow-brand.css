@@ -24,3 +24,15 @@
 @media(max-width:650px){.tc-footer{padding:18px;display:grid}.tc-topbrand .tc-sig-copy small{display:none}.tc-topbrand .tc-emblem{width:25px;height:25px;font-size:14px}.tc-topbrand .tc-sig-copy strong{font-size:11px}}
 @media(max-width:390px){.app-header .tc-topbrand .tc-sig-copy{display:none}.app-header .tc-topbrand{margin-left:0}}
 @media print{.tc-watermark{opacity:.55!important}.tc-footer{break-inside:avoid}}
+
+/* thankscow illustrated wordmark: subtle but clearly recognizable on charts */
+.tc-watermark{right:18px;bottom:16px;display:inline-flex;align-items:flex-end;gap:3px;opacity:.52;line-height:1;z-index:3;padding:5px 7px;border-radius:8px;background:rgba(255,255,255,.62);filter:saturate(.75);max-width:40%;pointer-events:none!important}
+.tc-watermark .tc-sprout{display:block;width:17px;height:16px;align-self:center;margin-right:1px}
+.tc-watermark .tc-sprout svg{width:17px;height:16px}
+.tc-watermark .tc-wordmark{display:inline-flex;font-family:ui-rounded,'Arial Rounded MT Bold','Trebuchet MS',system-ui,sans-serif;font-weight:900;letter-spacing:-.65px;font-size:15px;white-space:nowrap}
+.tc-watermark .tc-wordmark span:first-child{color:#31482f}
+.tc-watermark .tc-wordmark span:last-child{color:#a56846}
+.app-shell .tc-watermark{opacity:.46;right:11px;bottom:10px}
+.app-shell .tc-watermark .tc-wordmark{font-size:12px}
+.app-shell .tc-watermark .tc-sprout,.app-shell .tc-watermark .tc-sprout svg{width:13px;height:13px}
+@media print{.tc-watermark{opacity:.65!important}}
