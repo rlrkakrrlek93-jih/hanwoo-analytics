@@ -177,7 +177,7 @@ function renderMarket(){
  const detail=monthDetail(activeYears.map(s=>({...s,value:s.values[state.marketMonth-1]?.value})),state.marketMonth,label,marketUnit(state.metric));
  const numbers='<div class="kpi-strip">'+
    '<div class="kpi-mini"><span>최신 '+esc(label)+'</span><strong>'+fmt(panelMetric(latest,state.metric,state.sex),0)+'</strong><small>'+dateText(latest.month)+' · '+marketUnit(state.metric)+'</small></div>'+
-   '<div class="kpi-mini highlight"><span>현재 데이터</span><strong>'+fmt(m.records.length)+'</strong><small>2024년 1월부터 · 확인된 월</small></div></div>';
+   '</div>';
  const tableRows=Array.from({length:12},(_,i)=>{
  const month=i+1;return '<tr><td>'+month+'월</td>'+['2024','2025','2026'].map(y=>{
   const row=m.records.find(r=>r.month===y+'-'+String(month).padStart(2,'0'));
