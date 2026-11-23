@@ -29,11 +29,11 @@ def main():
                 assert svg.locator('circle[data-year="2024"]').count()==12
                 assert svg.locator('circle[data-year="2025"]').count()==12
                 assert svg.locator('circle[data-year="2026"]').count()==7
-                assert svg.locator('text[data-semen-value="true"]').count()==55
-                assert svg.locator('text[data-semen-value="true"][data-year="2022"][data-month="1"]').text_content() == "171"
-                assert svg.locator('text[data-semen-value="true"][data-year="2025"][data-month="6"]').text_content() == "157.6"
-                assert svg.locator('text[data-semen-value="true"][data-year="2026"][data-month="7"]').text_content() == "171.3"
-                assert scope.locator('.ss-values input').is_checked()
+                assert svg.locator('text[data-semen-value="true"]').count()==0
+                assert svg.locator('circle[data-year="2022"][data-month="1"]').count()==1
+                assert svg.locator('circle[data-year="2025"][data-month="6"]').count()==1
+                assert svg.locator('circle[data-year="2026"][data-month="7"]').count()==1
+                assert not scope.locator('.ss-values input').is_checked()
                 assert svg.locator('path[data-year="2022"]').count()==1
                 assert svg.locator('path[data-year="2023"]').count()==1
                 assert svg.locator('path[data-year="2024"]').count()==1
@@ -58,6 +58,18 @@ def main():
                 assert "171.3천 str" in svg.locator('circle[data-year="2026"][data-month="7"] title').text_content()
                 assert "KREI" in svg.locator('circle[data-year="2026"][data-month="7"] title').text_content()
                 assert "한국농촌경제연구원(KREI)" in scope.inner_text()
+                table=scope.locator('.ss-table table')
+                assert table.is_visible(), "Monthly numbers table must always be visible below chart"
+                assert scope.locator('details').count()==0, "No hidden disclosure for important data"
+                assert scope.locator('.ss-table tbody tr').count()==12
+                assert scope.locator('.ss-table thead th').count()==6
+                assert scope.locator('.ss-table tbody td').count()==60
+                assert scope.locator('.ss-table tbody tr').nth(0).locator('td').nth(0).inner_text()=="171"
+                assert scope.locator('.ss-table tbody tr').nth(0).locator('td').nth(1).inner_text()=="132"
+                assert scope.locator('.ss-table tbody tr').nth(5).locator('td').nth(3).inner_text()=="157.6"
+                assert scope.locator('.ss-table tbody tr').nth(6).locator('td').nth(4).inner_text()=="171.3"
+                assert scope.locator('.ss-table tbody tr').nth(11).locator('td').nth(4).inner_text()=="—"
+                assert scope.locator('.ss-table tbody tr').nth(5).locator('td').nth(3).locator('a').get_attribute('href').startswith('https://www.aglook.kr/')
                 folder=ROOT/"test_artifacts"
                 folder.mkdir(exist_ok=True)
                 scope.screenshot(path=str(folder/"semen_sales_annual_compare.png"))
@@ -65,14 +77,14 @@ def main():
                 assert svg.locator('path[data-year="2022"]').count()==0
                 assert svg.locator('path[data-year="2024"]').count()==1
                 assert svg.locator('path[data-year="2025"]').count()==1
-                assert svg.locator('text[data-semen-value="true"]').count()==43
-                scope.locator('.ss-values input').uncheck()
                 assert svg.locator('text[data-semen-value="true"]').count()==0
-                assert svg.locator('path[data-year]').count()==4
                 scope.locator('.ss-values input').check()
                 assert svg.locator('text[data-semen-value="true"]').count()==43
+                assert svg.locator('path[data-year]').count()==4
+                scope.locator('.ss-values input').uncheck()
+                assert svg.locator('text[data-semen-value="true"]').count()==0
                 assert not errors, errors[:3]
-                print("PASS: semen annual chart has 55 numeric value labels with year/value toggles")
+                print("PASS: monthly semen sales visible 12x5 table, year colors, official linked cells, optional graph labels")
             finally:browser.close()
     finally:server.shutdown();server.server_close()
 if __name__=="__main__":
