@@ -148,3 +148,12 @@ a{color:inherit}
 .beef-extra-item span{color:#7a887e;font-size:10.5px}
 .beef-extra-item strong{color:#29463d;font-size:14px;word-break:break-word}
 @media(max-width:360px){.quality-breed-tabs button{font-size:10px;min-height:43px;padding:8px 1px}.beef-extra-item strong{font-size:13px}}
+
+/* Beef steer: the 1+ and above incidence is the primary commercial grade KPI. */
+#quality .stat-card.beef-grade-primary{
+ background:linear-gradient(130deg,#fff5eb,#fdfbf6);border-color:#e9c7b1;
+ box-shadow:0 4px 14px #b66a4e14;
+}
+#quality .stat-card.beef-grade-primary .stat-name{color:#995942;font-weight:800}
+#quality .stat-card.beef-grade-primary .stat-icon{background:#f8e0cd;color:#aa6347}
+#quality .stat-card.beef-grade-primary .stat-val{color:#a44c37}
