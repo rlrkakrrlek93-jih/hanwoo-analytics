@@ -131,17 +131,24 @@ def run():
      page.locator('[data-quality-kind="beef-steer"]').click()
      assert page.locator('[data-quality-kind="beef-steer"]').get_attribute('aria-selected')=='true'
      assert '육우 거세우' in page.locator('#qualityContent .quality-breed-description').inner_text()
-     assert '4,112' in page.locator('#quality .stat-card').first.inner_text()
-     assert '441' in page.locator('#quality .stat-card').nth(1).inner_text()
-     assert '12,790' in page.locator('#quality .stat-card').nth(2).inner_text()
-     assert '—' in page.locator('#quality .stat-card').nth(3).inner_text()
+     assert '1등급 이상 출현율' in page.locator('#quality .stat-card').first.inner_text()
+     assert '20.8' in page.locator('#quality .stat-card').first.inner_text()
+     assert '870 / 4,176두' in page.locator('#quality .stat-card').first.inner_text()
+     assert '4,112' in page.locator('#quality .stat-card').nth(1).inner_text()
+     assert '441' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '12,790' in page.locator('#quality .stat-card').nth(3).inner_text()
+     assert page.locator('#beefMetric').input_value()=='grade1plus'
+     assert '1등급 이상 출현율' in page.locator('#qualityContent .chart-heading').inner_text()
      assert page.locator('#quality [data-chart-point="beef"]').count()==10
      assert page.locator('#quality .data-table tbody tr').count()==10
-     assert '육우 1++ 등급 출현율은' in page.locator('#qualityContent').inner_text()
+     assert '20.8%' in page.locator('#quality .data-table tbody tr').first.inner_text()
+     assert '육우 1등급 이상 출현율은' in page.locator('#qualityContent').inner_text()
      page.locator('[data-quality-mode="ytd"]').click()
-     assert '40,782' in page.locator('#quality .stat-card').first.inner_text()
-     assert '432.7' in page.locator('#quality .stat-card').nth(1).inner_text()
-     assert '12,605.1' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '17.9' in page.locator('#quality .stat-card').first.inner_text()
+     assert '7,352 / 40,968두' in page.locator('#quality .stat-card').first.inner_text()
+     assert '40,782' in page.locator('#quality .stat-card').nth(1).inner_text()
+     assert '432.7' in page.locator('#quality .stat-card').nth(2).inner_text()
+     assert '12,605.1' in page.locator('#quality .stat-card').nth(3).inner_text()
      page.locator('#beefMonth').select_option('2026-09')
      assert '1~9월' in page.locator('#quality .stat-card').first.inner_text()
      page.locator('#beefMonth').select_option('2026-10')
@@ -182,6 +189,12 @@ def run():
     assert dpage.locator('#semenSalesScope .ss-table tbody tr').count()==12
     assert dpage.locator('#nationalBeef').count()==1, 'desktop beef steer section must remain available'
     assert dpage.locator('#chooseBeef').count()==1
+    dpage.locator('#chooseBeef').click()
+    dpage.locator('#beefNGrade1').get_by_text('20.8%',exact=True).wait_for(timeout=18000)
+    assert '870 / 4,176' in dpage.locator('#beefGradeNote').inner_text()
+    assert dpage.locator('#beefGradeTrend svg').count()==1
+    assert '20.8%' in dpage.locator('#beefNationalRows tr').first.inner_text()
+    assert '육우 거세우' in dpage.locator('#nationalBeef .farmer-head').inner_text()
     assert not dpage.locator('#marketScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public market chart must be outside admin details"
     assert not dpage.locator('#semenSalesScope').evaluate("node=>Boolean(node.closest('#hanwooAdminDetails'))"),"public semen chart must be outside admin details"
     assert dpage.locator('#hanwooAdminDetails').count()==1
