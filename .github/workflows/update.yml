@@ -7,6 +7,7 @@ on:
       - 'semen_krei_sync.py'
       - 'hanwoo_update_health.py'
       - 'market_supply_sync.py'
+      - 'beef_grade_sync.py'
       - '.github/workflows/update.yml'
   workflow_dispatch:
   schedule:
@@ -137,6 +138,18 @@ jobs:
             git push
           fi
 
+      - name: Collect official beef steer grade 1+ distribution
+        id: beef_grades
+        continue-on-error: true
+        run: python beef_grade_sync.py
+      - name: Commit independently verified beef steer grade incidence
+        run: |
+          if [ -f beef_grade_data.json ]; then git add beef_grade_data.json; fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Update official beef steer 1+ grade incidence"
+            git push
+          fi
+
       - name: Save collector health and latest published months
         if: always()
         id: health
@@ -148,6 +161,7 @@ jobs:
           COLLECT_SEMEN_ASSOCIATION: ${{ steps.semen_association.outcome }}
           COLLECT_SEMEN_KREI: ${{ steps.semen_krei.outcome }}
           COLLECT_BEEF: ${{ steps.beef.outcome }}
+          COLLECT_BEEF_GRADES: ${{ steps.beef_grades.outcome }}
         run: python hanwoo_update_health.py
 
       - name: Publish daily collector health status
@@ -171,10 +185,11 @@ jobs:
           COLLECT_SEMEN_ASSOCIATION: ${{ steps.semen_association.outcome }}
           COLLECT_SEMEN_KREI: ${{ steps.semen_krei.outcome }}
           COLLECT_BEEF: ${{ steps.beef.outcome }}
+          COLLECT_BEEF_GRADES: ${{ steps.beef_grades.outcome }}
           COLLECT_HEALTH: ${{ steps.health.outcome }}
         run: |
           FAILED=0
-          for NAME in QUALITY GRADES AGES MARKET SEMEN_ASSOCIATION SEMEN_KREI BEEF HEALTH; do
+          for NAME in QUALITY GRADES AGES MARKET SEMEN_ASSOCIATION SEMEN_KREI BEEF BEEF_GRADES HEALTH; do
             VAR="COLLECT_$NAME"
             RESULT="${!VAR}"
             if [ "$RESULT" != "success" ]; then
