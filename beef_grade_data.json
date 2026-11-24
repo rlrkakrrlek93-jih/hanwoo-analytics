@@ -1,0 +1,308 @@
+{
+  "source": "https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1050005&conn_path=I3",
+  "table_id": "DT_323903_E1050005",
+  "definition": "전국 육우 거세우 육질 1등급 이상(1++, 1+, 1)의 등급별 판정두수 합계 / 전체 육우 거세우 판정두수",
+  "last_success_kst": "2026-11-24 12:27 KST",
+  "records": [
+    {
+      "month": "2026-01",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 43,
+          "rate": 0.9
+        },
+        "1+": {
+          "count": 186,
+          "rate": 3.7
+        },
+        "1": {
+          "count": 618,
+          "rate": 12.3
+        },
+        "2": {
+          "count": 2413,
+          "rate": 48.0
+        },
+        "3": {
+          "count": 1757,
+          "rate": 35.0
+        }
+      },
+      "count": 5025,
+      "grade1plus_count": 847,
+      "grade1plus_rate": 16.86
+    },
+    {
+      "month": "2026-02",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 41,
+          "rate": 1.2
+        },
+        "1+": {
+          "count": 144,
+          "rate": 4.4
+        },
+        "1": {
+          "count": 402,
+          "rate": 12.2
+        },
+        "2": {
+          "count": 1512,
+          "rate": 46.0
+        },
+        "3": {
+          "count": 1171,
+          "rate": 35.6
+        }
+      },
+      "count": 3287,
+      "grade1plus_count": 587,
+      "grade1plus_rate": 17.86
+    },
+    {
+      "month": "2026-03",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 44,
+          "rate": 1.1
+        },
+        "1+": {
+          "count": 144,
+          "rate": 3.6
+        },
+        "1": {
+          "count": 520,
+          "rate": 13.0
+        },
+        "2": {
+          "count": 1931,
+          "rate": 48.4
+        },
+        "3": {
+          "count": 1338,
+          "rate": 33.5
+        }
+      },
+      "count": 3991,
+      "grade1plus_count": 708,
+      "grade1plus_rate": 17.74
+    },
+    {
+      "month": "2026-04",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 50,
+          "rate": 1.2
+        },
+        "1+": {
+          "count": 136,
+          "rate": 3.3
+        },
+        "1": {
+          "count": 553,
+          "rate": 13.5
+        },
+        "2": {
+          "count": 2016,
+          "rate": 49.1
+        },
+        "3": {
+          "count": 1335,
+          "rate": 32.5
+        }
+      },
+      "count": 4104,
+      "grade1plus_count": 739,
+      "grade1plus_rate": 18.01
+    },
+    {
+      "month": "2026-05",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 31,
+          "rate": 0.9
+        },
+        "1+": {
+          "count": 112,
+          "rate": 3.2
+        },
+        "1": {
+          "count": 381,
+          "rate": 11.0
+        },
+        "2": {
+          "count": 1782,
+          "rate": 51.3
+        },
+        "3": {
+          "count": 1157,
+          "rate": 33.3
+        }
+      },
+      "count": 3472,
+      "grade1plus_count": 524,
+      "grade1plus_rate": 15.09
+    },
+    {
+      "month": "2026-06",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 45,
+          "rate": 1.0
+        },
+        "1+": {
+          "count": 145,
+          "rate": 4.0
+        },
+        "1": {
+          "count": 519,
+          "rate": 13.0
+        },
+        "2": {
+          "count": 2074,
+          "rate": 52.0
+        },
+        "3": {
+          "count": 1225,
+          "rate": 30.0
+        }
+      },
+      "count": 4020,
+      "grade1plus_count": 709,
+      "grade1plus_rate": 17.64
+    },
+    {
+      "month": "2026-07",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 29,
+          "rate": 0.7
+        },
+        "1+": {
+          "count": 140,
+          "rate": 3.6
+        },
+        "1": {
+          "count": 498,
+          "rate": 12.9
+        },
+        "2": {
+          "count": 2033,
+          "rate": 52.6
+        },
+        "3": {
+          "count": 1155,
+          "rate": 29.9
+        }
+      },
+      "count": 3867,
+      "grade1plus_count": 667,
+      "grade1plus_rate": 17.25
+    },
+    {
+      "month": "2026-08",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 34,
+          "rate": 0.9
+        },
+        "1+": {
+          "count": 153,
+          "rate": 3.8
+        },
+        "1": {
+          "count": 486,
+          "rate": 12.2
+        },
+        "2": {
+          "count": 1958,
+          "rate": 49.0
+        },
+        "3": {
+          "count": 1352,
+          "rate": 33.9
+        }
+      },
+      "count": 3994,
+      "grade1plus_count": 673,
+      "grade1plus_rate": 16.85
+    },
+    {
+      "month": "2026-09",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 100,
+          "rate": 2.0
+        },
+        "1+": {
+          "count": 262,
+          "rate": 5.2
+        },
+        "1": {
+          "count": 666,
+          "rate": 13.2
+        },
+        "2": {
+          "count": 2470,
+          "rate": 49.1
+        },
+        "3": {
+          "count": 1509,
+          "rate": 30.0
+        }
+      },
+      "count": 5032,
+      "grade1plus_count": 1028,
+      "grade1plus_rate": 20.43
+    },
+    {
+      "month": "2026-10",
+      "breed": "육우",
+      "sex": "거세우",
+      "grades": {
+        "1++": {
+          "count": 66,
+          "rate": 1.6
+        },
+        "1+": {
+          "count": 209,
+          "rate": 5.0
+        },
+        "1": {
+          "count": 595,
+          "rate": 14.2
+        },
+        "2": {
+          "count": 1986,
+          "rate": 47.6
+        },
+        "3": {
+          "count": 1256,
+          "rate": 30.1
+        }
+      },
+      "count": 4176,
+      "grade1plus_count": 870,
+      "grade1plus_rate": 20.83
+    }
+  ]
+}
