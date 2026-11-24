@@ -9,7 +9,7 @@ const validLink=u=>{try{const x=new URL(u,location.href);return x.protocol==='ht
 const yearColors={'2022':'#8969c0','2023':'#c76e78','2024':'#4c83bd','2025':'#d69a45','2026':'#2c9481'};
 const names={steer:'거세우',female:'암소',male:'수소'};
 const screenNames=['home','market','semen','quality'];
-const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityBreed:'hanwoo',qualityMonth:'',beefMonth:'',qualityMetric:'weight',beefMetric:'weight',qualityMode:'month'};
+const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityBreed:'hanwoo',qualityMonth:'',beefMonth:'',qualityMetric:'weight',beefMetric:'grade1plus',qualityMode:'month'};
 let loading=false,installPrompt=null;
 const tabs=[...document.querySelectorAll('.bottom-tabs [data-tab]')];
 const sourceLine=(label,url)=>'<p class="source-line">자료 출처 · <a href="'+validLink(url)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a></p>';
@@ -43,7 +43,7 @@ async function loadAll(){
  if(loading)return;loading=true;
  const refresh=$('#refreshBtn');refresh.disabled=true;
  refresh.style.opacity='.5';
- const files={market:'market_supply_data.json',semen:'semen_sales_data.json',quality:'data.json',grades:'grade_data.json',ages:'age_data.json',beef:'beef_national_data.json'};
+ const files={market:'market_supply_data.json',semen:'semen_sales_data.json',quality:'data.json',grades:'grade_data.json',ages:'age_data.json',beef:'beef_national_data.json',beefGrades:'beef_grade_data.json'};
  const results=await Promise.allSettled(Object.entries(files).map(async([k,path])=>[k,await loadJSON(path)]));
  for(let i=0;i<results.length;i++){
   const result=results[i];
@@ -296,6 +296,7 @@ function renderBeefQuality(){
  if(!state.beefMonth||!months.includes(state.beefMonth))state.beefMonth=latest;
  const target=state.beefMonth,selected=rows.find(r=>r.month===target);
  const cumulative=state.qualityMode==='ytd';
+ const gradeRows=(state.data.beefGrades?.records||[]).filter(x=>x.breed==='육우'&&x.sex==='거세우');
  const year=target.slice(0,4),n=Number(target.slice(5));
  const keys=Array.from({length:n},(_,i)=>year+'-'+String(i+1).padStart(2,'0'));
  const ytd=keys.map(m=>rows.find(r=>r.month===m));
@@ -307,52 +308,61 @@ function renderBeefQuality(){
   return chosen.every(r=>r&&Number.isFinite(r.count)&&r.count>0&&Number.isFinite(r[k]))&&Number.isFinite(divisor)&&divisor>0?
     chosen.reduce((sum,r)=>sum+r[k]*r.count,0)/divisor:null;
  };
+ const gradeSet=(cumulative?keys:[target]).map(m=>gradeRows.find(x=>x.month===m));
+ const gradeReady=gradeSet.length>0&&gradeSet.every(g=>g&&Number.isFinite(g.count)&&g.count>0&&
+    ['1++','1+','1'].every(k=>Number.isFinite(g.grades?.[k]?.count)));
+ const gradeTotal=gradeReady?gradeSet.reduce((sum,g)=>sum+g.count,0):null;
+ const gradeTop=gradeReady?gradeSet.reduce((sum,g)=>sum+['1++','1+','1'].reduce((sum,k)=>sum+g.grades[k].count,0),0):null;
+ const gradePercent=gradeReady?gradeTop/gradeTotal*100:null;
  const period=cumulative?year+'년 1~'+n+'월':dateText(target);
  const statsNote=cumulative?period+' · 판정두수 가중 추정':period;
  const sel='<div class="quality-selects"><select class="mini-select" id="beefMonth" aria-label="육우 통계 월 선택">'+
   months.map(m=>'<option value="'+m+'"'+(m===target?' selected':'')+'>'+dateText(m)+'</option>').join('')+
   '</select><select class="mini-select" id="beefMetric" aria-label="육우 그래프 지표 선택">'+
-  [['weight','평균 도체중'],['price','경락가격'],['marbling','근내지방도'],['area','등심단면적'],['fat','등지방두께'],['live','평균 생체중'],['age_months','도축개월령']]
+  [['grade1plus','1등급 이상 출현율'],['weight','평균 도체중'],['price','경락가격'],['marbling','근내지방도'],['area','등심단면적'],['fat','등지방두께'],['live','평균 생체중'],['age_months','도축개월령']]
     .map(([k,v])=>'<option value="'+k+'"'+(state.beefMetric===k?' selected':'')+'>'+v+'</option>').join('')+
   '</select></div>';
  const modePicker='<div class="segmented quality-period-switch" role="group" aria-label="품질 통계 집계 기간">'+
   '<button type="button" data-quality-mode="month" aria-selected="'+!cumulative+'">선택 월</button>'+
   '<button type="button" data-quality-mode="ytd" aria-selected="'+cumulative+'">1월~선택 월 누적</button></div>';
+ const gradeNote=Number.isFinite(gradeTotal)?period+' · '+fmt(gradeTop)+' / '+fmt(gradeTotal)+'두':'공식 등급별 자료 미확인';
  const cards='<div class="stat-grid">'+
+  card('★','1등급 이상 출현율',Number.isFinite(gradePercent)?fmt(gradePercent,1):'—','%',gradeNote,'beef-grade-primary')+
   card('∑',cumulative?'누적 판정두수':'등급판정두수',
-     complete?fmt(cumulative?total:selected.count):'—','두',complete?period:'선택 기간 월별 자료 확인 필요')+
+      complete?fmt(cumulative?total:selected.count):'—','두',complete?period:'선택 기간 월별 자료 확인 필요')+
   card('▣','평균 도체중',Number.isFinite(avg('weight'))?fmt(avg('weight'),cumulative?1:0):'—','kg',statsNote)+
   card('₩','평균 경락단가',Number.isFinite(avg('price'))?fmt(avg('price'),cumulative?1:0):'—','원/kg',statsNote,'price')+
-  card('◷','평균 도축개월령',Number.isFinite(avg('age_months'))?fmt(avg('age_months'),1):'—','개월',
-      Number.isFinite(avg('age_months'))?statsNote:'선택 기간 도축개월령 미발표')+
  '</div>';
- const metricMap={weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],area:['등심단면적','㎠'],fat:['등지방두께','mm'],live:['평균 생체중','kg'],age_months:['도축개월령','개월']};
+ const metricMap={grade1plus:['1등급 이상 출현율','%'],weight:['평균 도체중','kg'],price:['경락단가','원/kg'],marbling:['근내지방도','No.'],area:['등심단면적','㎠'],fat:['등지방두께','mm'],live:['평균 생체중','kg'],age_months:['도축개월령','개월']};
  if(!Object.hasOwn(metricMap,state.beefMetric))state.beefMetric='weight';
  const [label,unit]=metricMap[state.beefMetric];
  const line=[{year,legendLabel:'육우 거세우',color:'#b36b57',values:Array.from({length:12},(_,i)=>{
   const m=i+1,record=rows.find(r=>r.month===year+'-'+String(m).padStart(2,'0'));
-  return {month:m,value:Number.isFinite(record?.[state.beefMetric])?record[state.beefMetric]:null};
+  const gradeRow=gradeRows.find(x=>x.month===year+'-'+String(m).padStart(2,'0'));
+  const value=state.beefMetric==='grade1plus'?gradeRow?.grade1plus_rate:record?.[state.beefMetric];
+  return {month:m,value:Number.isFinite(value)?value:null};
  })}];
  const note=cumulative?'<p class="quality-rollup-note">누적은 '+esc(period)+' 자료를 판정두수로 가중 계산한 추정 평균입니다. 월별 값이 누락되면 해당 누적 통계를 표시하지 않습니다. 한우 통계와 혼합하지 않습니다.</p>':'';
- const more=['marbling','area','fat','live','yield_index'].map(k=>{
-  const name={marbling:'평균 근내지방도',area:'평균 등심단면적',fat:'평균 등지방두께',live:'평균 생체중',yield_index:'육량지수'}[k];
-  const unit={marbling:'No.',area:'㎠',fat:'mm',live:'kg',yield_index:''}[k];
+ const more=['age_months','marbling','area','fat','live','yield_index'].map(k=>{
+  const name={age_months:'평균 도축개월령',marbling:'평균 근내지방도',area:'평균 등심단면적',fat:'평균 등지방두께',live:'평균 생체중',yield_index:'육량지수'}[k];
+  const unit={age_months:'개월',marbling:'No.',area:'㎠',fat:'mm',live:'kg',yield_index:''}[k];
   const value=avg(k);
   return '<div class="beef-extra-item"><span>'+name+'</span><strong>'+ (Number.isFinite(value)?fmt(value,cumulative?1:0):'—')+' '+unit+'</strong></div>';
  }).join('');
  const tableRows=rows.slice().reverse().map(r=>'<tr><td>'+dateText(r.month)+'</td>'+
+  '<td>'+(Number.isFinite(gradeRows.find(x=>x.month===r.month)?.grade1plus_rate)?fmt(gradeRows.find(x=>x.month===r.month).grade1plus_rate,1)+'%':'—')+'</td>'+
   [r.count,r.weight,r.price,r.marbling,r.area,r.fat,r.live,r.age_months]
   .map((v,i)=>'<td>'+(Number.isFinite(v)?fmt(v,i===7?1:0):'미발표')+'</td>').join('')+'</tr>').join('');
  const details='<div class="data-table-card"><div class="data-table-header"><h2>육우 거세우 월별 상세 통계</h2><span class="meta-dot">'+rows.length+'개월</span></div>'+
-   '<div class="scroll-table"><table class="data-table"><thead><tr><th>월</th><th>판정두수</th><th>도체중(kg)</th><th>경락단가(원/kg)</th><th>근내지방도</th><th>등심단면적(㎠)</th><th>등지방두께(mm)</th><th>생체중(kg)</th><th>도축개월령</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>'+
+   '<div class="scroll-table"><table class="data-table"><thead><tr><th>월</th><th>1등급 이상</th><th>판정두수</th><th>도체중(kg)</th><th>경락단가(원/kg)</th><th>근내지방도</th><th>등심단면적(㎠)</th><th>등지방두께(mm)</th><th>생체중(kg)</th><th>도축개월령</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>'+
    '<p class="table-hint">육우 거세우만의 전국 공식 월별 수치입니다. 표는 좌우로 밀어 확인하세요.</p></div>';
  $('#qualityContent').innerHTML=ss+sel+modePicker+
   '<div class="quality-breed-description">육우 거세우 · 전국 평균 · 한우 거세우와 구분한 별도 공식 통계</div>'+
   cards+note+headerSmall('육우 거세우 월별 성적 추이',period)+
   lineChart(line,{label,unit,metric:'beef',monthKey:Number(target.slice(5))})+
   '<div class="paper-card beef-extra-card"><strong class="beef-extra-title">'+esc(period)+' · 추가 품질 지표</strong><div class="beef-extra-grid">'+more+'</div></div>'+
-  '<p class="quality-rollup-note">육우 1++ 등급 출현율은 현재 연결된 육우 원자료에 없어 표시하지 않습니다. 한우의 1++ 출현율을 육우에 적용하지 않습니다.</p>'+
-  details+sourceLine('축산물품질평가원 · 육우 거세우 전국 평균','https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2');
+  '<p class="quality-rollup-note">육우 1등급 이상 출현율은 공식 등급분포 통계에서 1++, 1+, 1등급 두수를 합산한 비율입니다. 평균 성적표의 판정두수와 등급분포표의 전체 두수는 집계 기준 차이로 다를 수 있습니다.</p>'+
+  details+sourceLine('축산물품질평가원 · 육우 거세우 등급분포','https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1050005&conn_path=I3')+sourceLine('축산물품질평가원 · 육우 거세우 전국 평균','https://mtrace.go.kr/statHtml/statHtml.do?orgId=323&tblId=DT_323903_E1080008&conn_path=I2');
 }
 function renderQuality(){
  if(state.qualityBreed==='beef')return renderBeefQuality();
