@@ -1,12 +1,12 @@
 /* HANWOO INSIGHT PWA — online always fetches current official data first. */
-const CACHE='hanwoo-insight-mobile-20261123-v9';
+const CACHE='hanwoo-insight-mobile-20261124-beef1';
 const ROOT=new URL('./',self.registration.scope).href;
 const REQUIRED=[
  './','./index.html','./app.html','./app.css','./app.js','./data-health-widget.js','./manifest.webmanifest','./mobile.css','./mobile-app.js',
  './market-indicators.js','./semen_sales_chart.js','./quality-check.js',
  './pwa/icon-192.png','./pwa/icon-512.png','./pwa/apple-touch-icon.png',
  './data.json','./grade_data.json','./age_data.json',
- './market_supply_data.json','./semen_sales_data.json','./beef_national_data.json',
+ './market_supply_data.json','./semen_sales_data.json','./beef_national_data.json','./beef_grade_data.json',
  './quality_report.json'
 ];
 self.addEventListener('install',event=>{
