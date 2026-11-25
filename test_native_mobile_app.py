@@ -44,9 +44,7 @@ def run():
      assert '313.9' in page.locator('#home .stat-grid').inner_text()
      assert '171.3' in page.locator('#home .stat-grid').inner_text()
      assert page.locator('#home').is_visible()
-     assert page.locator('#home .calf-mobile').count()==1, 'Home should show verified national calf prices'
-     assert '5,058,000원' in page.locator('#home .calf-mobile').inner_text()
-     assert '3,569,000원' in page.locator('#home .calf-mobile').inner_text()
+     assert page.locator('#home .calf-mobile').count()==0, 'Calf market should not dominate the home header'
 
      dims=page.evaluate('({scroll:document.documentElement.scrollWidth,viewport:innerWidth})')
      assert dims['scroll']<=dims['viewport']+2,('page horizontal overflow',w,dims)
@@ -58,6 +56,20 @@ def run():
      assert '2026.11.23' in page.locator('#market .calf-mobile').inner_text()
      assert '5,530,000원' in page.locator('#market .calf-mobile').inner_text()
      assert page.locator('#market .calf-mobile-links a').count()==2
+     assert page.locator('#market .calf-history-legend .calf-legend-year').count()==3
+     assert page.locator('#market .calf-history-canvas svg').count()==1
+     assert page.locator('#market .calf-history-canvas svg text').count()>35
+     assert '2024~2026년 월별 송아지 가격 흐름' in page.locator('#market .calf-mobile-history').inner_text()
+     assert '550.8만원' in page.locator('#market .calf-history-move').inner_text()
+     assert '하락' in page.locator('#market .calf-history-move').inner_text()
+     assert page.locator('#market .calf-history-data table tbody tr').count()==12
+     page.locator('#market [data-calf-sex="female"]').click()
+     assert page.locator('#market [data-calf-sex="female"]').get_attribute('aria-pressed')=='true'
+     assert '396.0만원' in page.locator('#market .calf-history-move').inner_text()
+     assert '상승' in page.locator('#market .calf-history-move').inner_text()
+     page.locator('#market [data-calf-sex="male"]').click()
+     assert page.locator('#market [data-calf-sex="male"]').get_attribute('aria-pressed')=='true'
+
 
      assert page.locator('#market [data-chart-point="market"]').count()>25
      market_lines=page.locator('#market svg [data-chart-line="market"]')
@@ -200,6 +212,12 @@ def run():
     assert '5,058,000원' in dpage.locator('#calfPrices').inner_text()
     assert '3,569,000원' in dpage.locator('#calfPrices').inner_text()
     assert dpage.locator('#calfPrices .tc-calf-plot svg').count()==1
+    assert dpage.locator('#calfPrices').evaluate("e=>e.nextElementSibling?.id==='semenSalesScope'"),'Calf section must be immediately before semen sales'
+    assert dpage.locator('#calfPrices .calf-legend-year').count()==3
+    assert '550.8만원' in dpage.locator('#calfPrices .calf-history-move').inner_text()
+    assert dpage.locator('#calfPrices .calf-history-data tbody tr').count()==12
+    dpage.locator('#calfPrices [data-calf-sex="female"]').click()
+    assert '396.0만원' in dpage.locator('#calfPrices .calf-history-move').inner_text()
     assert '지역 가축시장 확인' in dpage.locator('#calfPrices').inner_text()
 
     assert dpage.locator('#nationalBeef').count()==1, 'desktop beef steer section must remain available'
