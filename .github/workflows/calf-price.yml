@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'calf_price_sync.py'
+      - 'calf_monthly_sync.py'
       - '.github/workflows/calf-price.yml'
   workflow_dispatch:
   schedule:
@@ -28,14 +29,25 @@ jobs:
           python -m pip install --quiet beautifulsoup4 playwright
           python -m playwright install --with-deps chromium
       - name: Collect price and validate survey date
+        id: day
+        continue-on-error: true
         run: python calf_price_sync.py
+      - name: Refresh verified 2024–2026 monthly calf prices
+        id: history
+        continue-on-error: true
+        run: python calf_monthly_sync.py
       - name: Commit verified results only
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add calf_price_data.json
           if ! git diff --cached --quiet; then
-            git commit -m "Archive verified calf auction prices"
+            git commit -m "Archive verified daily and historical calf auction prices"
             git pull --rebase
             git push
           fi
+      - name: Report any full-source outage
+        if: ${{ steps.day.outcome == 'failure' && steps.history.outcome == 'failure' }}
+        run: |
+          echo "Both current survey and monthly history failed; previously verified data remains unchanged."
+          exit 1
