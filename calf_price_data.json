@@ -28,5 +28,6 @@
   ],
   "regions": [],
   "regional_availability_note": "전국가격과 동일한 산출기준으로 검증된 지역별 월령·성별 데이터가 없어 표시하지 않습니다. 농협 스마트 가축시장 거래 지역별 자료는 전체 지역 대표 평균이 아니므로 별도로 확인해야 합니다.",
-  "last_verified_date": "2026-11-23"
+  "last_verified_date": "2026-11-23",
+  "last_success_kst": "2026-11-25 11:04 KST"
 }
