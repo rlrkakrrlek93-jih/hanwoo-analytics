@@ -18,6 +18,19 @@ def run():
   verify_png(path,size)
  manifest=json.loads((ROOT/'manifest.webmanifest').read_text('utf8'))
  assert manifest['start_url']=='./app.html'
+ calf=json.loads((ROOT/'calf_price_data.json').read_text('utf8'))
+ calf_days=sorted((r for r in calf['records'] if r.get('region')=='전국'),key=lambda r:r['date'])
+ calf_months=sorted((r for r in calf['monthly_series'] if r.get('region')=='전국'),key=lambda r:r['month'])
+ assert len(calf_months)>=34
+ calf_recent=calf_days[-1]
+ calf_reference=sorted(calf['monthly_reference'],key=lambda r:r['month'])[-1]
+ calf_latest=calf_months[-1]
+ calf_prev=next((x for x in reversed(calf_months[:-1]) if x['month'][:4]==calf_latest['month'][:4]),None)
+ won=lambda x:f"{x*1000:,.0f}원"
+ man_price=f"{calf_latest['male_6_7']/10:,.1f}만원"
+ woman_price=f"{calf_latest['female_6_7']/10:,.1f}만원"
+ man_direction='상승' if calf_prev and calf_latest['male_6_7']>calf_prev['male_6_7'] else '하락' if calf_prev and calf_latest['male_6_7']<calf_prev['male_6_7'] else '보합'
+ woman_direction='상승' if calf_prev and calf_latest['female_6_7']>calf_prev['female_6_7'] else '하락' if calf_prev and calf_latest['female_6_7']<calf_prev['female_6_7'] else '보합'
  for name in ['app.html','app.css','app.js','service-worker.js','index.html','dashboard_template.html']:
   assert (ROOT/name).exists(),name
  for name in ['index.html','dashboard_template.html']:
@@ -53,20 +66,20 @@ def run():
      page.locator('#home').wait_for(state='hidden',timeout=10000)
      assert page.locator('#market .data-table tbody tr').count()==12
      assert page.locator('#market .calf-mobile').count()==1
-     assert '2026.11.23' in page.locator('#market .calf-mobile').inner_text()
-     assert '5,530,000원' in page.locator('#market .calf-mobile').inner_text()
+     assert calf_recent['date'].replace('-','.') in page.locator('#market .calf-mobile').inner_text()
+     assert won(calf_reference['male_6_7']) in page.locator('#market .calf-mobile').inner_text()
      assert page.locator('#market .calf-mobile-links a').count()==2
      assert page.locator('#market .calf-history-legend .calf-legend-year').count()==3
      assert page.locator('#market .calf-history-canvas svg').count()==1
      assert page.locator('#market .calf-history-canvas svg text').count()>35
      assert '2024~2026년 월별 송아지 가격 흐름' in page.locator('#market .calf-mobile-history').inner_text()
-     assert '550.8만원' in page.locator('#market .calf-history-move').inner_text()
-     assert '하락' in page.locator('#market .calf-history-move').inner_text()
+     assert man_price in page.locator('#market .calf-history-move').inner_text()
+     assert man_direction in page.locator('#market .calf-history-move').inner_text()
      assert page.locator('#market .calf-history-data table tbody tr').count()==12
      page.locator('#market [data-calf-sex="female"]').click()
      assert page.locator('#market [data-calf-sex="female"]').get_attribute('aria-pressed')=='true'
-     assert '396.0만원' in page.locator('#market .calf-history-move').inner_text()
-     assert '상승' in page.locator('#market .calf-history-move').inner_text()
+     assert woman_price in page.locator('#market .calf-history-move').inner_text()
+     assert woman_direction in page.locator('#market .calf-history-move').inner_text()
      page.locator('#market [data-calf-sex="male"]').click()
      assert page.locator('#market [data-calf-sex="male"]').get_attribute('aria-pressed')=='true'
 
@@ -209,15 +222,15 @@ def run():
     assert '/app.html' not in dpage.url
     assert dpage.locator('#semenSalesScope .ss-table tbody tr').count()==12
     dpage.locator('#calfPrices .tc-calf-cards').wait_for(timeout=15000)
-    assert '5,058,000원' in dpage.locator('#calfPrices').inner_text()
-    assert '3,569,000원' in dpage.locator('#calfPrices').inner_text()
+    assert won(calf_recent['male_6_7']) in dpage.locator('#calfPrices').inner_text()
+    assert won(calf_recent['female_6_7']) in dpage.locator('#calfPrices').inner_text()
     assert dpage.locator('#calfPrices .tc-calf-plot svg').count()==1
     assert dpage.locator('#calfPrices').evaluate("e=>e.nextElementSibling?.id==='semenSalesScope'"),'Calf section must be immediately before semen sales'
     assert dpage.locator('#calfPrices .calf-legend-year').count()==3
-    assert '550.8만원' in dpage.locator('#calfPrices .calf-history-move').inner_text()
+    assert man_price in dpage.locator('#calfPrices .calf-history-move').inner_text()
     assert dpage.locator('#calfPrices .calf-history-data tbody tr').count()==12
     dpage.locator('#calfPrices [data-calf-sex="female"]').click()
-    assert '396.0만원' in dpage.locator('#calfPrices .calf-history-move').inner_text()
+    assert woman_price in dpage.locator('#calfPrices .calf-history-move').inner_text()
     assert '지역 가축시장 확인' in dpage.locator('#calfPrices').inner_text()
 
     assert dpage.locator('#nationalBeef').count()==1, 'desktop beef steer section must remain available'
