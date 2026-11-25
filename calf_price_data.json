@@ -29,5 +29,219 @@
   "regions": [],
   "regional_availability_note": "전국가격과 동일한 산출기준으로 검증된 지역별 월령·성별 데이터가 없어 표시하지 않습니다. 농협 스마트 가축시장 거래 지역별 자료는 전체 지역 대표 평균이 아니므로 별도로 확인해야 합니다.",
   "last_verified_date": "2026-11-23",
-  "last_success_kst": "2026-11-25 11:04 KST"
+  "last_success_kst": "2026-11-25 11:04 KST",
+  "monthly_series": [
+    {
+      "month": "2024-01",
+      "region": "전국",
+      "male_6_7": 3443,
+      "female_6_7": 2429
+    },
+    {
+      "month": "2024-02",
+      "region": "전국",
+      "male_6_7": 3339,
+      "female_6_7": 2387
+    },
+    {
+      "month": "2024-03",
+      "region": "전국",
+      "male_6_7": 3413,
+      "female_6_7": 2387
+    },
+    {
+      "month": "2024-04",
+      "region": "전국",
+      "male_6_7": 3387,
+      "female_6_7": 2276
+    },
+    {
+      "month": "2024-05",
+      "region": "전국",
+      "male_6_7": 3419,
+      "female_6_7": 2234
+    },
+    {
+      "month": "2024-06",
+      "region": "전국",
+      "male_6_7": 3557,
+      "female_6_7": 2338
+    },
+    {
+      "month": "2024-07",
+      "region": "전국",
+      "male_6_7": 3452,
+      "female_6_7": 2438
+    },
+    {
+      "month": "2024-08",
+      "region": "전국",
+      "male_6_7": 3562,
+      "female_6_7": 2343
+    },
+    {
+      "month": "2024-09",
+      "region": "전국",
+      "male_6_7": 3755,
+      "female_6_7": 2457
+    },
+    {
+      "month": "2024-10",
+      "region": "전국",
+      "male_6_7": 3766,
+      "female_6_7": 2537
+    },
+    {
+      "month": "2024-11",
+      "region": "전국",
+      "male_6_7": 3702,
+      "female_6_7": 2541
+    },
+    {
+      "month": "2024-12",
+      "region": "전국",
+      "male_6_7": 3638,
+      "female_6_7": 2438
+    },
+    {
+      "month": "2025-01",
+      "region": "전국",
+      "male_6_7": 3570,
+      "female_6_7": 2506
+    },
+    {
+      "month": "2025-02",
+      "region": "전국",
+      "male_6_7": 3608,
+      "female_6_7": 2577
+    },
+    {
+      "month": "2025-03",
+      "region": "전국",
+      "male_6_7": 3569,
+      "female_6_7": 2642
+    },
+    {
+      "month": "2025-04",
+      "region": "전국",
+      "male_6_7": 3668,
+      "female_6_7": 2611
+    },
+    {
+      "month": "2025-05",
+      "region": "전국",
+      "male_6_7": 3855,
+      "female_6_7": 2787
+    },
+    {
+      "month": "2025-06",
+      "region": "전국",
+      "male_6_7": 3979,
+      "female_6_7": 2851
+    },
+    {
+      "month": "2025-07",
+      "region": "전국",
+      "male_6_7": 4134,
+      "female_6_7": 2971
+    },
+    {
+      "month": "2025-08",
+      "region": "전국",
+      "male_6_7": 4319,
+      "female_6_7": 3086
+    },
+    {
+      "month": "2025-09",
+      "region": "전국",
+      "male_6_7": 4674,
+      "female_6_7": 3392
+    },
+    {
+      "month": "2025-10",
+      "region": "전국",
+      "male_6_7": 4495,
+      "female_6_7": 3257
+    },
+    {
+      "month": "2025-11",
+      "region": "전국",
+      "male_6_7": 4484,
+      "female_6_7": 3264
+    },
+    {
+      "month": "2025-12",
+      "region": "전국",
+      "male_6_7": 4528,
+      "female_6_7": 3518
+    },
+    {
+      "month": "2026-01",
+      "region": "전국",
+      "male_6_7": 4604,
+      "female_6_7": 3464
+    },
+    {
+      "month": "2026-02",
+      "region": "전국",
+      "male_6_7": 4706,
+      "female_6_7": 3571
+    },
+    {
+      "month": "2026-03",
+      "region": "전국",
+      "male_6_7": 4666,
+      "female_6_7": 3590
+    },
+    {
+      "month": "2026-04",
+      "region": "전국",
+      "male_6_7": 4714,
+      "female_6_7": 3506
+    },
+    {
+      "month": "2026-05",
+      "region": "전국",
+      "male_6_7": 4801,
+      "female_6_7": 3492
+    },
+    {
+      "month": "2026-06",
+      "region": "전국",
+      "male_6_7": 4963,
+      "female_6_7": 3625
+    },
+    {
+      "month": "2026-07",
+      "region": "전국",
+      "male_6_7": 5089,
+      "female_6_7": 3728
+    },
+    {
+      "month": "2026-08",
+      "region": "전국",
+      "male_6_7": 5155,
+      "female_6_7": 3737
+    },
+    {
+      "month": "2026-09",
+      "region": "전국",
+      "male_6_7": 5551,
+      "female_6_7": 3926
+    },
+    {
+      "month": "2026-10",
+      "region": "전국",
+      "male_6_7": 5508,
+      "female_6_7": 3960
+    }
+  ],
+  "monthly_series_sources": {
+    "male": "https://agropick.martius.kr/indicator/calf-male",
+    "female": "https://agropick.martius.kr/indicator/calf-female",
+    "underlying": "https://www.ekapepia.com/v3/price/livestock/cow/producer.do"
+  },
+  "monthly_series_note": "2024~2026년 월별 수치는 아그로픽이 축산유통정보 다봄(eKAPEpia) 일별 가축시장 공개가격을 바탕으로 재집계한 월평균(천원/마리). 공식 산지가격 페이지의 전월평균과 집계방식에 따라 차이 날 수 있어 별도 보존. 진행 중인 2026년 11월은 제외.",
+  "monthly_series_last_confirmed": "2026-10",
+  "monthly_series_transcribed_date": "2026-11-25"
 }
