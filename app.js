@@ -43,7 +43,7 @@ async function loadAll(){
  if(loading)return;loading=true;
  const refresh=$('#refreshBtn');refresh.disabled=true;
  refresh.style.opacity='.5';
- const files={market:'market_supply_data.json',semen:'semen_sales_data.json',quality:'data.json',grades:'grade_data.json',ages:'age_data.json',beef:'beef_national_data.json',beefGrades:'beef_grade_data.json'};
+ const files={market:'market_supply_data.json',semen:'semen_sales_data.json',quality:'data.json',grades:'grade_data.json',ages:'age_data.json',beef:'beef_national_data.json',beefGrades:'beef_grade_data.json',calf:'calf_price_data.json'};
  const results=await Promise.allSettled(Object.entries(files).map(async([k,path])=>[k,await loadJSON(path)]));
  for(let i=0;i<results.length;i++){
   const result=results[i];
@@ -89,6 +89,7 @@ function renderHome(){
   card('₩','암소 경락단가',fmt(last.auction_price_by_sex.female),'원/kg',dateText(last.month)+' · 월평균','price')+
   card('♧','한우 정액 판매량',semen?fmt(semen.sold_thousand_str,1):'—','천 str',semen?dateText(semen.month)+' · 최근 확보':'공식 자료 미확보','semen')+
   '</div>'+
+  calfPriceSection(state.data.calf,true)+
   homeInsights(m,s)+
   '<div class="section-intro"><h2>시장 가격 흐름</h2><a href="#market">자세히 보기 →</a></div>'+
   miniTrend(m.records.filter(r=>r.month.startsWith('2026-')).map(r=>r.auction_price_by_sex.steer),'2026년 거세우 경락단가 (원/kg)')+
@@ -179,6 +180,25 @@ function marketSeries(){
   })
  }));
 }
+function calfPriceRecords(d){
+ return (d?.records||[]).filter(r=>r.region==='전국'&&/^20\d{2}-\d{2}-\d{2}$/.test(r.date)&&Number.isFinite(r.male_6_7)&&Number.isFinite(r.female_6_7)&&r.male_6_7>500&&r.female_6_7>500).sort((a,b)=>a.date.localeCompare(b.date));
+}
+function calfWon(n){return Number.isFinite(n)?fmt(n*1000)+'원':'—'}
+function calfPriceSection(d,mini=false){
+ const list=calfPriceRecords(d),last=list.at(-1);
+ if(!last)return mini?'':'<div class="paper-card calf-mobile"><h2>송아지 전국 평균 시세</h2><p class="chart-note">현재 공식 송아지 가격을 확인할 수 없습니다.</p></div>';
+ const localLink='https://xn--e20bw05b.kr/dashboard/main';
+ const officialLink='https://www.ekapepia.com/v3/price/livestock/cow/producer.do';
+ const month=(d.monthly_reference||[]).filter(r=>r.region==='전국'&&/^20\d{2}-\d{2}$/.test(r.month)&&Number.isFinite(r.male_6_7)&&Number.isFinite(r.female_6_7)).sort((a,b)=>a.month.localeCompare(b.month)).at(-1);
+ const head='<div class="calf-mobile-head"><div><span class="calf-mobile-kicker">CALF MARKET</span><h2>한우 송아지 전국 평균가격</h2><p>6~7개월령 · 수송아지/암송아지</p></div><small>'+esc(last.date.replaceAll('-','.'))+' 확인</small></div>';
+ const cards='<div class="calf-mobile-cards"><div><span>수송아지</span><strong>'+esc(calfWon(last.male_6_7))+'</strong></div><div class="female"><span>암송아지</span><strong>'+esc(calfWon(last.female_6_7))+'</strong></div></div>';
+ const note=mini?'<a class="calf-mobile-more" href="#market">송아지 시세 자세히 보기 ↗</a>':
+ '<div class="calf-mobile-reference">전월 공식 평균'+(month?' · '+esc(month.month.replace('-','년 ')+'월'):'')+
+ '<div>수송아지 <strong>'+(month?esc(calfWon(month.male_6_7)):'—')+'</strong></div><div>암송아지 <strong>'+(month?esc(calfWon(month.female_6_7)):'—')+'</strong></div></div>'+
+ '<p class="calf-mobile-note">확인일별 가격과 전월 평균은 다른 집계기간입니다. 지역별 시세는 공식 전국평균과 동일 기준으로 검증되지 않아 임의 평균을 제공하지 않습니다.</p>'+
+ '<div class="calf-mobile-links"><a href="'+localLink+'" target="_blank" rel="noopener noreferrer">지역 가축시장 확인 ↗</a><a href="'+officialLink+'" target="_blank" rel="noopener noreferrer">가격 원문 ↗</a></div>';
+ return '<section class="paper-card calf-mobile '+(mini?'calf-mobile-mini':'')+'" aria-label="전국 한우 송아지 가격">'+head+cards+note+'</section>';
+}
 function renderMarket(){
  const m=state.data.market;
  if(!m){$('#marketContent').innerHTML='<div class="loading-block">시장 통계를 불러올 수 없습니다.</div>';return}
@@ -208,7 +228,7 @@ function renderMarket(){
  const validationNote=flagged?'<p class="chart-note" style="color:#a36a44;padding:0 3px 9px">※ 2025년 10월 사육두수는 전후 월과 큰 차이가 있어 원자료 재확인 전까지 그래프·표에서 제외합니다. 임의 보정값을 사용하지 않습니다.</p>':'';
  const table='<div class="data-table-card"><div class="data-table-header"><h2>월별 전체 수치</h2><span class="meta-dot">'+marketUnit(state.metric)+'</span></div>'+
  '<div class="scroll-table"><table class="data-table"><thead><tr><th>월</th><th>2024년</th><th>2025년</th><th>2026년</th></tr></thead><tbody>'+tableRows+'</tbody></table></div><p class="table-hint">숫자는 공표된 원자료 기준 · 미발표 월은 — 표시</p></div>';
- $('#marketContent').innerHTML=numbers+controls+sexSelect+selector+
+ $('#marketContent').innerHTML=calfPriceSection(state.data.calf)+numbers+controls+sexSelect+selector+
  lineChart(activeYears,{label,unit:marketUnit(state.metric),metric:'market',monthKey:state.marketMonth})+
  validationNote+pills('market',state.marketMonth)+detail+
  headerSmall('월별 비교표','1~12월')+table+
