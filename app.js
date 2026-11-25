@@ -9,7 +9,7 @@ const validLink=u=>{try{const x=new URL(u,location.href);return x.protocol==='ht
 const yearColors={'2022':'#8969c0','2023':'#c76e78','2024':'#4c83bd','2025':'#d69a45','2026':'#2c9481'};
 const names={steer:'거세우',female:'암소',male:'수소'};
 const screenNames=['home','market','semen','quality'];
-const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityBreed:'hanwoo',qualityMonth:'',beefMonth:'',qualityMetric:'weight',beefMetric:'grade1plus',qualityMode:'month'};
+const state={data:{},screen:'home',metric:'price',sex:'steer',marketMonth:10,semenMonth:7,marketYears:new Set(['2024','2025','2026']),semenYears:new Set(['2022','2023','2024','2025','2026']),qualitySex:'거세우',qualityBreed:'hanwoo',qualityMonth:'',beefMonth:'',qualityMetric:'weight',beefMetric:'grade1plus',qualityMode:'month',calfSex:'male'};
 let loading=false,installPrompt=null;
 const tabs=[...document.querySelectorAll('.bottom-tabs [data-tab]')];
 const sourceLine=(label,url)=>'<p class="source-line">자료 출처 · <a href="'+validLink(url)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a></p>';
@@ -89,7 +89,6 @@ function renderHome(){
   card('₩','암소 경락단가',fmt(last.auction_price_by_sex.female),'원/kg',dateText(last.month)+' · 월평균','price')+
   card('♧','한우 정액 판매량',semen?fmt(semen.sold_thousand_str,1):'—','천 str',semen?dateText(semen.month)+' · 최근 확보':'공식 자료 미확보','semen')+
   '</div>'+
-  calfPriceSection(state.data.calf,true)+
   homeInsights(m,s)+
   '<div class="section-intro"><h2>시장 가격 흐름</h2><a href="#market">자세히 보기 →</a></div>'+
   miniTrend(m.records.filter(r=>r.month.startsWith('2026-')).map(r=>r.auction_price_by_sex.steer),'2026년 거세우 경락단가 (원/kg)')+
@@ -197,7 +196,8 @@ function calfPriceSection(d,mini=false){
  '<div>수송아지 <strong>'+(month?esc(calfWon(month.male_6_7)):'—')+'</strong></div><div>암송아지 <strong>'+(month?esc(calfWon(month.female_6_7)):'—')+'</strong></div></div>'+
  '<p class="calf-mobile-note">확인일별 가격과 전월 평균은 다른 집계기간입니다. 지역별 시세는 공식 전국평균과 동일 기준으로 검증되지 않아 임의 평균을 제공하지 않습니다.</p>'+
  '<div class="calf-mobile-links"><a href="'+localLink+'" target="_blank" rel="noopener noreferrer">지역 가축시장 확인 ↗</a><a href="'+officialLink+'" target="_blank" rel="noopener noreferrer">가격 원문 ↗</a></div>';
- return '<section class="paper-card calf-mobile '+(mini?'calf-mobile-mini':'')+'" aria-label="전국 한우 송아지 가격">'+head+cards+note+'</section>';
+ const history=mini?'':'<div class="calf-mobile-history"><h3>2024~2026년 월별 송아지 가격 흐름</h3><div class="tc-calf-sex-picker" role="group" aria-label="송아지 가격 성별"><button type="button" data-calf-sex="male" aria-pressed="'+(state.calfSex==='male')+'">수송아지</button><button type="button" data-calf-sex="female" aria-pressed="'+(state.calfSex==='female')+'">암송아지</button></div>'+(window.HanwooCalfChart?.render(d,state.calfSex,true)||'<p>월별 데이터 확인 중</p>')+'</div>';
+ return '<section class="paper-card calf-mobile '+(mini?'calf-mobile-mini':'')+'" aria-label="전국 한우 송아지 가격">'+head+cards+history+note+'</section>';
 }
 function renderMarket(){
  const m=state.data.market;
@@ -228,10 +228,11 @@ function renderMarket(){
  const validationNote=flagged?'<p class="chart-note" style="color:#a36a44;padding:0 3px 9px">※ 2025년 10월 사육두수는 전후 월과 큰 차이가 있어 원자료 재확인 전까지 그래프·표에서 제외합니다. 임의 보정값을 사용하지 않습니다.</p>':'';
  const table='<div class="data-table-card"><div class="data-table-header"><h2>월별 전체 수치</h2><span class="meta-dot">'+marketUnit(state.metric)+'</span></div>'+
  '<div class="scroll-table"><table class="data-table"><thead><tr><th>월</th><th>2024년</th><th>2025년</th><th>2026년</th></tr></thead><tbody>'+tableRows+'</tbody></table></div><p class="table-hint">숫자는 공표된 원자료 기준 · 미발표 월은 — 표시</p></div>';
- $('#marketContent').innerHTML=calfPriceSection(state.data.calf)+numbers+controls+sexSelect+selector+
+ $('#marketContent').innerHTML=numbers+controls+sexSelect+selector+
  lineChart(activeYears,{label,unit:marketUnit(state.metric),metric:'market',monthKey:state.marketMonth})+
  validationNote+pills('market',state.marketMonth)+detail+
  headerSmall('월별 비교표','1~12월')+table+
+ calfPriceSection(state.data.calf)+
  sourceLine('축산물품질평가원 · 전국 한우 공식 월별 통계',m.source_grading);
 }
 function semenSeries(){
@@ -448,6 +449,7 @@ const main=$('#appMain');
 main.addEventListener('click',event=>{
  const btn=event.target.closest('button');
  if(btn){
+  if(btn.hasAttribute('data-calf-sex')){state.calfSex=btn.dataset.calfSex==='female'?'female':'male';renderMarket();return}
   if(btn.hasAttribute('data-market-metric')){state.metric=btn.dataset.marketMetric;renderMarket();return}
   if(btn.hasAttribute('data-market-year')){const y=btn.dataset.marketYear;if(state.marketYears.has(y)){if(state.marketYears.size>1)state.marketYears.delete(y)}else state.marketYears.add(y);renderMarket();return}
   if(btn.hasAttribute('data-semen-year')){const y=btn.dataset.semenYear;if(state.semenYears.has(y)){if(state.semenYears.size>1)state.semenYears.delete(y)}else state.semenYears.add(y);renderSemen();return}
