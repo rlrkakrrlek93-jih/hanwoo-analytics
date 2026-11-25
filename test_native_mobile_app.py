@@ -44,12 +44,21 @@ def run():
      assert '313.9' in page.locator('#home .stat-grid').inner_text()
      assert '171.3' in page.locator('#home .stat-grid').inner_text()
      assert page.locator('#home').is_visible()
+     assert page.locator('#home .calf-mobile').count()==1, 'Home should show verified national calf prices'
+     assert '5,058,000원' in page.locator('#home .calf-mobile').inner_text()
+     assert '3,569,000원' in page.locator('#home .calf-mobile').inner_text()
+
      dims=page.evaluate('({scroll:document.documentElement.scrollWidth,viewport:innerWidth})')
      assert dims['scroll']<=dims['viewport']+2,('page horizontal overflow',w,dims)
      page.locator('a[data-tab="market"]').click()
      page.locator('#market').wait_for(state='visible',timeout=10000)
      page.locator('#home').wait_for(state='hidden',timeout=10000)
      assert page.locator('#market .data-table tbody tr').count()==12
+     assert page.locator('#market .calf-mobile').count()==1
+     assert '2026.11.23' in page.locator('#market .calf-mobile').inner_text()
+     assert '5,530,000원' in page.locator('#market .calf-mobile').inner_text()
+     assert page.locator('#market .calf-mobile-links a').count()==2
+
      assert page.locator('#market [data-chart-point="market"]').count()>25
      market_lines=page.locator('#market svg [data-chart-line="market"]')
      assert market_lines.count()==3
@@ -187,6 +196,12 @@ def run():
     dpage.locator('#marketScope .mk-card').first.wait_for(timeout=18000)
     assert '/app.html' not in dpage.url
     assert dpage.locator('#semenSalesScope .ss-table tbody tr').count()==12
+    dpage.locator('#calfPrices .tc-calf-cards').wait_for(timeout=15000)
+    assert '5,058,000원' in dpage.locator('#calfPrices').inner_text()
+    assert '3,569,000원' in dpage.locator('#calfPrices').inner_text()
+    assert dpage.locator('#calfPrices .tc-calf-plot svg').count()==1
+    assert '지역 가축시장 확인' in dpage.locator('#calfPrices').inner_text()
+
     assert dpage.locator('#nationalBeef').count()==1, 'desktop beef steer section must remain available'
     assert dpage.locator('#chooseBeef').count()==1
     dpage.locator('#chooseBeef').click()
