@@ -1,5 +1,5 @@
 /* HANWOO INSIGHT PWA — online always fetches current official data first. */
-const CACHE='hanwoo-insight-mobile-20261125-calf1';
+const CACHE='hanwoo-insight-mobile-20261125-calfhist1';
 const ROOT=new URL('./',self.registration.scope).href;
 const REQUIRED=[
  './','./index.html','./app.html','./app.css','./app.js','./data-health-widget.js','./manifest.webmanifest','./mobile.css','./mobile-app.js',
@@ -7,7 +7,7 @@ const REQUIRED=[
  './pwa/icon-192.png','./pwa/icon-512.png','./pwa/apple-touch-icon.png',
  './data.json','./grade_data.json','./age_data.json',
  './market_supply_data.json','./semen_sales_data.json','./beef_national_data.json','./beef_grade_data.json',
- './calf_price_data.json','./calf-prices.js','./calf-prices.css',
+ './calf_price_data.json','./calf-prices.js','./calf-prices.css','./calf-chart.js','./calf-chart.css',
  './quality_report.json'
 ];
 self.addEventListener('install',event=>{
