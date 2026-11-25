@@ -1,0 +1,43 @@
+
+/* 2024–2026 Hanwoo calf historical price comparison */
+.calf-history-wrap{width:100%;color:#2b453a}
+.calf-history-top{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.calf-history-top>div:first-child{display:grid;gap:3px}
+.calf-history-top strong{font-weight:850;font-size:15px;line-height:1.4}
+.calf-history-top small{color:#839487;font-size:11px}
+.calf-history-move{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:8px 13px;border-radius:12px;background:#edf7f1;color:#1e7b5b}
+.calf-history-move.falling{background:#fff1eb;color:#b35c45}
+.calf-history-move span{font-size:10px;font-weight:750}
+.calf-history-move b{font-size:20px}
+.calf-history-move small{font-size:11px;font-weight:750;color:inherit}
+.calf-history-legend{display:flex;gap:17px;flex-wrap:wrap;align-items:center;margin:14px 0 6px}
+.calf-history-legend span{font-size:12px;font-weight:800;display:inline-flex;align-items:center;gap:6px;color:#607c6e}
+.calf-history-legend i{width:12px;height:5px;border-radius:6px;display:inline-block}
+.calf-history-scroll{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-color:#c9d7ce transparent}
+.calf-history-canvas{min-width:760px;width:100%}
+.calf-history-canvas svg{width:100%;height:auto;display:block}
+.calf-history-data{border-top:1px solid #e5eae3;margin:13px 0 0;padding-top:11px}
+.calf-history-data summary{color:#426c58;font-size:12px;font-weight:750;cursor:pointer;list-style:revert}
+.calf-history-table-scroll{overflow-x:auto;max-width:100%;padding:12px 0}
+.calf-history-data table{border-collapse:collapse;width:100%;min-width:350px;font-size:12px;white-space:nowrap}
+.calf-history-data th,.calf-history-data td{padding:9px 12px;text-align:right;border-bottom:1px solid #e8eee8}
+.calf-history-data th:first-child,.calf-history-data td:first-child{text-align:left}
+.calf-history-data th{color:#608171;font-weight:750}
+.calf-history-data td.is-current{font-weight:850;color:#218874}
+.calf-history-source{margin:12px 0 0!important;font-size:10px!important;line-height:1.7!important;color:#78877d!important}
+.calf-history-source a{color:#42705d!important;text-decoration:underline;text-underline-offset:2px}
+.calf-history-swipe{font-size:10px;color:#8a968d;margin:5px 0 0}
+.calf-history-empty{padding:25px 12px;text-align:center;color:#72857a;font-size:12px}
+.tc-calf-sex-picker{display:inline-flex;gap:5px;background:#f2f6f1;border:1px solid #e4ece6;padding:4px;border-radius:12px;margin:12px 0 6px}
+.tc-calf-sex-picker button{font:inherit;font-size:12px;font-weight:800;padding:8px 17px;border:0;border-radius:9px;background:transparent;color:#718678;cursor:pointer}
+.tc-calf-sex-picker button[aria-pressed=true]{color:#fff;background:#3d7865;box-shadow:0 2px 6px #21534522}
+.tc-calf-sex-picker button[data-calf-sex=female][aria-pressed=true]{background:#bd7e5e}
+@media(max-width:600px){
+ .calf-history-top{align-items:stretch;flex-direction:column;gap:9px}
+ .calf-history-move{align-items:flex-start}
+ .calf-history-move b{font-size:21px}
+ .calf-history-canvas{width:840px}
+ .calf-history-legend{gap:12px}
+ .calf-history-source{font-size:9.5px!important}
+ .tc-calf-sex-picker{display:grid;grid-template-columns:1fr 1fr}
+}
