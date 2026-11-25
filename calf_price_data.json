@@ -1,0 +1,32 @@
+{
+  "source": "https://www.ekapepia.com/v3/price/livestock/cow/producer.do",
+  "region_source": "https://xn--e20bw05b.kr/dashboard/main",
+  "definition": "한우 송아지 6~7개월령 전국 가축시장 가격조사(농협중앙회). 성별 개별 평균가격, 천원/마리. 수/암 단순평균은 제공하지 않음.",
+  "observation_type": "가축시장 조사 발표일 기준",
+  "price_unit": "천원/마리",
+  "records": [
+    {
+      "date": "2026-11-20",
+      "region": "전국",
+      "male_6_7": 5102,
+      "female_6_7": 3728
+    },
+    {
+      "date": "2026-11-23",
+      "region": "전국",
+      "male_6_7": 5058,
+      "female_6_7": 3569
+    }
+  ],
+  "monthly_reference": [
+    {
+      "month": "2026-10",
+      "region": "전국",
+      "male_6_7": 5530,
+      "female_6_7": 3976
+    }
+  ],
+  "regions": [],
+  "regional_availability_note": "전국가격과 동일한 산출기준으로 검증된 지역별 월령·성별 데이터가 없어 표시하지 않습니다. 농협 스마트 가축시장 거래 지역별 자료는 전체 지역 대표 평균이 아니므로 별도로 확인해야 합니다.",
+  "last_verified_date": "2026-11-23"
+}
