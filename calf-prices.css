@@ -28,3 +28,13 @@
 #calfPrices a{font-size:11px;font-weight:800;text-decoration:underline;text-underline-offset:2px;color:#326953}
 @media(max-width:900px){#calfPrices .tc-calf-lower{grid-template-columns:1fr}#calfPrices .tc-calf-foot{display:block}#calfPrices .tc-calf-foot p{max-width:none;margin-bottom:10px}}
 @media(max-width:600px){#calfPrices{padding:15px}#calfPrices .tc-calf-cards{grid-template-columns:1fr}#calfPrices .tc-calf-head{display:block}}
+
+/* Keep historical three-year graph full-width and allow value labels room. */
+#calfPrices .tc-calf-lower{display:flex;flex-direction:column;gap:13px}
+#calfPrices .tc-calf-plot{width:100%;overflow:hidden;padding:19px 17px}
+#calfPrices .tc-calf-plot>strong{display:block;font-size:17px;font-weight:850}
+#calfPrices aside{display:grid;grid-template-columns:1fr 1fr 1fr;column-gap:18px;align-items:center;padding:14px 18px}
+#calfPrices aside p{grid-column:1;font-size:11px}
+#calfPrices aside div{border:0;padding:5px 0;align-items:center;justify-content:flex-start;gap:12px}
+#calfPrices aside small{grid-column:1/-1;margin-top:2px}
+@media(max-width:800px){#calfPrices aside{display:block}#calfPrices .tc-calf-plot{padding:12px}}
