@@ -1,0 +1,30 @@
+#calfPrices{margin:22px 0 28px;padding:24px 26px;border:1px solid #e8e6dc;border-radius:21px;background:#fffbf6;color:#263e34;box-shadow:0 8px 26px #3653450d}
+#calfPrices .tc-calf-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:16px}
+#calfPrices h2{font-size:23px;line-height:1.35;letter-spacing:-.5px;margin:3px 0 4px}
+#calfPrices p{color:#70857a;font-size:12px;line-height:1.65;margin:0}
+#calfPrices .tc-calf-eyebrow{color:#b87b61;font-size:11px;letter-spacing:1px;font-weight:800}
+#calfPrices .tc-calf-date{white-space:nowrap;font-size:12px;color:#7b8d82}
+#calfPrices .tc-calf-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+#calfPrices .tc-calf-cards article{padding:19px 22px;border:1px solid #dce8de;border-radius:16px;background:#f2f8f2;display:flex;flex-direction:column;gap:8px}
+#calfPrices .tc-calf-cards article.female{background:#fcf2ed;border-color:#f0ded4}
+#calfPrices .tc-calf-cards span{font-weight:750;color:#4b6757;font-size:13px}
+#calfPrices .tc-calf-cards strong{font-size:clamp(21px,2.6vw,34px);font-weight:850;color:#275e4d;white-space:nowrap}
+#calfPrices .tc-calf-cards .female strong{color:#a66248}
+#calfPrices .tc-calf-cards small{color:#819589;font-size:11px}
+#calfPrices .tc-calf-lower{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(210px,.8fr);gap:12px;margin-top:15px}
+#calfPrices .tc-calf-plot,#calfPrices aside{padding:17px;border:1px solid #eae8e0;border-radius:14px;background:white}
+#calfPrices .tc-calf-plot strong,#calfPrices aside>strong{font-size:13px;color:#294538}
+#calfPrices .tc-calf-plot svg{width:100%;height:auto}
+#calfPrices .tc-calf-legend{display:flex;gap:16px;justify-content:flex-end;color:#657b6d;font-size:11px}
+#calfPrices .tc-calf-legend span:first-child{color:#367d6c}
+#calfPrices .tc-calf-legend span:last-child{color:#c27d5a}
+#calfPrices aside p{margin-top:5px}
+#calfPrices aside div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid #eee;padding:12px 0;font-size:12px}
+#calfPrices aside b{color:#426854}
+#calfPrices aside small{display:block;margin-top:10px;color:#7d9084;font-size:11px;line-height:1.5}
+#calfPrices .tc-calf-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:16px}
+#calfPrices .tc-calf-foot p{max-width:64%;font-size:11px}
+#calfPrices .tc-calf-foot div{display:flex;gap:12px;flex-wrap:wrap}
+#calfPrices a{font-size:11px;font-weight:800;text-decoration:underline;text-underline-offset:2px;color:#326953}
+@media(max-width:900px){#calfPrices .tc-calf-lower{grid-template-columns:1fr}#calfPrices .tc-calf-foot{display:block}#calfPrices .tc-calf-foot p{max-width:none;margin-bottom:10px}}
+@media(max-width:600px){#calfPrices{padding:15px}#calfPrices .tc-calf-cards{grid-template-columns:1fr}#calfPrices .tc-calf-head{display:block}}
