@@ -9,6 +9,11 @@ on:
       - 'index.html'
       - 'dashboard_template.html'
       - 'market-indicators.js'
+      - 'calf-chart.js'
+      - 'calf-chart.css'
+      - 'calf-prices.js'
+      - 'calf-prices.css'
+      - 'calf_price_data.json'
       - 'thankscow-brand.js'
       - 'thankscow-brand.css'
       - 'quality-check.js'
@@ -23,6 +28,11 @@ on:
       - 'app.html'
       - 'app.css'
       - 'app.js'
+      - 'calf-chart.js'
+      - 'calf-chart.css'
+      - 'calf-prices.js'
+      - 'calf-prices.css'
+      - 'calf_price_data.json'
       - 'mobile-app.js'
       - 'manifest.webmanifest'
       - 'service-worker.js'
@@ -50,6 +60,8 @@ jobs:
         run: |
           node --check mobile-app.js
           node --check app.js
+          node --check calf-chart.js
+          node --check calf-prices.js
           node --check market-indicators.js
           node --check thankscow-brand.js
           node --check quality-check.js
