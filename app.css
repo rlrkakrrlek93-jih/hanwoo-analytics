@@ -180,3 +180,13 @@ a{color:inherit}
 .app-screen .calf-mobile-mini{margin-top:14px}
 .app-screen .calf-mobile-mini .calf-mobile-more{display:block;margin-top:13px}
 @media(max-width:365px){.app-screen .calf-mobile-cards strong{font-size:11.5px;letter-spacing:-.6px}.app-screen .calf-mobile-head>small{font-size:8px}}
+
+/* Calf market history is part of market analytics, not the mobile home hero. */
+.app-screen .calf-mobile-history{margin:18px -2px 17px;padding:13px 0 7px;border-top:1px solid #e9ebe5;border-bottom:1px solid #e9ebe5}
+.app-screen .calf-mobile-history h3{font-size:14px;font-weight:850;letter-spacing:-.35px;margin:3px 0 2px}
+.app-screen .calf-mobile-history .tc-calf-sex-picker{width:100%;margin:11px 0 8px}
+.app-screen .calf-mobile-history .calf-history-wrap{overflow:hidden}
+.app-screen .calf-mobile-history .calf-history-top{padding:0 2px}
+.app-screen .calf-mobile-history .calf-history-data{margin-top:15px}
+.app-screen .calf-mobile-history .calf-history-canvas{width:850px}
+.app-screen .calf-mobile-history .calf-history-scroll{border-radius:10px;background:#fff}
