@@ -5,7 +5,7 @@
   "inventory_definition": "월말 전국 한우 사육두수 (농장 사육형태 전체)",
   "grading_definition": "월중 전국 한우 도체 판정두수 (암·수·거세 포함)",
   "price_definition": "월중 전국 한우 성별 경락단가(원/kg), 공표 원본; 한우 전체 평균으로 혼합 계산하지 않음",
-  "last_success_kst": "2026-11-24 10:17 KST",
+  "last_success_kst": "2026-11-25 10:23 KST",
   "latest_month": "2026-10",
   "records": [
     {
