@@ -16,6 +16,12 @@
       "region": "전국",
       "male_6_7": 5058,
       "female_6_7": 3569
+    },
+    {
+      "date": "2026-11-25",
+      "region": "전국",
+      "male_6_7": 4902,
+      "female_6_7": 3476
     }
   ],
   "monthly_reference": [
@@ -28,8 +34,8 @@
   ],
   "regions": [],
   "regional_availability_note": "전국가격과 동일한 산출기준으로 검증된 지역별 월령·성별 데이터가 없어 표시하지 않습니다. 농협 스마트 가축시장 거래 지역별 자료는 전체 지역 대표 평균이 아니므로 별도로 확인해야 합니다.",
-  "last_verified_date": "2026-11-23",
-  "last_success_kst": "2026-11-26 11:20 KST",
+  "last_verified_date": "2026-11-25",
+  "last_success_kst": "2026-11-27 18:36 KST",
   "monthly_series": [
     {
       "month": "2024-01",
@@ -244,5 +250,5 @@
   "monthly_series_note": "아그로픽이 eKAPEpia 공개 가축시장 일별 6~7개월령 한우 송아지 가격을 월평균으로 재집계한 자료(천원/마리). 축산유통정보 다봄 공식 전월평균과 집계 방식 차이가 있을 수 있어 별도 시계열로 유지. 미발표·진행 중인 월은 포함하지 않음.",
   "monthly_series_last_confirmed": "2026-10",
   "monthly_series_transcribed_date": "2026-11-25",
-  "monthly_series_last_synced_kst": "2026-11-26 11:20 KST"
+  "monthly_series_last_synced_kst": "2026-11-27 18:36 KST"
 }
