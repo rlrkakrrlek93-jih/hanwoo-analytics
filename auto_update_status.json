@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at_kst": "2026-11-27 17:23 KST",
+  "checked_at_kst": "2026-11-28 16:44 KST",
   "kind": "collector_run_status_not_official_release_time",
   "note": "수집 성공은 공식 데이터의 새 월 공개를 의미하지 않습니다. 갱신 월은 각 지표별 공표 시점에 따릅니다.",
   "datasets": {
@@ -10,7 +10,7 @@
       "collector_outcome": "success",
       "latest_published_month": "2026-10",
       "record_count": 20,
-      "last_collected_at_kst": "2026-11-27 17:19 KST",
+      "last_collected_at_kst": "2026-11-28 16:40 KST",
       "state": "reported_data_preserved"
     },
     "grades": {
@@ -19,7 +19,7 @@
       "collector_outcome": "success",
       "latest_published_month": "2026-10",
       "record_count": 20,
-      "last_collected_at_kst": "2026-11-27 17:19 KST",
+      "last_collected_at_kst": "2026-11-28 16:41 KST",
       "state": "reported_data_preserved"
     },
     "ages": {
@@ -28,7 +28,7 @@
       "collector_outcome": "success",
       "latest_published_month": "2026-09",
       "record_count": 18,
-      "last_collected_at_kst": "2026-11-27 17:19 KST",
+      "last_collected_at_kst": "2026-11-28 16:41 KST",
       "state": "reported_data_preserved"
     },
     "market": {
@@ -37,7 +37,7 @@
       "collector_outcome": "success",
       "latest_published_month": "2026-10",
       "record_count": 34,
-      "last_collected_at_kst": "2026-11-27 17:20 KST",
+      "last_collected_at_kst": "2026-11-28 16:42 KST",
       "state": "reported_data_preserved"
     },
     "semen_association": {
@@ -58,7 +58,7 @@
       "last_collected_at_kst": "2026-11-21",
       "state": "reported_data_preserved",
       "krei_check_status": "verified_no_new_months",
-      "krei_last_check_at": "2026-11-27 17:21 KST",
+      "krei_last_check_at": "2026-11-28 16:42 KST",
       "krei_verified_issues": [
         "2026-09",
         "2026-06",
@@ -71,11 +71,11 @@
     "beef": {
       "label": "육우 거세우",
       "filename": "beef_national_data.json",
-      "collector_outcome": "success",
+      "collector_outcome": "failure",
       "latest_published_month": "2026-10",
       "record_count": 10,
       "last_collected_at_kst": null,
-      "state": "reported_data_preserved"
+      "state": "check_failed"
     }
   }
 }
